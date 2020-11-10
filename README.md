@@ -7,7 +7,7 @@
 
 
 
-###Languages and Tools:
+### Languages and Tools:
 <code><img width="50px" src="https://upload.vectorlogo.zone/logos/typescriptlang/images/235f610f-bc79-428a-9511-b3de5c3b1208.svg"></code>
 <code><img width="100px" src="https://www.vectorlogo.zone/logos/angular/angular-ar21.svg"></code>
 <code><img width="100px" src="https://upload.wikimedia.org/wikipedia/commons/2/24/Ionic-logo-landscape.svg"></code>
