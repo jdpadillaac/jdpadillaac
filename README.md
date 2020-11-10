@@ -3,7 +3,7 @@
 ### A Self taught Frontend and Backend Developer
 [![Github](https://img.shields.io/badge/-Github-000?style=flat&logo=Github&logoColor=white)](https://github.com/jdpadillaac)
 [![Linkedin](https://img.shields.io/badge/-LinkedIn-blue?style=flat&logo=Linkedin&logoColor=white)](https://www.linkedin.com/in/jonatan-padilla-233b34122/)
-[![Twitter Badge](https://img.shields.io/badge/-@neryadg-1ca0f1?style=flat&labelColor=1ca0f1&logo=twitter&logoColor=white&link=https://twitter.com/Ipenywis)](https://twitter.com/jdpadillac_)
+[![Twitter Badge](https://img.shields.io/badge/-@jdpadillac_-1ca0f1?style=flat&labelColor=1ca0f1&logo=twitter&logoColor=white&link=https://twitter.com/Ipenywis)](https://twitter.com/jdpadillac_)
 
 
 
