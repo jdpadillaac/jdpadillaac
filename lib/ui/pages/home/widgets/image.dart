@@ -7,6 +7,7 @@ class _ImageContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final borderRadius = BorderRadius.circular(200);
+
     return Center(
       child: Container(
         decoration: BoxDecoration(

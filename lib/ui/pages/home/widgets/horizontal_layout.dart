@@ -12,7 +12,7 @@ class _HorizontalLayout extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.xl,
-        vertical: 130,
+        vertical: 80,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -35,7 +35,6 @@ class _CustomImage extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           launch(redirectUrl);
-          // js.context.callMethod('open', [redirectUrl]);
         },
         child: Container(
           margin: const EdgeInsets.only(
@@ -64,7 +63,7 @@ class _NameInfo extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Jonatan Padilla ',
+          'Jonatan Padilla',
           style: theme.textTheme.headline2!.copyWith(
             color: theme.colorScheme.primary,
           ),
