@@ -30,9 +30,10 @@ class _HomeMainCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Software develper',
+                  'Software developer',
                   style: theme.textTheme.headline3!.copyWith(
                     color: theme.colorScheme.secondary,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
                 const SizedBox(height: AppSpacing.md),

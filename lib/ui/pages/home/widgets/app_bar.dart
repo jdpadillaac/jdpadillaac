@@ -33,7 +33,7 @@ class HomeAppBar extends StatelessWidget {
                   borderRadius: BorderRadius.circular(AppSpacing.sm),
                 ),
                 child: Text(
-                  'contact me',
+                  'Contact me',
                   style: theme.textTheme.bodyText1!.copyWith(
                     color: theme.colorScheme.background,
                   ),

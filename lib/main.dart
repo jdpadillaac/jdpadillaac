@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Jonata Padilla',
+      title: 'Jonatan Padilla',
       builder: (context, widget) => ResponsiveWrapper.builder(
         BouncingScrollWrapper.builder(context, widget!),
         minWidth: 450,
@@ -31,7 +31,6 @@ class MyApp extends StatelessWidget {
         ),
       ),
       theme: AppTheme.mainTheme(),
-      //  darkTheme: AppTheme.darkTheme(),
       home: const HomePage(),
     );
   }
