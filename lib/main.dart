@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:jdpadillac/ui/constants/colors.dart';
 import 'package:jdpadillac/ui/pages/home/home.dart';
 import 'package:jdpadillac/ui/theme/app_theme.dart';
 import 'package:responsive_framework/responsive_framework.dart';
