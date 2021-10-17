@@ -20,14 +20,12 @@ class _SkillWidget extends StatelessWidget {
             ),
             width: double.infinity,
             child: Center(
-              child: Expanded(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: _SkillList.getSkillList(AppSpacing.sl),
-                  ),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: _SkillList.getSkillList(AppSpacing.md),
                 ),
               ),
             ),
@@ -42,70 +40,70 @@ class _SkillList {
   static List<Widget> getSkillList(double size) {
     return [
       Container(
-        margin: EdgeInsets.symmetric(horizontal: size),
+        margin: EdgeInsets.only(right: size),
         child: Image.asset(
           AppAssets.flutter,
           color: AppColors.surface,
         ),
       ),
       Container(
-        margin: EdgeInsets.symmetric(horizontal: size),
+        margin: EdgeInsets.only(right: size),
         child: Image.asset(
           AppAssets.swift,
           color: AppColors.surface,
         ),
       ),
       Container(
-        margin: EdgeInsets.symmetric(horizontal: size),
+        margin: EdgeInsets.only(right: size),
         child: Image.asset(
           AppAssets.golang,
           color: AppColors.surface,
         ),
       ),
       Container(
-        margin: EdgeInsets.symmetric(horizontal: size),
+        margin: EdgeInsets.only(right: size),
         child: Image.asset(
           AppAssets.angular,
           color: AppColors.surface,
         ),
       ),
       Container(
-        margin: EdgeInsets.symmetric(horizontal: size),
+        margin: EdgeInsets.only(right: size),
         child: Image.asset(
           AppAssets.ts,
           color: AppColors.surface,
         ),
       ),
       Container(
-        margin: EdgeInsets.symmetric(horizontal: size),
+        margin: EdgeInsets.only(right: size),
         child: Image.asset(
           AppAssets.nodejs,
           color: AppColors.surface,
         ),
       ),
       Container(
-        margin: EdgeInsets.symmetric(horizontal: size),
+        margin: EdgeInsets.only(right: size),
         child: Image.asset(
           AppAssets.nest,
           color: AppColors.surface,
         ),
       ),
       Container(
-        margin: EdgeInsets.symmetric(horizontal: size),
+        margin: EdgeInsets.only(right: size),
         child: Image.asset(
           AppAssets.docker,
           color: AppColors.surface,
         ),
       ),
       Container(
-        margin: EdgeInsets.symmetric(horizontal: size),
+        margin: EdgeInsets.only(right: size),
         child: Image.asset(
           AppAssets.mysql,
           color: AppColors.surface,
         ),
       ),
       Container(
-        margin: EdgeInsets.symmetric(horizontal: size),
+        margin: EdgeInsets.only(right: size),
         child: Image.asset(
           AppAssets.mongo,
           color: AppColors.surface,

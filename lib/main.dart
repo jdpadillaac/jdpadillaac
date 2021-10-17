@@ -4,6 +4,7 @@ import 'package:jdpadillac/ui/theme/app_theme.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
