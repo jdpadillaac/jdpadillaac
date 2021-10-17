@@ -38,14 +38,26 @@
       "languageVersion": "2.12"
     },
     {
-      "name": "cupertino_icons",
-      "rootUri": "file:///Users/jdpadillac/soft/flutter/.pub-cache/hosted/pub.dartlang.org/cupertino_icons-1.0.3",
+      "name": "crypto",
+      "rootUri": "file:///Users/jdpadillac/soft/flutter/.pub-cache/hosted/pub.dartlang.org/crypto-3.0.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "fake_async",
       "rootUri": "file:///Users/jdpadillac/soft/flutter/.pub-cache/hosted/pub.dartlang.org/fake_async-1.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "ffi",
+      "rootUri": "file:///Users/jdpadillac/soft/flutter/.pub-cache/hosted/pub.dartlang.org/ffi-1.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "file",
+      "rootUri": "file:///Users/jdpadillac/soft/flutter/.pub-cache/hosted/pub.dartlang.org/file-6.1.2",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -64,6 +76,24 @@
     {
       "name": "flutter_test",
       "rootUri": "file:///Users/jdpadillac/soft/flutter/packages/flutter_test",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "google_fonts",
+      "rootUri": "file:///Users/jdpadillac/soft/flutter/.pub-cache/hosted/pub.dartlang.org/google_fonts-2.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "http",
+      "rootUri": "file:///Users/jdpadillac/soft/flutter/.pub-cache/hosted/pub.dartlang.org/http-0.13.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
+      "name": "http_parser",
+      "rootUri": "file:///Users/jdpadillac/soft/flutter/.pub-cache/hosted/pub.dartlang.org/http_parser-4.0.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -88,6 +118,60 @@
     {
       "name": "path",
       "rootUri": "file:///Users/jdpadillac/soft/flutter/.pub-cache/hosted/pub.dartlang.org/path-1.8.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "path_provider",
+      "rootUri": "file:///Users/jdpadillac/soft/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider-2.0.5",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
+      "name": "path_provider_linux",
+      "rootUri": "file:///Users/jdpadillac/soft/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_linux-2.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "path_provider_macos",
+      "rootUri": "file:///Users/jdpadillac/soft/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_macos-2.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "path_provider_platform_interface",
+      "rootUri": "file:///Users/jdpadillac/soft/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_platform_interface-2.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "path_provider_windows",
+      "rootUri": "file:///Users/jdpadillac/soft/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_windows-2.0.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "platform",
+      "rootUri": "file:///Users/jdpadillac/soft/flutter/.pub-cache/hosted/pub.dartlang.org/platform-3.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "plugin_platform_interface",
+      "rootUri": "file:///Users/jdpadillac/soft/flutter/.pub-cache/hosted/pub.dartlang.org/plugin_platform_interface-2.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "process",
+      "rootUri": "file:///Users/jdpadillac/soft/flutter/.pub-cache/hosted/pub.dartlang.org/process-4.2.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "responsive_framework",
+      "rootUri": "file:///Users/jdpadillac/soft/flutter/.pub-cache/hosted/pub.dartlang.org/responsive_framework-0.1.4",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -146,13 +230,25 @@
       "languageVersion": "2.14"
     },
     {
+      "name": "win32",
+      "rootUri": "file:///Users/jdpadillac/soft/flutter/.pub-cache/hosted/pub.dartlang.org/win32-2.2.9",
+      "packageUri": "lib/",
+      "languageVersion": "2.13"
+    },
+    {
+      "name": "xdg_directories",
+      "rootUri": "file:///Users/jdpadillac/soft/flutter/.pub-cache/hosted/pub.dartlang.org/xdg_directories-0.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "jdpadillac",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "2.15"
     }
   ],
-  "generated": "2021-10-16T23:02:43.730707Z",
+  "generated": "2021-10-17T02:00:38.688910Z",
   "generator": "pub",
   "generatorVersion": "2.15.0-177.0.dev"
 }

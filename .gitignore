@@ -40,7 +40,13 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
+.dart_tool
+.dart_tool/
 
+build
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
 # System Files
 .DS_Store
 Thumbs.db
