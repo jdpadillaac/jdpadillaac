@@ -3,7 +3,7 @@
   "packages": [
     {
       "name": "async",
-      "rootUri": "file:///Users/jdpadillac/soft/flutter/.pub-cache/hosted/pub.dartlang.org/async-2.8.2",
+      "rootUri": "file:///Users/jdpadillac/soft/flutter/.pub-cache/hosted/pub.dartlang.org/async-2.8.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -15,7 +15,7 @@
     },
     {
       "name": "characters",
-      "rootUri": "file:///Users/jdpadillac/soft/flutter/.pub-cache/hosted/pub.dartlang.org/characters-1.2.0",
+      "rootUri": "file:///Users/jdpadillac/soft/flutter/.pub-cache/hosted/pub.dartlang.org/characters-1.1.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -117,7 +117,7 @@
     },
     {
       "name": "matcher",
-      "rootUri": "file:///Users/jdpadillac/soft/flutter/.pub-cache/hosted/pub.dartlang.org/matcher-0.12.11",
+      "rootUri": "file:///Users/jdpadillac/soft/flutter/.pub-cache/hosted/pub.dartlang.org/matcher-0.12.10",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -225,7 +225,7 @@
     },
     {
       "name": "test_api",
-      "rootUri": "file:///Users/jdpadillac/soft/flutter/.pub-cache/hosted/pub.dartlang.org/test_api-0.4.3",
+      "rootUri": "file:///Users/jdpadillac/soft/flutter/.pub-cache/hosted/pub.dartlang.org/test_api-0.4.2",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -273,9 +273,9 @@
     },
     {
       "name": "vector_math",
-      "rootUri": "file:///Users/jdpadillac/soft/flutter/.pub-cache/hosted/pub.dartlang.org/vector_math-2.1.1",
+      "rootUri": "file:///Users/jdpadillac/soft/flutter/.pub-cache/hosted/pub.dartlang.org/vector_math-2.1.0",
       "packageUri": "lib/",
-      "languageVersion": "2.14"
+      "languageVersion": "2.12"
     },
     {
       "name": "win32",
@@ -293,10 +293,10 @@
       "name": "jdpadillac",
       "rootUri": "../",
       "packageUri": "lib/",
-      "languageVersion": "2.15"
+      "languageVersion": "2.14"
     }
   ],
-  "generated": "2021-10-17T16:07:50.944877Z",
+  "generated": "2021-10-20T22:44:15.710700Z",
   "generator": "pub",
-  "generatorVersion": "2.15.0-177.0.dev"
+  "generatorVersion": "2.14.3"
 }
