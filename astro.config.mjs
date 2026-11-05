@@ -9,12 +9,18 @@ export default defineConfig({
   site: 'https://jdpadillac.com',
   trailingSlash: 'always',
   output: 'static',
+  redirects: {
+    '/': '/es/',
+  },
+  build: {
+    inlineStylesheets: 'always',
+  },
   integrations: [
     mdx(),
     sitemap({
       filter: includeInSitemap,
       i18n: {
-        defaultLocale: 'en',
+        defaultLocale: 'es',
         locales: {
           es: 'es',
           en: 'en',

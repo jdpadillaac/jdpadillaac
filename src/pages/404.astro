@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { site } from '../data/site';
+import { localePath } from '../i18n/paths';
 import { ui } from '../i18n/ui';
 ---
 
@@ -20,8 +21,14 @@ import { ui } from '../i18n/ui';
       <p class="lead" lang="en">{ui.en.notFoundLead}</p>
     </header>
     <div class="cluster">
-      <a class="button" href="/es/">Español</a>
-      <a class="button button--ghost" href="/en/" lang="en">English</a>
+      <a class="button" href="/es/">Español — inicio</a>
+      <a class="button button--ghost" href="/en/" lang="en">English — home</a>
+      <a class="button button--ghost" href={localePath('es', '/perfiles/')}>Perfiles</a>
+      <a class="button button--ghost" href={localePath('es', '/experiencia/')}>Experiencia</a>
+      <a class="button button--ghost" href={localePath('es', '/contacto/')}>Contacto</a>
+      <a class="button button--ghost" href={site.links.linkedin} rel="me noopener noreferrer" target="_blank">
+        LinkedIn
+      </a>
     </div>
   </div>
 </BaseLayout>

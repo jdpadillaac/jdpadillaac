@@ -3,7 +3,7 @@ export const site = {
   url: 'https://jdpadillac.com',
   email: 'contact@jdpadillac.com',
   location: 'Medellín, Colombia',
-  ogImage: '/og/default.svg',
+  ogImage: '/og/default-es.png',
   links: {
     github: 'https://github.com/jdpadillaac',
     linkedin: 'https://www.linkedin.com/in/jdpadillac/',

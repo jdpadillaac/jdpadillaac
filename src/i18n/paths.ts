@@ -1,4 +1,20 @@
 import type { Lang } from './ui';
+import {
+  aboutPath,
+  contactPath,
+  cvPath,
+  experienceIndexPath,
+  experiencePath,
+  casePath,
+  homePath,
+  pathFromLegacy,
+  profilePath,
+  profilesIndexPath,
+  projectPath,
+  projectsIndexPath,
+  sentPath,
+  swapLangPath,
+} from './routes';
 
 export const langs = ['es', 'en'] as const satisfies readonly Lang[];
 
@@ -10,19 +26,26 @@ export function staticLangs() {
   return langs.map((lang) => ({ params: { lang } }));
 }
 
+/** @deprecated Prefer route helpers from ./routes.ts */
 export function localePath(lang: Lang, path = '/'): string {
-  const hashIndex = path.indexOf('#');
-  const hash = hashIndex >= 0 ? path.slice(hashIndex) : '';
-  const pathname = (hashIndex >= 0 ? path.slice(0, hashIndex) : path).replace(/^\/+|\/+$/g, '');
-  const base = pathname ? `/${lang}/${pathname}/` : `/${lang}/`;
-  return `${base}${hash}`;
+  return pathFromLegacy(lang, path);
 }
 
 export function swapLang(pathname: string, target: Lang): string {
-  const hashIndex = pathname.indexOf('#');
-  const hash = hashIndex >= 0 ? pathname.slice(hashIndex) : '';
-  const parts = (hashIndex >= 0 ? pathname.slice(0, hashIndex) : pathname).split('/').filter(Boolean);
-  if (parts[0] === 'es' || parts[0] === 'en') parts[0] = target;
-  else parts.unshift(target);
-  return `/${parts.join('/')}/${hash}`;
+  return swapLangPath(pathname, target);
 }
+
+export {
+  aboutPath,
+  casePath,
+  contactPath,
+  cvPath,
+  experienceIndexPath,
+  experiencePath,
+  homePath,
+  profilePath,
+  profilesIndexPath,
+  projectPath,
+  projectsIndexPath,
+  sentPath,
+};

@@ -18,6 +18,12 @@
   force = true
 
 [[redirects]]
+  from = "/"
+  to = "/es/"
+  status = 301
+  force = true
+
+[[redirects]]
   from = "/sitemap.xml"
   to = "/sitemap-index.xml"
   status = 200
@@ -57,6 +63,56 @@
   to = "/es/sobre-mi/"
   status = 301
 
+[[redirects]]
+  from = "/en/experiencia/:slug/casos/:case"
+  to = "/en/experience/:slug/cases/:case"
+  status = 301
+
+[[redirects]]
+  from = "/en/experiencia/:slug/"
+  to = "/en/experience/:slug/"
+  status = 301
+
+[[redirects]]
+  from = "/en/experiencia/"
+  to = "/en/experience/"
+  status = 301
+
+[[redirects]]
+  from = "/en/perfiles/:slug/"
+  to = "/en/profiles/:slug/"
+  status = 301
+
+[[redirects]]
+  from = "/en/perfiles/"
+  to = "/en/profiles/"
+  status = 301
+
+[[redirects]]
+  from = "/en/sobre-mi/"
+  to = "/en/about/"
+  status = 301
+
+[[redirects]]
+  from = "/en/contacto/enviado/"
+  to = "/en/contact/sent/"
+  status = 301
+
+[[redirects]]
+  from = "/en/contacto/"
+  to = "/en/contact/"
+  status = 301
+
+[[redirects]]
+  from = "/en/proyectos/:slug/"
+  to = "/en/projects/:slug/"
+  status = 301
+
+[[redirects]]
+  from = "/en/proyectos/"
+  to = "/en/projects/"
+  status = 301
+
 [[headers]]
   for = "/*"
   [headers.values]
@@ -67,5 +123,30 @@
 
 [[headers]]
   for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/og/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/icon-*.png"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/apple-touch-icon.png"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/favicon.ico"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/favicon.svg"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
