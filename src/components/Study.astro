@@ -48,28 +48,27 @@ const {
   others = [],
 } = Astro.props;
 const narrative = sections.filter((section) => section.body.trim());
+const pair = (a?: { id: string; title: string; body: string }, b?: { id: string; title: string; body: string }) =>
+  [a, b].filter((section) => section !== undefined && section.body.trim());
+const byId = (id: string) => narrative.find((section) => section.id === id);
+const firstPair = pair(byId('contexto'), byId('rol'));
+const secondPair = pair(byId('reto'), byId('solucion'));
+const pairedIds = new Set([...firstPair, ...secondPair].map((section) => section.id));
+const remaining = narrative.filter((section) => !pairedIds.has(section.id));
+const trimmedLearnings = learnings?.trim();
 const t = ui[lang];
 ---
 
 <div class="study">
   <slot name="crumbs" />
   <header>
-    <p class="kicker">{kicker}</p>
+    <p class="study__kicker kicker">{kicker}</p>
     <h1 id="titulo">{title}</h1>
-    <p class="lead">{summary}</p>
-    {
-      highlights.length > 0 && (
-        <ul class="points">
-          {highlights.map((item) => (
-            <li>{item}</li>
-          ))}
-        </ul>
-      )
-    }
+    <p class="study__summary">{summary}</p>
   </header>
   {
     facts && (
-      <section class="card facts" aria-label={t.facts}>
+      <section class="facts facts--bar" aria-label={t.facts}>
         <dl>
           <div>
             <dt>{t.role}</dt>
@@ -79,29 +78,69 @@ const t = ui[lang];
             <dt>{t.dates}</dt>
             <dd>{facts.dates}</dd>
           </div>
-          {facts.team && (
-            <div>
-              <dt>{t.team}</dt>
-              <dd>{facts.team}</dd>
-            </div>
-          )}
           {facts.stack && facts.stack.length > 0 && (
-            <div>
-              <dt>{t.stack}</dt>
-              <dd>
+          <div>
+            <dt>{t.stack}</dt>
+            <dd>
                 <ul class="pills">
                   {facts.stack.map((item) => (
                     <li>{item}</li>
                   ))}
                 </ul>
-              </dd>
+            </dd>
+          </div>
+          )}
+          {facts.team && facts.team.trim() && (
+            <div>
+              <dt>{t.team}</dt>
+              <dd>{facts.team}</dd>
             </div>
           )}
         </dl>
       </section>
     )
   }
-  {heroAlt && <Frame alt={heroAlt} />}
+  {heroAlt && (
+    <div class="frame--hero">
+      <Frame alt={heroAlt} />
+    </div>
+  )}
+  {
+    highlights.length > 0 && (
+      <section aria-labelledby="que-hice">
+        <h2 id="que-hice">{t.whatIDid}</h2>
+        <ul class="done-grid">
+          {highlights.map((item) => (
+            <li class="done-card">{item}</li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+  {
+    firstPair.length > 0 && (
+      <div class="pair-grid">
+        {firstPair.map((section) => (
+          <article aria-labelledby={section.id}>
+            <h2 id={section.id}>{section.title}</h2>
+            <p>{section.body}</p>
+          </article>
+        ))}
+      </div>
+    )
+  }
+  {
+    secondPair.length > 0 && (
+      <div class="pair-grid">
+        {secondPair.map((section) => (
+          <article aria-labelledby={section.id}>
+            <h2 id={section.id}>{section.title}</h2>
+            <p>{section.body}</p>
+          </article>
+        ))}
+      </div>
+    )
+  }
   {
     stages.length > 0 && (
       <section aria-labelledby="etapas">
@@ -134,7 +173,7 @@ const t = ui[lang];
     )
   }
   {
-    narrative.map((section) => (
+    remaining.map((section) => (
       <section class="narrative" aria-labelledby={section.id}>
         <h2 id={section.id}>{section.title}</h2>
         <p>{section.body}</p>
@@ -154,10 +193,10 @@ const t = ui[lang];
     )
   }
   {
-    learnings && learnings.trim() && (
+    trimmedLearnings && (
       <section class="narrative" aria-labelledby="aprendizajes">
         <h2 id="aprendizajes">{t.learnings}</h2>
-        <p>{learnings}</p>
+        <p>{trimmedLearnings}</p>
       </section>
     )
   }
@@ -182,12 +221,15 @@ const t = ui[lang];
     others.length > 0 && (
       <section class="other-experiences" aria-labelledby="otras-experiencias">
         <h2 id="otras-experiencias">{t.otherExperiences}</h2>
-        <ul class="link-list">
+        <ul class="other-list">
           {others.map((item) => (
             <li>
-              <a class="row-link" href={item.href}>
-                <span class="row-link__title">{item.title}</span>
-                {item.meta && <span class="kicker">{item.meta}</span>}
+              <a class="other-row" href={item.href}>
+                <span class="other-row__main">
+                  <span class="other-row__company">{item.title}</span>
+                  {item.meta && <span class="other-row__meta">{item.meta}</span>}
+                </span>
+                <span class="other-row__cta">{t.viewPage} →</span>
               </a>
             </li>
           ))}

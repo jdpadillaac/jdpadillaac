@@ -37,16 +37,14 @@ const crumbs = [
       files.map((file) => {
         const available = cvAvailable(file.lang);
         return (
-          <section id={file.id} aria-labelledby={`${file.id}-titulo`}>
-            <h2 id={`${file.id}-titulo`}>{file.title}</h2>
-            {available ? (
+          available && (
+            <section id={file.id} aria-labelledby={`${file.id}-titulo`}>
+              <h2 id={`${file.id}-titulo`}>{file.title}</h2>
               <a class="button" href={cvHref(file.lang)} download>
                 {t.cvDownload}
               </a>
-            ) : (
-              <p class="pending">{t.cvPending}</p>
-            )}
-          </section>
+            </section>
+          )
         );
       })
     }

@@ -1,5 +1,6 @@
 ---
 import ContactBand from '../../components/ContactBand.astro';
+import SectionHeader from '../../components/SectionHeader.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { cvAvailable, cvHref } from '../../data/cv';
 import { copy } from '../../data/copy';
@@ -28,6 +29,8 @@ const cvEn = cvAvailable('en');
 function dates(entry: (typeof experiences)[number]) {
   return `${tx(lang, entry.data.start)} — ${tx(lang, entry.data.end)}`;
 }
+
+const featuredHighlights = featured ? featured.data.highlights[lang].slice(0, 3) : [];
 ---
 
 <BaseLayout
@@ -38,74 +41,149 @@ function dates(entry: (typeof experiences)[number]) {
   jsonLd={identityGraph(lang)}
 >
   <div class="container page">
-    <section class="hero" aria-labelledby="titulo">
-      <p class="pill">{tx(lang, copy.availability)}</p>
-      <p class="eyebrow">{tx(lang, copy.label)}</p>
-      <h1 id="titulo">{tx(lang, copy.headline)}</h1>
-      <p class="lead">{tx(lang, copy.lede)}</p>
-      <div class="cluster">
-        <a class="button" href={cvEs ? cvHref('es') : localePath(lang, '/cv/#cv-es')} download={cvEs ? '' : undefined}>
-          {t.downloadCvEs}
-        </a>
-        <a class="button button--ghost" href={cvEn ? cvHref('en') : localePath(lang, '/cv/#cv-en')} download={cvEn ? '' : undefined}>
-          {t.downloadCvEn}
-        </a>
-        <a class="button button--ghost" href={site.links.linkedin} rel="me noopener noreferrer" target="_blank">
-          LinkedIn
-          <span class="sr-only"> ({t.newTab})</span>
-        </a>
+    <section class="hero-top" aria-labelledby="titulo">
+      <div class="hero-top__text">
+        <p class="pill">{tx(lang, copy.availability)}</p>
+        <p class="eyebrow">{tx(lang, copy.label)}</p>
+        <h1 id="titulo">{tx(lang, copy.headline)}</h1>
+        <p class="lead">{tx(lang, copy.lede)}</p>
+        <div class="cluster">
+          <a class="button" href={cvEs ? cvHref('es') : localePath(lang, '/cv/#cv-es')} download={cvEs ? '' : undefined}>
+            {t.downloadCvEs}
+          </a>
+          <a class="button button--ghost" href={cvEn ? cvHref('en') : localePath(lang, '/cv/#cv-en')} download={cvEn ? '' : undefined}>
+            {t.downloadCvEn}
+          </a>
+          <a class="text-link" href={localePath(lang, '/experiencia/')}>
+            {t.viewExperience} →
+          </a>
+        </div>
+        <div class="hero-links">
+          <a class="text-link" href={site.links.linkedin} rel="me noopener noreferrer" target="_blank">
+            LinkedIn
+            <span class="sr-only"> ({t.newTab})</span>
+          </a>
+        </div>
       </div>
+      <aside class="hero-top__card summary-card" aria-label={t.facts}>
+        <dl>
+          <div class="summary-card__row">
+            <dt>{t.sumNow}</dt>
+            <dd>{t.sumNowValue}</dd>
+          </div>
+          <div class="summary-card__row">
+            <dt>{t.sumBefore}</dt>
+            <dd>{t.sumBeforeValue}</dd>
+          </div>
+          <div class="summary-card__row">
+            <dt>{t.sumStack}</dt>
+            <dd>{t.sumStackValue}</dd>
+          </div>
+          <div class="summary-card__row">
+            <dt>{t.sumBase}</dt>
+            <dd>{t.sumBaseValue}</dd>
+          </div>
+        </dl>
+      </aside>
     </section>
 
     <section aria-labelledby="perfiles">
-      <h2 id="perfiles">{t.profiles}</h2>
+      <SectionHeader id="perfiles" kicker={t.profiles} title={t.profilesTitle} />
       <div class="card-grid">
         {
-          profiles.map((profile) => (
-            <a class="card card-link" href={localePath(lang, `/perfiles/${profile.slug}/`)}>
-              <h3>{tx(lang, profile.name)}</h3>
-              <p class="lead">{tx(lang, profile.summary)}</p>
-            </a>
-          ))
+          profiles.map((profile, index) => {
+            const name = tx(lang, profile.name);
+            return (
+              <article class="card profile-card">
+                <p class="profile-card__num">{String(index + 1).padStart(2, '0')}</p>
+                <h3>{name}</h3>
+                <p class="profile-card__desc">{tx(lang, profile.summary)}</p>
+                <ul class="pills" aria-label={t.stack}>
+                  {profile.stack.map((item) => (
+                    <li>{item}</li>
+                  ))}
+                </ul>
+                <a
+                  class="profile-card__link text-link"
+                  href={localePath(lang, `/perfiles/${profile.slug}/`)}
+                  aria-label={`${t.viewProfile} ${name}`}
+                >
+                  {t.viewProfile} →
+                </a>
+              </article>
+            );
+          })
         }
       </div>
     </section>
 
-    <section aria-labelledby="experiencia">
-      <h2 id="experiencia">{t.experience}</h2>
-      {
-        featured ? (
-          <a class="card card-link" href={localePath(lang, `/experiencia/${featured.data.slug}/`)}>
-            <p class="kicker">
-              {tx(lang, featured.data.company)} · {dates(featured)}
-            </p>
-            <h3>{tx(lang, featured.data.title)}</h3>
-            <p class="lead">{tx(lang, featured.data.summary)}</p>
-          </a>
-        ) : (
-          <p class="pending">{t.experiencePending}</p>
-        )
-      }
-      {
-        rest.length > 0 && (
-          <div class="other-experiences">
-            <h3>{t.otherExperiences}</h3>
-            <ul class="link-list">
-              {rest.map((entry) => (
-                <li>
-                  <a class="row-link" href={localePath(lang, `/experiencia/${entry.data.slug}/`)}>
-                    <span class="row-link__title">{tx(lang, entry.data.company)}</span>
-                    <span class="kicker">
-                      {tx(lang, entry.data.title)} · {dates(entry)}
-                    </span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )
-      }
-    </section>
+    {
+      featured && (
+        <section aria-labelledby="experiencia">
+          <SectionHeader
+            id="experiencia"
+            kicker={t.experience}
+            title={t.experience}
+            sub={t.experienceSubtitle}
+          />
+          <article class="feature-card">
+            <div class="feature-card__media">
+              <p class="feature-card__media-title">{t.inFinance}</p>
+              {featured.data.stack?.[lang] && featured.data.stack[lang].length > 0 && (
+                <ul class="pills pills--on-panel" aria-label={t.stack}>
+                  {featured.data.stack[lang].map((item) => (
+                    <li>{item}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            <div class="feature-card__body">
+              <p class="kicker">
+                {tx(lang, featured.data.company)} · {dates(featured)}
+              </p>
+              <h3>{tx(lang, featured.data.title)}</h3>
+              <p class="feature-card__summary">{tx(lang, featured.data.summary)}</p>
+              {featuredHighlights.length > 0 && (
+                <ul class="feature-card__points">
+                  {featuredHighlights.map((item) => (
+                    <li>{item}</li>
+                  ))}
+                </ul>
+              )}
+              <a
+                class="text-link"
+                href={localePath(lang, `/experiencia/${featured.data.slug}/`)}
+              >
+                {t.readCase} →
+              </a>
+            </div>
+          </article>
+          {rest.length > 0 && (
+            <div class="other-experiences">
+              <h3>{t.otherExperiences}</h3>
+              <ul class="other-list">
+                {rest.map((entry) => (
+                  <li>
+                    <a
+                      class="other-row"
+                      href={localePath(lang, `/experiencia/${entry.data.slug}/`)}
+                    >
+                      <span class="other-row__main">
+                        <span class="other-row__company">{tx(lang, entry.data.company)}</span>
+                        <span class="other-row__meta">
+                          {tx(lang, entry.data.title)} · {dates(entry)}
+                        </span>
+                      </span>
+                      <span class="other-row__cta">{t.viewPage} →</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </section>
+      )
+    }
   </div>
   <ContactBand lang={lang} />
 </BaseLayout>

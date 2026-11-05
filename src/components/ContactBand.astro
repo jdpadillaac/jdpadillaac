@@ -1,20 +1,80 @@
 ---
 import { copy } from '../data/copy';
+import { cvAvailable, cvHref } from '../data/cv';
+import { site } from '../data/site';
 import { localePath } from '../i18n/paths';
 import { tx, ui, type Lang } from '../i18n/ui';
 
 interface Props {
   lang: Lang;
+  title?: string;
+  actions?: 'cv' | 'contact';
 }
 
-const { lang } = Astro.props;
+const { lang, actions = 'cv' } = Astro.props;
 const t = ui[lang];
+const title = Astro.props.title ?? t.bandTitle;
+const cvEs = cvAvailable('es');
+const cvEn = cvAvailable('en');
+const cvEsHref = cvEs ? cvHref('es') : localePath(lang, '/cv/#cv-es');
+const cvEnHref = cvEn ? cvHref('en') : localePath(lang, '/cv/#cv-en');
 ---
 
 <section class="band" aria-labelledby="contacto-banda">
-  <div class="container">
-    <h2 id="contacto-banda">{t.contact}</h2>
-    <p>{tx(lang, copy.contactPrompt)}</p>
-    <a class="button button--inverse" href={localePath(lang, '/contacto/')}>{t.contactCta}</a>
+  <div class="container band__grid">
+    <div class="band__main">
+      <h2 id="contacto-banda">{title}</h2>
+      <p>{tx(lang, copy.contactPrompt)}</p>
+      <div class="cluster">
+        {
+          actions === 'contact' ? (
+            <>
+              <a class="button button--light" href={localePath(lang, '/contacto/')}>
+                {t.contactCta}
+              </a>
+              <a
+                class="button button--outline-light"
+                href={cvEsHref}
+                download={cvEs ? '' : undefined}
+              >
+                {t.downloadCvEs}
+              </a>
+            </>
+          ) : (
+            <>
+              <a class="button button--light" href={cvEsHref} download={cvEs ? '' : undefined}>
+                {t.downloadCvEs}
+              </a>
+              <a
+                class="button button--outline-light"
+                href={cvEnHref}
+                download={cvEn ? '' : undefined}
+              >
+                {t.downloadCvEn}
+              </a>
+            </>
+          )
+        }
+      </div>
+    </div>
+    <div class="band__aside">
+      <dl class="band__list">
+        <div class="band__row">
+          <dt>{t.email}</dt>
+          <dd>
+            <a href={`mailto:${site.email}`}>{site.email}</a>
+          </dd>
+        </div>
+        <div class="band__row">
+          <dt>LinkedIn</dt>
+          <dd>
+            <a href={site.links.linkedin} rel="me noopener noreferrer" target="_blank">
+              {t.linkedinShort}
+              <span class="sr-only"> ({t.newTab})</span>
+            </a>
+          </dd>
+        </div>
+      </dl>
+    </div>
   </div>
 </section>

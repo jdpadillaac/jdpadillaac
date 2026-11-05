@@ -32,9 +32,9 @@ function current(href: string, exact = false) {
 ---
 
 <header class="header">
-  <div class="container header__bar">
+  <div class="container header__bar" data-open="false">
     <a class="brand" href={localePath(lang, '/')}>{site.name}</a>
-    <nav aria-label={t.navLabel}>
+    <nav id="navegacion" aria-label={t.navLabel}>
       <ul class="nav">
         {
           items.map((item) => (
@@ -47,6 +47,9 @@ function current(href: string, exact = false) {
         }
       </ul>
     </nav>
+    <button class="menu-button" type="button" aria-expanded="false" aria-controls="navegacion">
+      {t.menu}
+    </button>
     <nav aria-label={t.languageLabel}>
       <ul class="lang-switch">
         <li>
@@ -59,3 +62,21 @@ function current(href: string, exact = false) {
     </nav>
   </div>
 </header>
+
+<script>
+  const bar = document.querySelector('.header__bar');
+  const button = document.querySelector('.menu-button');
+  if (bar instanceof HTMLElement && button instanceof HTMLButtonElement) {
+    button.addEventListener('click', () => {
+      const open = bar.dataset.open === 'true';
+      bar.dataset.open = open ? 'false' : 'true';
+      button.setAttribute('aria-expanded', open ? 'false' : 'true');
+    });
+    bar.querySelectorAll('#navegacion a').forEach((link) => {
+      link.addEventListener('click', () => {
+        bar.dataset.open = 'false';
+        button.setAttribute('aria-expanded', 'false');
+      });
+    });
+  }
+</script>
