@@ -15,8 +15,8 @@
   --on-dark: #f6f3ec;
   --on-dark-2: #d8d2c4;
   --dark-rule: #4a463e;
-  --serif: 'Fraunces Variable', 'Fraunces', Georgia, serif;
-  --sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --serif: 'Fraunces Variable', 'Fraunces Fallback', Georgia, serif;
+  --sans: 'Inter', 'Inter Fallback', system-ui, -apple-system, sans-serif;
 }
 
 .h-shell {
