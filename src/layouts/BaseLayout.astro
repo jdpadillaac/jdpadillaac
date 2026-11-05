@@ -16,6 +16,7 @@ interface Props {
   noindex?: boolean;
   ogImage?: string;
   ogAlt?: string;
+  ogType?: 'website' | 'article';
   alternates?: { es: string; en: string };
   jsonLd?: Record<string, unknown>;
 }
@@ -29,6 +30,7 @@ const {
   noindex = false,
   ogImage,
   ogAlt,
+  ogType,
   alternates,
   jsonLd,
 } = Astro.props;
@@ -47,6 +49,7 @@ const t = ui[lang];
       noindex={noindex}
       ogImage={ogImage}
       ogAlt={ogAlt}
+      ogType={ogType}
       jsonLd={jsonLd}
     />
   </head>

@@ -2,6 +2,7 @@
 import { site } from '../data/site';
 import { isLang, swapLang } from '../i18n/paths';
 import { type Lang } from '../i18n/ui';
+import { ogImagePath, ogKeyFromPathname } from '../lib/og-image';
 import { absolute } from '../lib/url';
 
 interface Props {
@@ -23,27 +24,33 @@ const {
   lang,
   localized = true,
   noindex = false,
-  ogImage = site.ogImage,
+  ogImage,
   ogAlt = site.name,
   ogType = 'website',
 } = Astro.props;
 
 const canonical = absolute(pathname);
-const image = ogImage.startsWith('http') ? ogImage : absolute(ogImage);
+const resolvedOg = ogImage ?? ogImagePath(ogKeyFromPathname(pathname));
+const image = resolvedOg.startsWith('http') ? resolvedOg : absolute(resolvedOg);
 const alternates = (['es', 'en'] as const).map((code) => ({
   code,
   href: absolute(swapLang(pathname, code)),
 }));
-const xDefault = alternates.find((item) => item.code === 'en')?.href ?? canonical;
+const xDefault = alternates.find((item) => item.code === 'es')?.href ?? canonical;
 const robots = noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large';
 const ogLocale = lang === 'es' ? 'es_CO' : 'en_US';
 const ogAlternate = lang === 'es' ? 'en_US' : 'es_CO';
+
+const googleVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
+const bingVerification = import.meta.env.PUBLIC_BING_SITE_VERIFICATION;
 
 if (!isLang(lang)) {
   throw new Error(`Unsupported language: ${lang}`);
 }
 ---
 
+{googleVerification && <meta name="google-site-verification" content={googleVerification} />}
+{bingVerification && <meta name="msvalidate.01" content={bingVerification} />}
 <title>{title}</title>
 <meta name="description" content={description} />
 <meta name="author" content={site.name} />

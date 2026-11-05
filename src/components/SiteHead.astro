@@ -13,6 +13,7 @@ interface Props {
   noindex?: boolean;
   ogImage?: string;
   ogAlt?: string;
+  ogType?: 'website' | 'article';
   jsonLd?: Record<string, unknown>;
 }
 
@@ -25,6 +26,7 @@ const {
   noindex = false,
   ogImage,
   ogAlt,
+  ogType,
   jsonLd,
 } = Astro.props;
 ---
@@ -41,6 +43,7 @@ const {
   noindex={noindex}
   ogImage={ogImage}
   ogAlt={ogAlt}
+  ogType={ogType}
 />
 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 <link rel="icon" href="/favicon.ico" sizes="any" />
