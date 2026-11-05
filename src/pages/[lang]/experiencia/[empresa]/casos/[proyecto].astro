@@ -1,0 +1,72 @@
+---
+import Breadcrumbs from '../../../../../components/Breadcrumbs.astro';
+import ContactBand from '../../../../../components/ContactBand.astro';
+import Study from '../../../../../components/Study.astro';
+import BaseLayout from '../../../../../layouts/BaseLayout.astro';
+import { site } from '../../../../../data/site';
+import { isLang, langs, localePath } from '../../../../../i18n/paths';
+import { tx, ui } from '../../../../../i18n/ui';
+import { publishedCases, publishedExperiences } from '../../../../../lib/content';
+import { breadcrumbGraph } from '../../../../../lib/structured-data';
+
+export async function getStaticPaths() {
+  const cases = await publishedCases();
+  return langs.flatMap((lang) =>
+    cases.map((entry) => ({
+      params: { lang, empresa: entry.data.experienceSlug, proyecto: entry.data.slug },
+    })),
+  );
+}
+
+const langParam = Astro.params.lang;
+const { empresa, proyecto } = Astro.params;
+if (!isLang(langParam) || !empresa || !proyecto) throw new Error('Unsupported case');
+const lang = langParam;
+const t = ui[lang];
+const experiences = await publishedExperiences();
+const parent = experiences.find((item) => item.data.slug === empresa);
+const entry = (await publishedCases()).find((item) => item.data.experienceSlug === empresa && item.data.slug === proyecto);
+if (!parent || !entry) throw new Error(`Missing case: ${empresa}/${proyecto}`);
+
+const pathname = localePath(lang, `/experiencia/${empresa}/casos/${proyecto}/`);
+const company = tx(lang, parent.data.company);
+const title = tx(lang, entry.data.title);
+const dates = `${tx(lang, parent.data.start)} — ${tx(lang, parent.data.end)}`;
+const crumbs = [
+  { label: t.home, href: localePath(lang, '/') },
+  { label: t.experience, href: localePath(lang, '/experiencia/') },
+  { label: company, href: localePath(lang, `/experiencia/${empresa}/`) },
+  { label: title, href: pathname },
+];
+const sections = [
+  { id: 'contexto', title: t.context, body: tx(lang, entry.data.context) },
+  { id: 'rol', title: t.roleSection, body: tx(lang, entry.data.roleNarrative) },
+  { id: 'reto', title: t.challenge, body: tx(lang, entry.data.challenge) },
+  { id: 'solucion', title: t.solution, body: tx(lang, entry.data.solution) },
+];
+---
+
+<BaseLayout
+  lang={lang}
+  title={`${title} — ${company} — ${site.name}`}
+  description={tx(lang, entry.data.description)}
+  pathname={pathname}
+  jsonLd={breadcrumbGraph(crumbs)}
+>
+  <div class="container page">
+    <Study
+      lang={lang}
+      kicker={`${company} · ${dates}`}
+      title={title}
+      summary={tx(lang, entry.data.summary)}
+      heroAlt={tx(lang, entry.data.heroAlt)}
+      results={entry.data.results.map((item) => ({ value: tx(lang, item.value), label: tx(lang, item.label) }))}
+      sections={sections}
+      shots={entry.data.gallery.map((shot) => tx(lang, shot.alt))}
+      learnings={tx(lang, entry.data.learnings)}
+    >
+      <Breadcrumbs slot="crumbs" items={crumbs} label={t.breadcrumbs} />
+    </Study>
+  </div>
+  <ContactBand lang={lang} />
+</BaseLayout>

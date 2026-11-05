@@ -1,0 +1,13 @@
+---
+interface Props {
+  alt: string;
+  width?: number;
+  height?: number;
+}
+
+const { alt, width = 1200, height = 750 } = Astro.props;
+---
+
+<div class="frame" role="img" aria-label={alt} style={`aspect-ratio: ${width} / ${height}`}>
+  <span>{alt}</span>
+</div>

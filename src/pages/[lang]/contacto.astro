@@ -1,0 +1,70 @@
+---
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { site } from '../../data/site';
+import { isLang, localePath, staticLangs } from '../../i18n/paths';
+import { ui } from '../../i18n/ui';
+import { breadcrumbGraph } from '../../lib/structured-data';
+
+export function getStaticPaths() {
+  return staticLangs();
+}
+
+const langParam = Astro.params.lang;
+if (!isLang(langParam)) throw new Error('Unsupported language');
+const lang = langParam;
+const t = ui[lang];
+const pathname = localePath(lang, '/contacto/');
+const crumbs = [
+  { label: t.home, href: localePath(lang, '/') },
+  { label: t.contact, href: pathname },
+];
+---
+
+<BaseLayout
+  lang={lang}
+  title={`${t.contact} — ${site.name}`}
+  description={t.seoContact}
+  pathname={pathname}
+  jsonLd={breadcrumbGraph(crumbs)}
+>
+  <div class="container page">
+    <Breadcrumbs items={crumbs} label={t.breadcrumbs} />
+    <header>
+      <h1 id="titulo">{t.contact}</h1>
+      <p class="lead"><a href={`mailto:${site.email}`}>{site.email}</a></p>
+    </header>
+    <form
+      class="form"
+      name="contact"
+      method="POST"
+      action={localePath(lang, '/contacto/enviado/')}
+      data-netlify="true"
+      netlify-honeypot="bot-field"
+    >
+      <input type="hidden" name="form-name" value="contact" />
+      <input type="hidden" name="subject" value={`Contacto — ${site.name}`} />
+      <input type="hidden" name="locale" value={lang} />
+      <p class="honeypot">
+        <label>
+          {t.honeypot}
+          <input name="bot-field" tabindex="-1" autocomplete="off" />
+        </label>
+      </p>
+      <label class="field">
+        {t.formName}
+        <input id={`nombre-${lang}`} name="name" type="text" required autocomplete="name" />
+      </label>
+      <label class="field">
+        {t.formEmail}
+        <input id={`correo-${lang}`} name="email" type="email" required autocomplete="email" />
+      </label>
+      <label class="field">
+        {t.formMessage}
+        <textarea id={`mensaje-${lang}`} name="message" required></textarea>
+      </label>
+      <p class="kicker">{t.formHint}</p>
+      <button class="button" type="submit">{t.formSend}</button>
+    </form>
+  </div>
+</BaseLayout>

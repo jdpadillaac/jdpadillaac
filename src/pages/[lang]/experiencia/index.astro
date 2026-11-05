@@ -1,0 +1,79 @@
+---
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import ContactBand from '../../../components/ContactBand.astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { copy } from '../../../data/copy';
+import { site } from '../../../data/site';
+import { isLang, localePath, staticLangs } from '../../../i18n/paths';
+import { tx, ui } from '../../../i18n/ui';
+import { publishedCases, publishedExperiences } from '../../../lib/content';
+import { breadcrumbGraph } from '../../../lib/structured-data';
+
+export function getStaticPaths() {
+  return staticLangs();
+}
+
+const langParam = Astro.params.lang;
+if (!isLang(langParam)) throw new Error('Unsupported language');
+const lang = langParam;
+const t = ui[lang];
+const pathname = localePath(lang, '/experiencia/');
+const experiences = await publishedExperiences();
+const cases = await publishedCases();
+const crumbs = [
+  { label: t.home, href: localePath(lang, '/') },
+  { label: t.experience, href: pathname },
+];
+---
+
+<BaseLayout
+  lang={lang}
+  title={`${t.experience} — ${site.name}`}
+  description={t.seoExperience}
+  pathname={pathname}
+  jsonLd={breadcrumbGraph(crumbs)}
+>
+  <div class="container page">
+    <Breadcrumbs items={crumbs} label={t.breadcrumbs} />
+    <header>
+      <h1 id="titulo">{t.experience}</h1>
+      <p class="lead">{tx(lang, copy.intro)}</p>
+    </header>
+    {
+      experiences.length > 0 ? (
+        <ul class="link-list">
+          {experiences.map((entry) => {
+            const childCases = cases.filter((item) => item.data.experienceSlug === entry.data.slug);
+            return (
+              <li>
+                <a class="row-link" href={localePath(lang, `/experiencia/${entry.data.slug}/`)}>
+                  <span class="row-link__title">{tx(lang, entry.data.company)}</span>
+                  <span class="kicker">
+                    {tx(lang, entry.data.title)} · {tx(lang, entry.data.start)} — {tx(lang, entry.data.end)}
+                  </span>
+                </a>
+                {childCases.length > 0 && (
+                  <ul class="link-list">
+                    {childCases.map((item) => (
+                      <li>
+                        <a
+                          class="row-link"
+                          href={localePath(lang, `/experiencia/${entry.data.slug}/casos/${item.data.slug}/`)}
+                        >
+                          <span class="row-link__title">{tx(lang, item.data.title)}</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <p class="pending">{t.experiencePending}</p>
+      )
+    }
+  </div>
+  <ContactBand lang={lang} />
+</BaseLayout>

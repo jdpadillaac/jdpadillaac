@@ -1,18 +1,34 @@
 ---
-import { profile } from '../data/profile';
+import { site } from '../data/site';
+import { ui, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = ui[lang];
 const year = new Date().getFullYear();
+const links = [
+  { href: site.links.linkedin, label: 'LinkedIn' },
+  { href: site.links.github, label: 'GitHub' },
+  { href: site.links.x, label: 'X' },
+];
 ---
 
-<footer class="site-footer">
-  <div class="shell">
-    <p>
-      © {year} {profile.givenName} {profile.familyName}. Construido con Astro y desplegado en Netlify.
-    </p>
-    <p class="link-row">
-      <a href={profile.links.github}>GitHub</a>
-      <a href={profile.links.linkedin}>LinkedIn</a>
-      <a href={profile.links.x}>X</a>
-      <a href={`mailto:${profile.email}`}>{profile.email}</a>
-    </p>
+<footer class="footer">
+  <div class="container footer__inner">
+    <p>© {year} {site.name}</p>
+    <div class="footer__links">
+      <a href={`mailto:${site.email}`}>{site.email}</a>
+      {
+        links.map((link) => (
+          <a href={link.href} rel="me noopener noreferrer" target="_blank">
+            {link.label}
+            <span class="sr-only"> ({t.newTab})</span>
+          </a>
+        ))
+      }
+    </div>
   </div>
 </footer>

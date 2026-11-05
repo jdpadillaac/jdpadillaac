@@ -1,62 +1,62 @@
 ---
-import { profile } from '../data/profile';
+import { site } from '../data/site';
+import { localePath, swapLang } from '../i18n/paths';
+import { ui, type Lang } from '../i18n/ui';
 
 interface Props {
-  currentPath: string;
+  lang: Lang;
+  pathname: string;
+  alternates?: { es: string; en: string };
 }
 
-const { currentPath } = Astro.props;
+const { lang, pathname, alternates } = Astro.props;
+const t = ui[lang];
+const hrefs = {
+  es: alternates?.es ?? swapLang(pathname, 'es'),
+  en: alternates?.en ?? swapLang(pathname, 'en'),
+};
 
-const links = [
-  { href: '/', label: 'Inicio' },
-  { href: '/proyectos', label: 'Proyectos' },
-  { href: '/sobre-mi', label: 'Sobre mí' },
-  { href: '/contacto', label: 'Contacto' },
+const items = [
+  { href: localePath(lang, '/'), label: t.home, exact: true },
+  { href: localePath(lang, '/perfiles/'), label: t.profiles },
+  { href: localePath(lang, '/experiencia/'), label: t.experience },
+  { href: localePath(lang, '/proyectos/'), label: t.projects },
+  { href: localePath(lang, '/sobre-mi/'), label: t.about },
+  { href: localePath(lang, '/contacto/'), label: t.contact },
+  { href: localePath(lang, '/cv/'), label: t.cv },
 ];
 
-const isActive = (href: string) => {
-  if (href === '/') return currentPath === '/';
-  return currentPath.startsWith(href);
-};
+function current(href: string, exact = false) {
+  if (exact || href === localePath(lang, '/')) return pathname === href;
+  return pathname === href || pathname.startsWith(href);
+}
 ---
 
-<header class="site-header">
-  <div class="shell site-header__inner">
-    <a class="brand" href="/">{profile.givenName} {profile.familyName}</a>
-    <nav class="nav" aria-label="Principal">
-      <details class="nav-toggle">
-        <summary>Menú</summary>
-        <div class="nav-panel">
-          {
-            links.map((link) => (
-              <a href={link.href} aria-current={isActive(link.href) ? 'page' : undefined}>
-                {link.label}
+<header class="header">
+  <div class="container header__bar">
+    <a class="brand" href={localePath(lang, '/')}>{site.name}</a>
+    <nav aria-label={t.navLabel}>
+      <ul class="nav">
+        {
+          items.map((item) => (
+            <li>
+              <a href={item.href} aria-current={current(item.href, item.exact) ? 'page' : undefined}>
+                {item.label}
               </a>
-            ))
-          }
-        </div>
-      </details>
-      {
-        links.map((link) => (
-          <a class="nav-desktop" href={link.href} aria-current={isActive(link.href) ? 'page' : undefined}>
-            {link.label}
-          </a>
-        ))
-      }
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+    <nav aria-label={t.languageLabel}>
+      <ul class="lang-switch">
+        <li>
+          <a href={hrefs.es} hreflang="es" lang="es" aria-current={hrefs.es === pathname ? 'page' : undefined}>ES</a>
+        </li>
+        <li>
+          <a href={hrefs.en} hreflang="en" lang="en" aria-current={hrefs.en === pathname ? 'page' : undefined}>EN</a>
+        </li>
+      </ul>
     </nav>
   </div>
 </header>
-
-<style>
-  @media (max-width: 767px) {
-    .nav-desktop {
-      display: none;
-    }
-  }
-
-  @media (min-width: 768px) {
-    .nav-toggle {
-      display: none !important;
-    }
-  }
-</style>

@@ -5,11 +5,57 @@
 [build.environment]
   NODE_VERSION = "22"
 
+[dev]
+  command = "npm run dev"
+  targetPort = 4321
+  port = 8888
+  framework = "#astro"
+
 [[redirects]]
   from = "https://www.jdpadillac.com/*"
   to = "https://jdpadillac.com/:splat"
   status = 301
   force = true
+
+[[redirects]]
+  from = "/sitemap.xml"
+  to = "/sitemap-index.xml"
+  status = 200
+
+[[redirects]]
+  from = "/proyectos"
+  to = "/es/proyectos/"
+  status = 301
+
+[[redirects]]
+  from = "/proyectos/"
+  to = "/es/proyectos/"
+  status = 301
+
+[[redirects]]
+  from = "/proyectos/*"
+  to = "/es/proyectos/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/contacto"
+  to = "/es/contacto/"
+  status = 301
+
+[[redirects]]
+  from = "/contacto/"
+  to = "/es/contacto/"
+  status = 301
+
+[[redirects]]
+  from = "/sobre-mi"
+  to = "/es/sobre-mi/"
+  status = 301
+
+[[redirects]]
+  from = "/sobre-mi/"
+  to = "/es/sobre-mi/"
+  status = 301
 
 [[headers]]
   for = "/*"
@@ -17,6 +63,7 @@
     X-Frame-Options = "DENY"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
 
 [[headers]]
   for = "/_astro/*"

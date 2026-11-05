@@ -1,0 +1,52 @@
+---
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import ContactBand from '../../../components/ContactBand.astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { copy } from '../../../data/copy';
+import { profiles } from '../../../data/profiles';
+import { site } from '../../../data/site';
+import { isLang, localePath, staticLangs } from '../../../i18n/paths';
+import { tx, ui } from '../../../i18n/ui';
+import { breadcrumbGraph } from '../../../lib/structured-data';
+
+export function getStaticPaths() {
+  return staticLangs();
+}
+
+const langParam = Astro.params.lang;
+if (!isLang(langParam)) throw new Error('Unsupported language');
+const lang = langParam;
+const t = ui[lang];
+const pathname = localePath(lang, '/perfiles/');
+const crumbs = [
+  { label: t.home, href: localePath(lang, '/') },
+  { label: t.profiles, href: pathname },
+];
+---
+
+<BaseLayout
+  lang={lang}
+  title={`${t.profiles} — ${site.name}`}
+  description={t.seoProfiles}
+  pathname={pathname}
+  jsonLd={breadcrumbGraph(crumbs)}
+>
+  <div class="container page">
+    <Breadcrumbs items={crumbs} label={t.breadcrumbs} />
+    <header>
+      <h1 id="titulo">{t.profiles}</h1>
+      <p class="lead">{tx(lang, copy.intro)}</p>
+    </header>
+    <div class="card-grid">
+      {
+        profiles.map((profile) => (
+          <a class="card card-link" href={localePath(lang, `/perfiles/${profile.slug}/`)}>
+            <h2>{tx(lang, profile.name)}</h2>
+            <p class="lead">{tx(lang, profile.summary)}</p>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+  <ContactBand lang={lang} />
+</BaseLayout>

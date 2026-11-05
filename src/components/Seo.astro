@@ -1,35 +1,79 @@
 ---
-import { site, profile } from '../data/profile';
+import { site } from '../data/site';
+import { isLang, swapLang } from '../i18n/paths';
+import { type Lang } from '../i18n/ui';
+import { absolute } from '../lib/url';
 
 interface Props {
   title: string;
   description: string;
-  canonical: string;
-  ogImage: string;
-  ogType: 'website' | 'article';
+  pathname: string;
+  lang: Lang;
+  localized?: boolean;
+  noindex?: boolean;
+  ogImage?: string;
+  ogAlt?: string;
+  ogType?: 'website' | 'article';
 }
 
-const { title, description, canonical, ogImage, ogType } = Astro.props;
-const imageUrl = new URL(ogImage, Astro.site).href;
+const {
+  title,
+  description,
+  pathname,
+  lang,
+  localized = true,
+  noindex = false,
+  ogImage = site.ogImage,
+  ogAlt = site.name,
+  ogType = 'website',
+} = Astro.props;
+
+const canonical = absolute(pathname);
+const image = ogImage.startsWith('http') ? ogImage : absolute(ogImage);
+const alternates = (['es', 'en'] as const).map((code) => ({
+  code,
+  href: absolute(swapLang(pathname, code)),
+}));
+const xDefault = alternates.find((item) => item.code === 'en')?.href ?? canonical;
+const robots = noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large';
+const ogLocale = lang === 'es' ? 'es_CO' : 'en_US';
+const ogAlternate = lang === 'es' ? 'en_US' : 'es_CO';
+
+if (!isLang(lang)) {
+  throw new Error(`Unsupported language: ${lang}`);
+}
 ---
 
 <title>{title}</title>
 <meta name="description" content={description} />
+<meta name="author" content={site.name} />
+<meta name="robots" content={robots} />
+<meta http-equiv="content-language" content={lang} />
+<meta name="theme-color" content="#F6F3EC" />
 <link rel="canonical" href={canonical} />
-<meta name="author" content={profile.givenName + ' ' + profile.familyName} />
-
-<meta property="og:site_name" content={site.name} />
-<meta property="og:locale" content={site.locale} />
+{
+  localized && (
+    <>
+      {alternates.map((item) => (
+        <link rel="alternate" hreflang={item.code} href={item.href} />
+      ))}
+      <link rel="alternate" hreflang="x-default" href={xDefault} />
+    </>
+  )
+}
 <meta property="og:type" content={ogType} />
+<meta property="og:site_name" content={site.name} />
+<meta property="og:locale" content={ogLocale} />
+<meta property="og:locale:alternate" content={ogAlternate} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:url" content={canonical} />
-<meta property="og:image" content={imageUrl} />
+<meta property="og:image" content={image} />
+<meta property="og:image:alt" content={ogAlt} />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
-
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:creator" content="@jdpadillac_" />
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
-<meta name="twitter:image" content={imageUrl} />
+<meta name="twitter:image" content={image} />
+<meta name="twitter:image:alt" content={ogAlt} />

@@ -1,82 +1,43 @@
 # jdpadillac.com
 
-Portafolio estático de **Jonatan Padilla**, construido con [Astro](https://astro.build) y pensado para desplegarse en [Netlify](https://www.netlify.com) en `https://jdpadillac.com`.
+Portafolio estático de Jonatan Padilla. Astro genera HTML en `dist/` y Netlify lo publica en `https://jdpadillac.com`.
 
-## Requisitos
-
-- Node.js 22+
-- npm 10+
-
-## Desarrollo local
+## Desarrollo
 
 ```bash
 npm install
 npm run dev
 ```
 
-Abre `http://localhost:4321`.
-
-## Build de producción
+Abre `http://localhost:4321`. `/` elige `/es/` o `/en/` con el idioma del navegador. En producción esa redirección la hace una edge function; en local la hace la página de inicio.
 
 ```bash
 npm run build
 npm run preview
 ```
 
-La salida queda en `dist/`.
+## Contenido
 
-## Estructura
+Los textos y cifras que todavía no están definidos aparecen entre corchetes, por ejemplo `[Titular pendiente]`. No rellenes esos huecos con datos estimados.
 
-- `src/pages/` — rutas del sitio (inicio, proyectos, sobre mí, contacto, 404)
-- `src/content/projects/` — un Markdown por proyecto
-- `src/data/profile.ts` — datos personales y SEO por defecto
-- `public/` — favicon, `robots.txt`, imágenes Open Graph
-- `netlify.toml` — build, caché, headers y redirección `www` → apex
+- Interfaz: `src/i18n/ui.ts`
+- Identidad, enlaces y stack: `src/data/site.ts`
+- Textos de portada: `src/data/copy.ts`
+- Perfiles: `src/data/profiles.ts`
+- Experiencias: `src/content/experiences/*.mdx`
+- Casos: `src/content/cases/*.mdx`
+- Proyectos: `src/content/projects/*.md`
 
-## Desplegar en Netlify (GitHub)
+`published: false` deja una experiencia o un caso fuera del build, del listado y del sitemap. Los borradores de ejemplo son `borrador`.
 
-1. **Sube el código** al repositorio [github.com/jdpadillaac/jdpadillaac](https://github.com/jdpadillaac/jdpadillaac):
+Los PDF del CV van en `public/cv/jonatan-padilla-es.pdf` y `public/cv/jonatan-padilla-en.pdf`. Hasta que existan, los botones llevan a la página `/cv/`.
 
-   ```bash
-   git add .
-   git commit -m "Reemplaza portafolio Flutter por sitio Astro estático"
-   git push origin master
-   ```
+## Idiomas
 
-2. En [Netlify](https://app.netlify.com), elige **Add new site → Import an existing project** y conecta GitHub.
+Las rutas conservan el mismo camino después del prefijo: `/es/experiencia/empresa-a/` y `/en/experiencia/empresa-a/`. El conmutador ES/EN intercambia solo ese prefijo. `hreflang` incluye `es`, `en` y `x-default` (inglés).
 
-3. Selecciona el repo `jdpadillaac/jdpadillaac`. Netlify detectará `netlify.toml`:
-   - **Build command:** `npm run build`
-   - **Publish directory:** `dist`
-   - **Node:** 22 (definido en `netlify.toml`)
+## Netlify
 
-4. **Dominio custom**
-   - En *Domain management*, añade `jdpadillac.com` como dominio principal.
-   - Añade `www.jdpadillac.com` como alias; la redirección 301 a la raíz ya está en `netlify.toml`.
-   - Configura los registros DNS que Netlify indique (normalmente `A`/`AAAA` al load balancer de Netlify y `CNAME` de `www`).
+`netlify.toml` define el build (`npm run build`, `dist`, Node 22), la redirección de `www`, las rutas viejas hacia `/es/…` y el formulario `contact`. Después del primer deploy, confirma el formulario en Forms y avisa a `contact@jdpadillac.com`.
 
-5. **HTTPS:** activa *Force HTTPS* en Netlify cuando el certificado esté listo.
-
-6. **Formulario de contacto**
-   - El formulario en `/contacto` usa [Netlify Forms](https://docs.netlify.com/forms/setup/) (`data-netlify="true"`).
-   - Tras el primer deploy, en *Site configuration → Forms* verifica que aparezca el formulario `contact`.
-   - En *Form notifications*, añade un email a `contact@jdpadillac.com`.
-
-## SEO incluido
-
-- HTML semántico pre-renderizado
-- `title`, meta description y canonical por página
-- Open Graph y Twitter Cards
-- `sitemap-index.xml` y `robots.txt`
-- JSON-LD (`Person` + `WebSite` en inicio)
-- Imágenes optimizadas (WebP) con `alt`, dimensiones y lazy loading
-
-## Editar contenido
-
-- Perfil y enlaces: [`src/data/profile.ts`](src/data/profile.ts)
-- Proyectos: archivos en [`src/content/projects/`](src/content/projects/) (frontmatter + cuerpo Markdown)
-- Estilos globales: [`src/styles/global.css`](src/styles/global.css)
-
-## Licencia
-
-Contenido y código del sitio © Jonatan Padilla. Repos enlazados mantienen sus licencias propias.
+`/` responde 302 según `Accept-Language`. Español tiene prioridad cuando su peso es mayor; el resto cae en inglés.

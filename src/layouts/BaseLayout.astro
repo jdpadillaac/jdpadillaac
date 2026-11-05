@@ -1,33 +1,44 @@
 ---
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import Seo from '../components/Seo.astro';
-import JsonLd from '../components/JsonLd.astro';
+import '@fontsource/fraunces/latin-500.css';
+import '@fontsource/inter/latin-400.css';
+import '@fontsource/inter/latin-600.css';
 import '../styles/global.css';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import JsonLd from '../components/JsonLd.astro';
+import Seo from '../components/Seo.astro';
+import { ui, type Lang } from '../i18n/ui';
 
 interface Props {
+  lang: Lang;
   title: string;
   description: string;
+  pathname: string;
+  localized?: boolean;
+  noindex?: boolean;
   ogImage?: string;
-  ogType?: 'website' | 'article';
-  includeWebsiteSchema?: boolean;
-  currentPath?: string;
+  ogAlt?: string;
+  alternates?: { es: string; en: string };
+  jsonLd?: Record<string, unknown>;
 }
 
 const {
+  lang,
   title,
   description,
-  ogImage = '/og/default.svg',
-  ogType = 'website',
-  includeWebsiteSchema = false,
-  currentPath = Astro.url.pathname,
+  pathname,
+  localized = true,
+  noindex = false,
+  ogImage,
+  ogAlt,
+  alternates,
+  jsonLd,
 } = Astro.props;
-
-const canonical = new URL(currentPath === '/' ? '/' : currentPath.replace(/\/$/, ''), Astro.site);
+const t = ui[lang];
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -35,22 +46,25 @@ const canonical = new URL(currentPath === '/' ? '/' : currentPath.replace(/\/$/,
     <Seo
       title={title}
       description={description}
-      canonical={canonical.href}
+      pathname={pathname}
+      lang={lang}
+      localized={localized}
+      noindex={noindex}
       ogImage={ogImage}
-      ogType={ogType}
+      ogAlt={ogAlt}
     />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    <JsonLd includeWebsite={includeWebsiteSchema} />
+    {jsonLd && <JsonLd data={jsonLd} />}
   </head>
   <body>
-    <a class="skip-link" href="#contenido-principal">Saltar al contenido</a>
-    <Header currentPath={currentPath} />
-    <main id="contenido-principal" class="site-main">
+    <a class="skip-link" href="#contenido">{t.skip}</a>
+    <Header lang={lang} pathname={pathname} alternates={alternates} />
+    <main id="contenido">
       <slot />
     </main>
-    <Footer />
+    <Footer lang={lang} />
   </body>
 </html>

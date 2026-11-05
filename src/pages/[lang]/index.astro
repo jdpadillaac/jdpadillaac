@@ -1,0 +1,127 @@
+---
+import ContactBand from '../../components/ContactBand.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { cvAvailable, cvHref } from '../../data/cv';
+import { copy } from '../../data/copy';
+import { profiles } from '../../data/profiles';
+import { site } from '../../data/site';
+import { isLang, localePath, staticLangs } from '../../i18n/paths';
+import { tx, ui } from '../../i18n/ui';
+import { publishedExperiences } from '../../lib/content';
+import { identityGraph } from '../../lib/structured-data';
+
+export function getStaticPaths() {
+  return staticLangs();
+}
+
+const langParam = Astro.params.lang;
+if (!isLang(langParam)) throw new Error('Unsupported language');
+const lang = langParam;
+const t = ui[lang];
+const pathname = localePath(lang, '/');
+const experiences = await publishedExperiences();
+const featured = experiences.find((entry) => entry.data.featured) ?? experiences[0];
+const rest = featured ? experiences.filter((entry) => entry.data.slug !== featured.data.slug) : [];
+const cvEs = cvAvailable('es');
+const cvEn = cvAvailable('en');
+
+function dates(entry: (typeof experiences)[number]) {
+  return `${tx(lang, entry.data.start)} — ${tx(lang, entry.data.end)}`;
+}
+---
+
+<BaseLayout
+  lang={lang}
+  title={`${site.name} — ${lang === 'es' ? 'Portafolio' : 'Portfolio'}`}
+  description={t.seoHome}
+  pathname={pathname}
+  jsonLd={identityGraph(lang)}
+>
+  <div class="container page">
+    <section class="hero" aria-labelledby="titulo">
+      <p class="pill">{tx(lang, copy.availability)}</p>
+      <h1 id="titulo">{tx(lang, copy.headline)}</h1>
+      <div class="cluster">
+        <a class="button" href={cvEs ? cvHref('es') : localePath(lang, '/cv/#cv-es')} download={cvEs ? '' : undefined}>
+          {t.downloadCvEs}
+        </a>
+        <a class="button button--ghost" href={cvEn ? cvHref('en') : localePath(lang, '/cv/#cv-en')} download={cvEn ? '' : undefined}>
+          {t.downloadCvEn}
+        </a>
+        <a class="button button--ghost" href={site.links.linkedin} rel="me noopener noreferrer" target="_blank">
+          LinkedIn
+          <span class="sr-only"> ({t.newTab})</span>
+        </a>
+        <a class="button button--ghost" href={site.links.github} rel="me noopener noreferrer" target="_blank">
+          GitHub
+          <span class="sr-only"> ({t.newTab})</span>
+        </a>
+      </div>
+    </section>
+
+    <section aria-labelledby="resultados-inicio">
+      <h2 id="resultados-inicio" class="sr-only">{t.results}</h2>
+      <ul class="results results--strip">
+        {
+          copy.results.map((item) => (
+            <li>
+              <p class="result__value">{tx(lang, item.value)}</p>
+              <p class="result__label">{tx(lang, item.label)}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section aria-labelledby="perfiles">
+      <h2 id="perfiles">{t.profiles}</h2>
+      <div class="card-grid">
+        {
+          profiles.map((profile) => (
+            <a class="card card-link" href={localePath(lang, `/perfiles/${profile.slug}/`)}>
+              <h3>{tx(lang, profile.name)}</h3>
+              <p class="lead">{tx(lang, profile.summary)}</p>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+
+    <section aria-labelledby="experiencia">
+      <h2 id="experiencia">{t.experience}</h2>
+      {
+        featured ? (
+          <a class="card card-link" href={localePath(lang, `/experiencia/${featured.data.slug}/`)}>
+            <p class="kicker">
+              {tx(lang, featured.data.company)} · {dates(featured)}
+            </p>
+            <h3>{tx(lang, featured.data.title)}</h3>
+            <p class="lead">{tx(lang, featured.data.summary)}</p>
+          </a>
+        ) : (
+          <p class="pending">{t.experiencePending}</p>
+        )
+      }
+      {
+        rest.length > 0 && (
+          <div>
+            <h3>{t.otherExperiences}</h3>
+            <ul class="link-list">
+              {rest.map((entry) => (
+                <li>
+                  <a class="row-link" href={localePath(lang, `/experiencia/${entry.data.slug}/`)}>
+                    <span class="row-link__title">{tx(lang, entry.data.company)}</span>
+                    <span class="kicker">
+                      {tx(lang, entry.data.title)} · {dates(entry)}
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+    </section>
+  </div>
+  <ContactBand lang={lang} />
+</BaseLayout>

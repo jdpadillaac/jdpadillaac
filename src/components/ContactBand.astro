@@ -1,0 +1,20 @@
+---
+import { copy } from '../data/copy';
+import { localePath } from '../i18n/paths';
+import { tx, ui, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = ui[lang];
+---
+
+<section class="band" aria-labelledby="contacto-banda">
+  <div class="container">
+    <h2 id="contacto-banda">{t.contact}</h2>
+    <p>{tx(lang, copy.contactPrompt)}</p>
+    <a class="button button--inverse" href={localePath(lang, '/contacto/')}>{t.contactCta}</a>
+  </div>
+</section>

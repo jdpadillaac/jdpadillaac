@@ -1,38 +1,9 @@
 ---
-import { profile, site } from '../data/profile';
-
 interface Props {
-  includeWebsite?: boolean;
+  data: Record<string, unknown>;
 }
 
-const { includeWebsite = false } = Astro.props;
-
-const personSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'Person',
-  name: `${profile.givenName} ${profile.familyName}`,
-  jobTitle: profile.role,
-  url: site.domain,
-  email: `mailto:${profile.email}`,
-  address: {
-    '@type': 'PostalAddress',
-    addressCountry: 'CO',
-  },
-  sameAs: [profile.links.github, profile.links.linkedin, profile.links.x],
-};
-
-const websiteSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'WebSite',
-  name: site.name,
-  url: site.domain,
-  inLanguage: site.language,
-  author: {
-    '@type': 'Person',
-    name: `${profile.givenName} ${profile.familyName}`,
-  },
-};
+const json = JSON.stringify(Astro.props.data).replace(/</g, '\\u003c');
 ---
 
-<script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
-{includeWebsite && <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />}
+<script type="application/ld+json" set:html={json} />

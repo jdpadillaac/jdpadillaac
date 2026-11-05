@@ -1,76 +1,61 @@
 ---
-import { Image } from 'astro:assets';
-import { getCollection } from 'astro:content';
-import BaseLayout from '../layouts/BaseLayout.astro';
-import ProjectCard from '../components/ProjectCard.astro';
-import profilePhoto from '../assets/images/profile.jpg';
-import { defaultSeo, profile } from '../data/profile';
-
-const projects = (await getCollection('projects'))
-  .filter((entry) => entry.data.featured)
-  .sort((a, b) => a.data.order - b.data.order)
-  .slice(0, 3);
+const title = 'Jonatan Padilla';
+const description = 'Portafolio de Jonatan Padilla.';
 ---
 
-<BaseLayout
-  title={defaultSeo.title}
-  description={defaultSeo.description}
-  ogImage={defaultSeo.ogImage}
-  includeWebsiteSchema={true}
-  currentPath="/"
->
-  <div class="shell">
-    <section class="hero" aria-labelledby="titulo-inicio">
-      <div>
-        <p class="chip">{profile.location}</p>
-        <h1 id="titulo-inicio">{profile.givenName} {profile.familyName}</h1>
-        <p class="hero__lead">{profile.role}. {profile.tagline}</p>
-        <div class="link-row">
-          <a class="button button--primary" href="/proyectos">Ver proyectos</a>
-          <a class="button button--ghost" href="/contacto">Contacto</a>
-        </div>
-        <div class="hero__meta">
-          <span class="chip">{profile.email}</span>
-          {
-            profile.skills.slice(0, 6).map((skill) => (
-              <span class="chip">{skill}</span>
-            ))
-          }
-        </div>
-      </div>
-      <figure>
-        <Image
-          class="profile-photo"
-          src={profilePhoto}
-          alt={`Retrato profesional de ${profile.givenName} ${profile.familyName}`}
-          width={640}
-          height={640}
-          widths={[320, 480, 640]}
-          sizes="(min-width: 768px) 320px, 100vw"
-          loading="eager"
-          decoding="async"
-          fetchpriority="high"
-        />
-      </figure>
-    </section>
-
-    <section class="section" aria-labelledby="proyectos-destacados">
-      <div class="section__header">
-        <h2 id="proyectos-destacados">Proyectos destacados</h2>
-        <a href="/proyectos">Ver todos</a>
-      </div>
-      <div class="card-grid">
-        {
-          projects.map((project) => (
-            <ProjectCard
-              href={`/proyectos/${project.id}`}
-              title={project.data.title}
-              summary={project.data.summary}
-              stack={project.data.stack}
-            />
-          ))
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content="noindex, follow" />
+    <meta name="theme-color" content="#F6F3EC" />
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background: #f6f3ec;
+        color: #1b1a17;
+        font-family: Georgia, serif;
+      }
+      main { padding: 24px; }
+      h1 { font-weight: 500; font-size: clamp(2.5rem, 6vw, 4rem); margin: 0 0 12px; }
+      p { margin: 0 0 16px; color: #3f3b33; }
+      a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+        margin: 8px 8px 0 0;
+        padding: 0 18px;
+        border-radius: 999px;
+        background: #0f5c4d;
+        color: #fff;
+        text-decoration: none;
+      }
+    </style>
+    <script is:inline>
+      const list = navigator.languages?.length ? navigator.languages : [navigator.language || 'en'];
+      let target = 'en';
+      for (const item of list) {
+        const tag = String(item).toLowerCase().split('-')[0];
+        if (tag === 'es' || tag === 'en') {
+          target = tag;
+          break;
         }
-      </div>
-    </section>
-  </div>
-</BaseLayout>
+      }
+      location.replace('/' + target + '/' + location.search + location.hash);
+    </script>
+  </head>
+  <body>
+    <main>
+      <h1>{title}</h1>
+      <p>Español / English</p>
+      <a href="/es/">Español</a>
+      <a href="/en/" lang="en">English</a>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,29 @@
+---
+interface Item {
+  label: string;
+  href: string;
+}
+
+interface Props {
+  items: Item[];
+  label: string;
+}
+
+const { items, label } = Astro.props;
+---
+
+<nav class="crumbs" aria-label={label}>
+  <ol>
+    {
+      items.map((item, index) => {
+        const last = index === items.length - 1;
+        return (
+          <li>
+            {last ? <span aria-current="page">{item.label}</span> : <a href={item.href}>{item.label}</a>}
+            {!last && <span class="crumbs__sep" aria-hidden="true">/</span>}
+          </li>
+        );
+      })
+    }
+  </ol>
+</nav>

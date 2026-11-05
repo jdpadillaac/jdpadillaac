@@ -1,0 +1,65 @@
+---
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import ContactBand from '../../../components/ContactBand.astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { profileBySlug, profiles } from '../../../data/profiles';
+import { site } from '../../../data/site';
+import { isLang, langs, localePath } from '../../../i18n/paths';
+import { tx, ui } from '../../../i18n/ui';
+import { projectsForProfile, publishedProjects } from '../../../lib/content';
+import { breadcrumbGraph } from '../../../lib/structured-data';
+
+export function getStaticPaths() {
+  return langs.flatMap((lang) => profiles.map((profile) => ({ params: { lang, slug: profile.slug } })));
+}
+
+const langParam = Astro.params.lang;
+const profile = profileBySlug(Astro.params.slug);
+if (!isLang(langParam) || !profile) throw new Error('Unsupported profile');
+const lang = langParam;
+const t = ui[lang];
+const name = tx(lang, profile.name);
+const pathname = localePath(lang, `/perfiles/${profile.slug}/`);
+const projects = await publishedProjects();
+const related = projectsForProfile(profile.match, projects);
+const crumbs = [
+  { label: t.home, href: localePath(lang, '/') },
+  { label: t.profiles, href: localePath(lang, '/perfiles/') },
+  { label: name, href: pathname },
+];
+const description = lang === 'es' ? `Perfil ${name} de ${site.name}.` : `${name} profile of ${site.name}.`;
+---
+
+<BaseLayout lang={lang} title={`${name} — ${site.name}`} description={description} pathname={pathname} jsonLd={breadcrumbGraph(crumbs)}>
+  <div class="container page">
+    <Breadcrumbs items={crumbs} label={t.breadcrumbs} />
+    <header>
+      <h1 id="titulo">{name}</h1>
+      <p class="lead">{tx(lang, profile.summary)}</p>
+    </header>
+    <section class="card facts" aria-labelledby="stack-perfil">
+      <h2 id="stack-perfil">{t.stack}</h2>
+      <ul class="pills">
+        {profile.stack.map((item) => <li>{item}</li>)}
+      </ul>
+    </section>
+    {
+      related.length > 0 && (
+        <section aria-labelledby="proyectos-relacionados">
+          <h2 id="proyectos-relacionados">{t.relatedProjects}</h2>
+          <ul class="link-list">
+            {related.map((project) => (
+              <li>
+                <a class="row-link" href={localePath(lang, `/proyectos/${project.id}/`)}>
+                  <span class="row-link__title">{project.data.title}</span>
+                  <span class="kicker">{lang === 'es' ? project.data.summary : project.data.summaryEn}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+  </div>
+  <ContactBand lang={lang} />
+</BaseLayout>

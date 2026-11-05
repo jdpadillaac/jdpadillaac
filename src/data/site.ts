@@ -1,0 +1,27 @@
+export const site = {
+  name: 'Jonatan Padilla',
+  url: 'https://jdpadillac.com',
+  email: 'contact@jdpadillac.com',
+  location: 'Colombia',
+  ogImage: '/og/default.svg',
+  links: {
+    github: 'https://github.com/jdpadillaac',
+    linkedin: 'https://www.linkedin.com/in/jdpadillac/',
+    x: 'https://x.com/jdpadillac_',
+  },
+  skills: [
+    'Flutter',
+    'Swift',
+    'iOS',
+    'Java',
+    'Spring Boot',
+    'Go',
+    'TypeScript',
+    'Node.js',
+    'NestJS',
+    'Angular',
+    'Docker',
+    'MySQL',
+    'MongoDB',
+  ],
+} as const;

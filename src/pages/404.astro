@@ -1,19 +1,27 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../data/site';
+import { ui } from '../i18n/ui';
 ---
 
 <BaseLayout
-  title="Página no encontrada — Jonatan Padilla"
-  description="La página que buscas no existe en jdpadillac.com."
-  ogImage="/og/default.svg"
-  currentPath="/404"
+  lang="es"
+  title={`${ui.es.notFound} — ${site.name}`}
+  description={ui.es.notFoundLead}
+  pathname="/404/"
+  localized={false}
+  noindex={true}
+  alternates={{ es: '/es/', en: '/en/' }}
 >
-  <div class="shell not-found">
-    <h1>404</h1>
-    <p>Esta ruta no existe. Vuelve al inicio o explora los proyectos.</p>
-    <div class="link-row" style="justify-content: center;">
-      <a class="button button--primary" href="/">Inicio</a>
-      <a class="button button--ghost" href="/proyectos">Proyectos</a>
+  <div class="container page">
+    <header>
+      <h1 id="titulo">{ui.es.notFound}</h1>
+      <p class="lead">{ui.es.notFoundLead}</p>
+      <p class="lead" lang="en">{ui.en.notFoundLead}</p>
+    </header>
+    <div class="cluster">
+      <a class="button" href="/es/">Español</a>
+      <a class="button button--ghost" href="/en/" lang="en">English</a>
     </div>
   </div>
 </BaseLayout>

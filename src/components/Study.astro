@@ -1,0 +1,134 @@
+---
+import { ui, type Lang } from '../i18n/ui';
+import Frame from './Frame.astro';
+
+interface LinkItem {
+  href: string;
+  title: string;
+  meta?: string;
+}
+
+interface Props {
+  lang: Lang;
+  kicker: string;
+  title: string;
+  summary: string;
+  facts?: { role: string; dates: string; team: string; stack: string[] };
+  heroAlt: string;
+  results: { value: string; label: string }[];
+  sections: { id: string; title: string; body: string }[];
+  shots: string[];
+  learnings: string;
+  cases?: LinkItem[];
+  others?: LinkItem[];
+}
+
+const { lang, kicker, title, summary, facts, heroAlt, results, sections, shots, learnings, cases = [], others = [] } =
+  Astro.props;
+const t = ui[lang];
+---
+
+<div class="study">
+  <slot name="crumbs" />
+  <header>
+    <p class="kicker">{kicker}</p>
+    <h1 id="titulo">{title}</h1>
+    <p class="lead">{summary}</p>
+  </header>
+  {
+    facts && (
+      <section class="card facts" aria-label={t.facts}>
+        <dl>
+          <div>
+            <dt>{t.role}</dt>
+            <dd>{facts.role}</dd>
+          </div>
+          <div>
+            <dt>{t.dates}</dt>
+            <dd>{facts.dates}</dd>
+          </div>
+          <div>
+            <dt>{t.team}</dt>
+            <dd>{facts.team}</dd>
+          </div>
+          <div>
+            <dt>{t.stack}</dt>
+            <dd>
+              <ul class="pills">
+                {facts.stack.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            </dd>
+          </div>
+        </dl>
+      </section>
+    )
+  }
+  <Frame alt={heroAlt} />
+  <section aria-labelledby="resultados">
+    <h2 id="resultados">{t.results}</h2>
+    <ul class="results">
+      {
+        results.map((item) => (
+          <li>
+            <p class="result__value">{item.value}</p>
+            <p class="result__label">{item.label}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+  {
+    sections.map((section) => (
+      <section class="narrative" aria-labelledby={section.id}>
+        <h2 id={section.id}>{section.title}</h2>
+        <p>{section.body}</p>
+      </section>
+    ))
+  }
+  <section aria-labelledby="capturas">
+    <h2 id="capturas">{t.shots}</h2>
+    <div class="shot-grid">
+      {shots.map((alt) => <Frame alt={alt} />)}
+    </div>
+  </section>
+  <section class="narrative" aria-labelledby="aprendizajes">
+    <h2 id="aprendizajes">{t.learnings}</h2>
+    <p>{learnings}</p>
+  </section>
+  {
+    cases.length > 0 && (
+      <section aria-labelledby="casos">
+        <h2 id="casos">{t.cases}</h2>
+        <ul class="link-list">
+          {cases.map((item) => (
+            <li>
+              <a class="row-link" href={item.href}>
+                <span class="row-link__title">{item.title}</span>
+                {item.meta && <span class="kicker">{item.meta}</span>}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+  {
+    others.length > 0 && (
+      <section aria-labelledby="otras-experiencias">
+        <h2 id="otras-experiencias">{t.otherExperiences}</h2>
+        <ul class="link-list">
+          {others.map((item) => (
+            <li>
+              <a class="row-link" href={item.href}>
+                <span class="row-link__title">{item.title}</span>
+                {item.meta && <span class="kicker">{item.meta}</span>}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+</div>
