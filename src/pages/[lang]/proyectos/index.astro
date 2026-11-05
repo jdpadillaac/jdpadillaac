@@ -2,10 +2,9 @@
 import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import ContactBand from '../../../components/ContactBand.astro';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import { copy } from '../../../data/copy';
 import { site } from '../../../data/site';
 import { isLang, localePath, staticLangs } from '../../../i18n/paths';
-import { tx, ui } from '../../../i18n/ui';
+import { ui } from '../../../i18n/ui';
 import { publishedProjects } from '../../../lib/content';
 import { breadcrumbGraph } from '../../../lib/structured-data';
 
@@ -36,7 +35,6 @@ const crumbs = [
     <Breadcrumbs items={crumbs} label={t.breadcrumbs} />
     <header>
       <h1 id="titulo">{t.projects}</h1>
-      <p class="lead">{tx(lang, copy.intro)}</p>
     </header>
     <ul class="link-list">
       {
@@ -44,7 +42,11 @@ const crumbs = [
           <li>
             <a class="row-link" href={localePath(lang, `/proyectos/${project.id}/`)}>
               <span class="row-link__title">{project.data.title}</span>
-              <span class="kicker">{lang === 'es' ? project.data.summary : project.data.summaryEn}</span>
+              {
+                (lang === 'es' ? project.data.summary : project.data.summaryEn) !== '[Pendiente: traducción]' && (
+                  <span class="kicker">{lang === 'es' ? project.data.summary : project.data.summaryEn}</span>
+                )
+              }
             </a>
           </li>
         ))

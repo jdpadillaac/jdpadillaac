@@ -23,8 +23,14 @@ const project = (await publishedProjects()).find((item) => item.id === proyecto)
 if (!project) throw new Error(`Missing project: ${proyecto}`);
 
 const pathname = localePath(lang, `/proyectos/${project.id}/`);
-const summary = lang === 'es' ? project.data.summary : project.data.summaryEn;
-const description = lang === 'es' ? project.data.description : `${project.data.descriptionEn} (${project.data.title})`;
+const pending = '[Pendiente: traducción]';
+const summary = lang === 'es' ? project.data.summary : project.data.summaryEn === pending ? '' : project.data.summaryEn;
+const description =
+  lang === 'es'
+    ? project.data.description
+    : project.data.descriptionEn === pending
+      ? project.data.description
+      : `${project.data.descriptionEn} (${project.data.title})`;
 const crumbs = [
   { label: t.home, href: localePath(lang, '/') },
   { label: t.projects, href: localePath(lang, '/proyectos/') },
@@ -46,7 +52,7 @@ const { Content } = await render(project);
     <Breadcrumbs items={crumbs} label={t.breadcrumbs} />
     <header>
       <h1 id="titulo">{project.data.title}</h1>
-      <p class="lead">{summary}</p>
+      {summary && <p class="lead">{summary}</p>}
     </header>
     <ul class="pills">
       {project.data.stack.map((item) => <li>{item}</li>)}

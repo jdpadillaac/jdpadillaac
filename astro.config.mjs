@@ -15,6 +15,7 @@ export default defineConfig({
         const { pathname } = new URL(page);
         if (pathname === '/' || pathname === '/index.html') return false;
         if (pathname.includes('/contacto/enviado')) return false;
+        if (pathname.includes('/proyectos')) return false;
         if (pathname === '/404/' || pathname === '/404.html') return false;
         return true;
       },

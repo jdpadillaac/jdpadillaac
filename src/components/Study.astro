@@ -8,23 +8,46 @@ interface LinkItem {
   meta?: string;
 }
 
+interface Stage {
+  role: string;
+  period: string;
+  summary: string;
+}
+
 interface Props {
   lang: Lang;
   kicker: string;
   title: string;
   summary: string;
-  facts?: { role: string; dates: string; team: string; stack: string[] };
-  heroAlt: string;
-  results: { value: string; label: string }[];
-  sections: { id: string; title: string; body: string }[];
-  shots: string[];
-  learnings: string;
+  facts?: { role: string; dates: string; team?: string; stack?: string[] };
+  heroAlt?: string;
+  results?: { value: string; label: string }[];
+  sections?: { id: string; title: string; body: string }[];
+  shots?: string[];
+  learnings?: string;
+  highlights?: string[];
+  stages?: Stage[];
   cases?: LinkItem[];
   others?: LinkItem[];
 }
 
-const { lang, kicker, title, summary, facts, heroAlt, results, sections, shots, learnings, cases = [], others = [] } =
-  Astro.props;
+const {
+  lang,
+  kicker,
+  title,
+  summary,
+  facts,
+  heroAlt,
+  results = [],
+  sections = [],
+  shots = [],
+  learnings,
+  highlights = [],
+  stages = [],
+  cases = [],
+  others = [],
+} = Astro.props;
+const narrative = sections.filter((section) => section.body.trim());
 const t = ui[lang];
 ---
 
@@ -34,6 +57,15 @@ const t = ui[lang];
     <p class="kicker">{kicker}</p>
     <h1 id="titulo">{title}</h1>
     <p class="lead">{summary}</p>
+    {
+      highlights.length > 0 && (
+        <ul class="points">
+          {highlights.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      )
+    }
   </header>
   {
     facts && (
@@ -47,56 +79,88 @@ const t = ui[lang];
             <dt>{t.dates}</dt>
             <dd>{facts.dates}</dd>
           </div>
-          <div>
-            <dt>{t.team}</dt>
-            <dd>{facts.team}</dd>
-          </div>
-          <div>
-            <dt>{t.stack}</dt>
-            <dd>
-              <ul class="pills">
-                {facts.stack.map((item) => (
-                  <li>{item}</li>
-                ))}
-              </ul>
-            </dd>
-          </div>
+          {facts.team && (
+            <div>
+              <dt>{t.team}</dt>
+              <dd>{facts.team}</dd>
+            </div>
+          )}
+          {facts.stack && facts.stack.length > 0 && (
+            <div>
+              <dt>{t.stack}</dt>
+              <dd>
+                <ul class="pills">
+                  {facts.stack.map((item) => (
+                    <li>{item}</li>
+                  ))}
+                </ul>
+              </dd>
+            </div>
+          )}
         </dl>
       </section>
     )
   }
-  <Frame alt={heroAlt} />
-  <section aria-labelledby="resultados">
-    <h2 id="resultados">{t.results}</h2>
-    <ul class="results">
-      {
-        results.map((item) => (
-          <li>
-            <p class="result__value">{item.value}</p>
-            <p class="result__label">{item.label}</p>
-          </li>
-        ))
-      }
-    </ul>
-  </section>
+  {heroAlt && <Frame alt={heroAlt} />}
   {
-    sections.map((section) => (
+    stages.length > 0 && (
+      <section aria-labelledby="etapas">
+        <h2 id="etapas">{t.stages}</h2>
+        <ol class="stages">
+          {stages.map((stage) => (
+            <li>
+              <h3>{stage.role}</h3>
+              <p class="kicker">{stage.period}</p>
+              <p>{stage.summary}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+    )
+  }
+  {
+    results.length > 0 && (
+      <section aria-labelledby="resultados">
+        <h2 id="resultados">{t.results}</h2>
+        <ul class="results">
+          {results.map((item) => (
+            <li>
+              <p class="result__value">{item.value}</p>
+              <p class="result__label">{item.label}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+  {
+    narrative.map((section) => (
       <section class="narrative" aria-labelledby={section.id}>
         <h2 id={section.id}>{section.title}</h2>
         <p>{section.body}</p>
       </section>
     ))
   }
-  <section aria-labelledby="capturas">
-    <h2 id="capturas">{t.shots}</h2>
-    <div class="shot-grid">
-      {shots.map((alt) => <Frame alt={alt} />)}
-    </div>
-  </section>
-  <section class="narrative" aria-labelledby="aprendizajes">
-    <h2 id="aprendizajes">{t.learnings}</h2>
-    <p>{learnings}</p>
-  </section>
+  {
+    shots.length > 0 && (
+      <section aria-labelledby="capturas">
+        <h2 id="capturas">{t.shots}</h2>
+        <div class="shot-grid">
+          {shots.map((alt) => (
+            <Frame alt={alt} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+  {
+    learnings && learnings.trim() && (
+      <section class="narrative" aria-labelledby="aprendizajes">
+        <h2 id="aprendizajes">{t.learnings}</h2>
+        <p>{learnings}</p>
+      </section>
+    )
+  }
   {
     cases.length > 0 && (
       <section aria-labelledby="casos">
@@ -116,7 +180,7 @@ const t = ui[lang];
   }
   {
     others.length > 0 && (
-      <section aria-labelledby="otras-experiencias">
+      <section class="other-experiences" aria-labelledby="otras-experiencias">
         <h2 id="otras-experiencias">{t.otherExperiences}</h2>
         <ul class="link-list">
           {others.map((item) => (

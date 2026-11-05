@@ -23,22 +23,39 @@ const experiences = defineCollection({
     role: text,
     start: text,
     end: text,
-    team: text,
-    stack: z.object({
-      es: z.array(z.string()),
-      en: z.array(z.string()),
-    }),
+    stack: z
+      .object({
+        es: z.array(z.string()),
+        en: z.array(z.string()),
+      })
+      .optional(),
+    team: text.optional(),
     title: text,
     summary: text,
     description: text,
-    results: z.array(result).length(3),
-    context: text,
-    roleNarrative: text,
-    challenge: text,
-    solution: text,
-    learnings: text,
-    heroAlt: text,
-    gallery: z.array(z.object({ alt: text })),
+    highlights: z
+      .object({
+        es: z.array(z.string()),
+        en: z.array(z.string()),
+      })
+      .default({ es: [], en: [] }),
+    stages: z
+      .array(
+        z.object({
+          role: text,
+          period: text,
+          summary: text,
+        }),
+      )
+      .default([]),
+    results: z.array(result).default([]),
+    context: text.optional(),
+    roleNarrative: text.optional(),
+    challenge: text.optional(),
+    solution: text.optional(),
+    learnings: text.optional(),
+    heroAlt: text.optional(),
+    gallery: z.array(z.object({ alt: text })).default([]),
   }),
 });
 

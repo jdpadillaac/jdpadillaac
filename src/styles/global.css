@@ -269,7 +269,8 @@ a:hover {
 
 .footer {
   border-top: 1px solid var(--divider);
-  padding-block: 32px 48px;
+  /* Clears the fixed “Powered by Netlify” badge at the bottom-right. */
+  padding-block: 32px 112px;
 }
 
 .footer__inner {
@@ -308,6 +309,11 @@ a:hover {
   max-width: 38rem;
   color: var(--secondary);
   font-size: 1.25rem;
+}
+
+.eyebrow {
+  color: var(--secondary);
+  font-weight: 600;
 }
 
 .pill {
@@ -535,6 +541,40 @@ a:hover {
   padding-left: 1.25rem;
 }
 
+.points {
+  margin: 0;
+  padding-left: 1.25rem;
+  max-width: 68ch;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.stages {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.stages li {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.other-experiences {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.study > section.other-experiences {
+  gap: 32px;
+}
+
 .link-list {
   list-style: none;
   margin: 0;
@@ -637,6 +677,16 @@ textarea {
 
 .honeypot {
   display: none;
+}
+
+@media (max-width: 720px) {
+  .row-link {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 4px;
+    padding-block: 16px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -32,7 +32,7 @@ function dates(entry: (typeof experiences)[number]) {
 
 <BaseLayout
   lang={lang}
-  title={`${site.name} — ${lang === 'es' ? 'Portafolio' : 'Portfolio'}`}
+  title={t.seoHomeTitle}
   description={t.seoHome}
   pathname={pathname}
   jsonLd={identityGraph(lang)}
@@ -40,7 +40,9 @@ function dates(entry: (typeof experiences)[number]) {
   <div class="container page">
     <section class="hero" aria-labelledby="titulo">
       <p class="pill">{tx(lang, copy.availability)}</p>
+      <p class="eyebrow">{tx(lang, copy.label)}</p>
       <h1 id="titulo">{tx(lang, copy.headline)}</h1>
+      <p class="lead">{tx(lang, copy.lede)}</p>
       <div class="cluster">
         <a class="button" href={cvEs ? cvHref('es') : localePath(lang, '/cv/#cv-es')} download={cvEs ? '' : undefined}>
           {t.downloadCvEs}
@@ -52,25 +54,7 @@ function dates(entry: (typeof experiences)[number]) {
           LinkedIn
           <span class="sr-only"> ({t.newTab})</span>
         </a>
-        <a class="button button--ghost" href={site.links.github} rel="me noopener noreferrer" target="_blank">
-          GitHub
-          <span class="sr-only"> ({t.newTab})</span>
-        </a>
       </div>
-    </section>
-
-    <section aria-labelledby="resultados-inicio">
-      <h2 id="resultados-inicio" class="sr-only">{t.results}</h2>
-      <ul class="results results--strip">
-        {
-          copy.results.map((item) => (
-            <li>
-              <p class="result__value">{tx(lang, item.value)}</p>
-              <p class="result__label">{tx(lang, item.label)}</p>
-            </li>
-          ))
-        }
-      </ul>
     </section>
 
     <section aria-labelledby="perfiles">
@@ -104,7 +88,7 @@ function dates(entry: (typeof experiences)[number]) {
       }
       {
         rest.length > 0 && (
-          <div>
+          <div class="other-experiences">
             <h3>{t.otherExperiences}</h3>
             <ul class="link-list">
               {rest.map((entry) => (

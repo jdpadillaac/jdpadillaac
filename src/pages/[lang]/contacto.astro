@@ -1,9 +1,10 @@
 ---
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { copy } from '../../data/copy';
 import { site } from '../../data/site';
 import { isLang, localePath, staticLangs } from '../../i18n/paths';
-import { ui } from '../../i18n/ui';
+import { tx, ui } from '../../i18n/ui';
 import { breadcrumbGraph } from '../../lib/structured-data';
 
 export function getStaticPaths() {
@@ -32,7 +33,14 @@ const crumbs = [
     <Breadcrumbs items={crumbs} label={t.breadcrumbs} />
     <header>
       <h1 id="titulo">{t.contact}</h1>
-      <p class="lead"><a href={`mailto:${site.email}`}>{site.email}</a></p>
+      <p class="lead">{tx(lang, copy.contactPrompt)}</p>
+      <div class="cluster">
+        <a class="button" href={`mailto:${site.email}`}>{t.contactCta}</a>
+        <a class="button button--ghost" href={site.links.linkedin} rel="me noopener noreferrer" target="_blank">
+          LinkedIn
+          <span class="sr-only"> ({t.newTab})</span>
+        </a>
+      </div>
     </header>
     <form
       class="form"

@@ -34,11 +34,11 @@ const crumbs = [
   { label: company, href: pathname },
 ];
 const sections = [
-  { id: 'contexto', title: t.context, body: tx(lang, entry.data.context) },
-  { id: 'rol', title: t.roleSection, body: tx(lang, entry.data.roleNarrative) },
-  { id: 'reto', title: t.challenge, body: tx(lang, entry.data.challenge) },
-  { id: 'solucion', title: t.solution, body: tx(lang, entry.data.solution) },
-];
+  entry.data.context ? { id: 'contexto', title: t.context, body: tx(lang, entry.data.context) } : undefined,
+  entry.data.roleNarrative ? { id: 'rol', title: t.roleSection, body: tx(lang, entry.data.roleNarrative) } : undefined,
+  entry.data.challenge ? { id: 'reto', title: t.challenge, body: tx(lang, entry.data.challenge) } : undefined,
+  entry.data.solution ? { id: 'solucion', title: t.solution, body: tx(lang, entry.data.solution) } : undefined,
+].filter((section) => section !== undefined);
 ---
 
 <BaseLayout
@@ -57,14 +57,20 @@ const sections = [
       facts={{
         role: tx(lang, entry.data.role),
         dates,
-        team: tx(lang, entry.data.team),
-        stack: entry.data.stack[lang],
+        team: entry.data.team ? tx(lang, entry.data.team) : undefined,
+        stack: entry.data.stack?.[lang],
       }}
-      heroAlt={tx(lang, entry.data.heroAlt)}
+      heroAlt={entry.data.heroAlt ? tx(lang, entry.data.heroAlt) : undefined}
+      highlights={entry.data.highlights[lang]}
+      stages={entry.data.stages.map((stage) => ({
+        role: tx(lang, stage.role),
+        period: tx(lang, stage.period),
+        summary: tx(lang, stage.summary),
+      }))}
       results={entry.data.results.map((item) => ({ value: tx(lang, item.value), label: tx(lang, item.label) }))}
       sections={sections}
       shots={entry.data.gallery.map((shot) => tx(lang, shot.alt))}
-      learnings={tx(lang, entry.data.learnings)}
+      learnings={entry.data.learnings ? tx(lang, entry.data.learnings) : undefined}
       cases={cases.map((item) => ({
         href: localePath(lang, `/experiencia/${entry.data.slug}/casos/${item.data.slug}/`),
         title: tx(lang, item.data.title),

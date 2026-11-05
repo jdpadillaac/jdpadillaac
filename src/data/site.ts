@@ -2,7 +2,7 @@ export const site = {
   name: 'Jonatan Padilla',
   url: 'https://jdpadillac.com',
   email: 'contact@jdpadillac.com',
-  location: 'Colombia',
+  location: 'Medellín, Colombia',
   ogImage: '/og/default.svg',
   links: {
     github: 'https://github.com/jdpadillaac',

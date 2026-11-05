@@ -2,7 +2,6 @@
 import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import ContactBand from '../../../components/ContactBand.astro';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import { copy } from '../../../data/copy';
 import { profiles } from '../../../data/profiles';
 import { site } from '../../../data/site';
 import { isLang, localePath, staticLangs } from '../../../i18n/paths';
@@ -35,7 +34,6 @@ const crumbs = [
     <Breadcrumbs items={crumbs} label={t.breadcrumbs} />
     <header>
       <h1 id="titulo">{t.profiles}</h1>
-      <p class="lead">{tx(lang, copy.intro)}</p>
     </header>
     <div class="card-grid">
       {
