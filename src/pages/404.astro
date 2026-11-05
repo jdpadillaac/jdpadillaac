@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Página no encontrada — Jonatan Padilla"
+  description="La página que buscas no existe en jdpadillac.com."
+  ogImage="/og/default.svg"
+  currentPath="/404"
+>
+  <div class="shell not-found">
+    <h1>404</h1>
+    <p>Esta ruta no existe. Vuelve al inicio o explora los proyectos.</p>
+    <div class="link-row" style="justify-content: center;">
+      <a class="button button--primary" href="/">Inicio</a>
+      <a class="button button--ghost" href="/proyectos">Proyectos</a>
+    </div>
+  </div>
+</BaseLayout>

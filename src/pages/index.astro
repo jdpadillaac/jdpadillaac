@@ -1,0 +1,76 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import profilePhoto from '../assets/images/profile.jpg';
+import { defaultSeo, profile } from '../data/profile';
+
+const projects = (await getCollection('projects'))
+  .filter((entry) => entry.data.featured)
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 3);
+---
+
+<BaseLayout
+  title={defaultSeo.title}
+  description={defaultSeo.description}
+  ogImage={defaultSeo.ogImage}
+  includeWebsiteSchema={true}
+  currentPath="/"
+>
+  <div class="shell">
+    <section class="hero" aria-labelledby="titulo-inicio">
+      <div>
+        <p class="chip">{profile.location}</p>
+        <h1 id="titulo-inicio">{profile.givenName} {profile.familyName}</h1>
+        <p class="hero__lead">{profile.role}. {profile.tagline}</p>
+        <div class="link-row">
+          <a class="button button--primary" href="/proyectos">Ver proyectos</a>
+          <a class="button button--ghost" href="/contacto">Contacto</a>
+        </div>
+        <div class="hero__meta">
+          <span class="chip">{profile.email}</span>
+          {
+            profile.skills.slice(0, 6).map((skill) => (
+              <span class="chip">{skill}</span>
+            ))
+          }
+        </div>
+      </div>
+      <figure>
+        <Image
+          class="profile-photo"
+          src={profilePhoto}
+          alt={`Retrato profesional de ${profile.givenName} ${profile.familyName}`}
+          width={640}
+          height={640}
+          widths={[320, 480, 640]}
+          sizes="(min-width: 768px) 320px, 100vw"
+          loading="eager"
+          decoding="async"
+          fetchpriority="high"
+        />
+      </figure>
+    </section>
+
+    <section class="section" aria-labelledby="proyectos-destacados">
+      <div class="section__header">
+        <h2 id="proyectos-destacados">Proyectos destacados</h2>
+        <a href="/proyectos">Ver todos</a>
+      </div>
+      <div class="card-grid">
+        {
+          projects.map((project) => (
+            <ProjectCard
+              href={`/proyectos/${project.id}`}
+              title={project.data.title}
+              summary={project.data.summary}
+              stack={project.data.stack}
+            />
+          ))
+        }
+      </div>
+    </section>
+  </div>
+</BaseLayout>

@@ -1,0 +1,69 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+---
+
+<BaseLayout
+  title={`${project.data.title} — Jonatan Padilla`}
+  description={project.data.description}
+  ogImage={project.data.ogImage}
+  ogType="article"
+  currentPath={`/proyectos/${project.id}`}
+>
+  <article class="shell prose">
+    <header>
+      <p class="chip">{project.data.stack.join(' · ')}</p>
+      <h1>{project.data.title}</h1>
+      <p>{project.data.summary}</p>
+    </header>
+
+    <ul class="meta-list">
+      <li>
+        <strong>Repositorio</strong>
+        <a href={project.data.repoUrl}>{project.data.repoUrl.replace('https://github.com/', '')}</a>
+      </li>
+      {
+        project.data.secondaryRepoUrl && (
+          <li>
+            <strong>Backend</strong>
+            <a href={project.data.secondaryRepoUrl}>
+              {project.data.secondaryRepoUrl.replace('https://github.com/', '')}
+            </a>
+          </li>
+        )
+      }
+      {
+        project.data.demoUrl && (
+          <li>
+            <strong>Demo</strong>
+            <a href={project.data.demoUrl}>{project.data.demoUrl}</a>
+          </li>
+        )
+      }
+    </ul>
+
+    <section aria-label="Detalle del proyecto">
+      <Content />
+    </section>
+
+    <p class="link-row">
+      <a class="button button--ghost" href="/proyectos">← Volver a proyectos</a>
+      {
+        project.data.demoUrl && (
+          <a class="button button--primary" href={project.data.demoUrl}>Abrir demo</a>
+        )
+      }
+    </p>
+  </article>
+</BaseLayout>

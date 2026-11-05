@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { profile } from '../data/profile';
+---
+
+<BaseLayout
+  title="Contacto — Jonatan Padilla"
+  description="Escríbeme para colaboraciones, consultoría mobile o backend. Formulario Netlify y correo directo."
+  ogImage="/og/default.svg"
+  currentPath="/contacto"
+>
+  <div class="shell prose">
+    <h1>Contacto</h1>
+    <p>
+      Cuéntame sobre tu producto, equipo o idea. Respondo por correo en
+      <a href={`mailto:${profile.email}`}>{profile.email}</a>.
+    </p>
+
+    <form class="form" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+      <input type="hidden" name="form-name" value="contact" />
+      <p class="hidden-field">
+        <label>No llenar<input name="bot-field" /></label>
+      </p>
+      <label>
+        Nombre
+        <input type="text" name="name" autocomplete="name" required />
+      </label>
+      <label>
+        Correo
+        <input type="email" name="email" autocomplete="email" required />
+      </label>
+      <label>
+        Mensaje
+        <textarea name="message" required></textarea>
+      </label>
+      <button class="button button--primary" type="submit">Enviar mensaje</button>
+    </form>
+  </div>
+</BaseLayout>

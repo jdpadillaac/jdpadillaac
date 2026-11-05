@@ -1,0 +1,18 @@
+---
+import { profile } from '../data/profile';
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="shell">
+    <p>
+      © {year} {profile.givenName} {profile.familyName}. Construido con Astro y desplegado en Netlify.
+    </p>
+    <p class="link-row">
+      <a href={profile.links.github}>GitHub</a>
+      <a href={profile.links.linkedin}>LinkedIn</a>
+      <a href={profile.links.x}>X</a>
+      <a href={`mailto:${profile.email}`}>{profile.email}</a>
+    </p>
+  </div>
+</footer>

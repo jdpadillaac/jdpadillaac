@@ -1,0 +1,56 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Seo from '../components/Seo.astro';
+import JsonLd from '../components/JsonLd.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  ogImage?: string;
+  ogType?: 'website' | 'article';
+  includeWebsiteSchema?: boolean;
+  currentPath?: string;
+}
+
+const {
+  title,
+  description,
+  ogImage = '/og/default.svg',
+  ogType = 'website',
+  includeWebsiteSchema = false,
+  currentPath = Astro.url.pathname,
+} = Astro.props;
+
+const canonical = new URL(currentPath === '/' ? '/' : currentPath.replace(/\/$/, ''), Astro.site);
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <Seo
+      title={title}
+      description={description}
+      canonical={canonical.href}
+      ogImage={ogImage}
+      ogType={ogType}
+    />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <JsonLd includeWebsite={includeWebsiteSchema} />
+  </head>
+  <body>
+    <a class="skip-link" href="#contenido-principal">Saltar al contenido</a>
+    <Header currentPath={currentPath} />
+    <main id="contenido-principal" class="site-main">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

@@ -1,30 +1,82 @@
+# jdpadillac.com
 
-# Hi!, I'm Jonatan padilla.
-### A Self taught Frontend and Backend Developer
-[![Github](https://img.shields.io/badge/-Github-000?style=flat&logo=Github&logoColor=white)](https://github.com/jdpadillaac)
-[![Linkedin](https://img.shields.io/badge/-LinkedIn-blue?style=flat&logo=Linkedin&logoColor=white)](https://www.linkedin.com/in/jonatan-padilla-233b34122/)
-[![Twitter Badge](https://img.shields.io/badge/-@jdpadillac_-1ca0f1?style=flat&labelColor=1ca0f1&logo=twitter&logoColor=white&link=https://twitter.com/Ipenywis)](https://twitter.com/jdpadillac_)
+Portafolio estático de **Jonatan Padilla**, construido con [Astro](https://astro.build) y pensado para desplegarse en [Netlify](https://www.netlify.com) en `https://jdpadillac.com`.
 
+## Requisitos
 
+- Node.js 22+
+- npm 10+
 
-### Languages and Tools:
-<code><img width="50px" src="https://upload.vectorlogo.zone/logos/typescriptlang/images/235f610f-bc79-428a-9511-b3de5c3b1208.svg"></code>
-<code><img width="100px" src="https://www.vectorlogo.zone/logos/angular/angular-ar21.svg"></code>
-<code><img width="100px" src="https://upload.wikimedia.org/wikipedia/commons/2/24/Ionic-logo-landscape.svg"></code>
+## Desarrollo local
 
-💙<code><img width="100px" src="https://www.vectorlogo.zone/logos/flutterio/flutterio-ar21.svg"></code>
-<code><img width="100px" src="https://www.vectorlogo.zone/logos/golang/golang-official.svg"></code>💙
+```bash
+npm install
+npm run dev
+```
 
-<code><img width="100px" src="https://www.vectorlogo.zone/logos/nodejs/nodejs-ar21.svg"></code>
-<code><img width="100px" src="https://www.vectorlogo.zone/logos/nestjs/nestjs-ar21.svg"></code>
+Abre `http://localhost:4321`.
 
-<code><img width="100px" src="https://www.vectorlogo.zone/logos/mongodb/mongodb-ar21.svg"></code>
-<code><img width="100px" src="https://www.vectorlogo.zone/logos/mysql/mysql-ar21.svg"></code>
+## Build de producción
 
+```bash
+npm run build
+npm run preview
+```
 
+La salida queda en `dist/`.
 
-![Jonatan github stats](https://github-readme-stats.vercel.app/api?username=jdpadillaac&theme=tokyonight&hide=contribs,prs)
+## Estructura
 
+- `src/pages/` — rutas del sitio (inicio, proyectos, sobre mí, contacto, 404)
+- `src/content/projects/` — un Markdown por proyecto
+- `src/data/profile.ts` — datos personales y SEO por defecto
+- `public/` — favicon, `robots.txt`, imágenes Open Graph
+- `netlify.toml` — build, caché, headers y redirección `www` → apex
 
-###  About me [jdpadillac.com](http://jdpadillac.com/) 
-### Send me an e-mail contact@jdpadillac.com
+## Desplegar en Netlify (GitHub)
+
+1. **Sube el código** al repositorio [github.com/jdpadillaac/jdpadillaac](https://github.com/jdpadillaac/jdpadillaac):
+
+   ```bash
+   git add .
+   git commit -m "Reemplaza portafolio Flutter por sitio Astro estático"
+   git push origin master
+   ```
+
+2. En [Netlify](https://app.netlify.com), elige **Add new site → Import an existing project** y conecta GitHub.
+
+3. Selecciona el repo `jdpadillaac/jdpadillaac`. Netlify detectará `netlify.toml`:
+   - **Build command:** `npm run build`
+   - **Publish directory:** `dist`
+   - **Node:** 22 (definido en `netlify.toml`)
+
+4. **Dominio custom**
+   - En *Domain management*, añade `jdpadillac.com` como dominio principal.
+   - Añade `www.jdpadillac.com` como alias; la redirección 301 a la raíz ya está en `netlify.toml`.
+   - Configura los registros DNS que Netlify indique (normalmente `A`/`AAAA` al load balancer de Netlify y `CNAME` de `www`).
+
+5. **HTTPS:** activa *Force HTTPS* en Netlify cuando el certificado esté listo.
+
+6. **Formulario de contacto**
+   - El formulario en `/contacto` usa [Netlify Forms](https://docs.netlify.com/forms/setup/) (`data-netlify="true"`).
+   - Tras el primer deploy, en *Site configuration → Forms* verifica que aparezca el formulario `contact`.
+   - En *Form notifications*, añade un email a `contact@jdpadillac.com`.
+
+## SEO incluido
+
+- HTML semántico pre-renderizado
+- `title`, meta description y canonical por página
+- Open Graph y Twitter Cards
+- `sitemap-index.xml` y `robots.txt`
+- JSON-LD (`Person` + `WebSite` en inicio)
+- Imágenes optimizadas (WebP) con `alt`, dimensiones y lazy loading
+
+## Editar contenido
+
+- Perfil y enlaces: [`src/data/profile.ts`](src/data/profile.ts)
+- Proyectos: archivos en [`src/content/projects/`](src/content/projects/) (frontmatter + cuerpo Markdown)
+- Estilos globales: [`src/styles/global.css`](src/styles/global.css)
+
+## Licencia
+
+Contenido y código del sitio © Jonatan Padilla. Repos enlazados mantienen sus licencias propias.
