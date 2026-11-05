@@ -28,7 +28,7 @@ const description = lang === 'es' ? `Perfil ${name} de ${site.name}.` : `${name}
 ---
 
 <BaseLayout lang={lang} title={`${name} — ${site.name}`} description={description} pathname={pathname} jsonLd={breadcrumbGraph(crumbs)}>
-  <div class="container page">
+  <div class="h-wrap page">
     <Breadcrumbs items={crumbs} label={t.breadcrumbs} />
     <header>
       <h1 id="titulo">{name}</h1>
@@ -37,7 +37,7 @@ const description = lang === 'es' ? `Perfil ${name} de ${site.name}.` : `${name}
     <section class="card facts" aria-labelledby="stack-perfil">
       <h2 id="stack-perfil">{t.stack}</h2>
       <ul class="pills">
-        {profile.stack.map((item) => <li>{item}</li>)}
+        {profile.stack[lang].map((item) => <li>{item}</li>)}
       </ul>
     </section>
   </div>

@@ -30,11 +30,11 @@ export const homeFeature = {
 };
 
 export const headlineEm = {
-  es: 'full stack con arquitectura limpia.',
-  en: 'full stack with clean architecture.',
+  es: 'backend con Java y Go.',
+  en: 'backend with Java and Go.',
 } as const satisfies Localized;
 
 export const headlineBefore = {
-  es: 'Apps móviles con Flutter, backend con Java y ',
-  en: 'Mobile apps with Flutter, backend with Java, and ',
+  es: 'Senior Software Engineer. Mobile con Flutter y nativo, ',
+  en: 'Senior Software Engineer. Mobile with Flutter and native, ',
 } as const satisfies Localized;

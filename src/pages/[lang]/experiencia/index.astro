@@ -32,26 +32,28 @@ const crumbs = [
   pathname={pathname}
   jsonLd={breadcrumbGraph(crumbs)}
 >
-  <div class="container page">
+  <div class="h-wrap page">
     <Breadcrumbs items={crumbs} label={t.breadcrumbs} />
-    <header>
-      <h1 id="titulo">{t.experience}</h1>
-    </header>
+    <div class="h-section__head">
+      <p class="h-eyebrow">{t.experience}</p>
+      <h1 id="titulo">{t.builtTitle}</h1>
+      <p>{t.builtSub}</p>
+    </div>
     {
       experiences.length > 0 && (
-        <ul class="other-list">
+        <ul class="h-list">
           {experiences.map((entry) => {
             const childCases = cases.filter((item) => item.data.experienceSlug === entry.data.slug);
             return (
               <li>
-                <a class="other-row" href={localePath(lang, `/experiencia/${entry.data.slug}/`)}>
-                  <span class="other-row__main">
-                    <span class="other-row__company">{tx(lang, entry.data.company)}</span>
-                    <span class="other-row__meta">
+                <a href={localePath(lang, `/experiencia/${entry.data.slug}/`)}>
+                  <span>
+                    <span class="h-list__company">{tx(lang, entry.data.company)}</span>
+                    <span class="h-list__meta">
                       {tx(lang, entry.data.title)} · {tx(lang, entry.data.start)} — {tx(lang, entry.data.end)}
                     </span>
                   </span>
-                  <span class="other-row__cta">{t.viewPage} →</span>
+                  <span class="h-list__go">{t.viewPage} →</span>
                 </a>
                 {childCases.length > 0 && (
                   <ul class="link-list">

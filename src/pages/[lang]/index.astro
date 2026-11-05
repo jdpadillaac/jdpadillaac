@@ -119,7 +119,7 @@ const featuredKicker = featured
                 <h3>{name}</h3>
                 <p>{tx(lang, profile.summary)}</p>
                 <ul class="h-chips" aria-label={t.techLabel}>
-                  {profile.stack.map((item) => (
+                  {profile.stack[lang].map((item) => (
                     <li>{item}</li>
                   ))}
                 </ul>

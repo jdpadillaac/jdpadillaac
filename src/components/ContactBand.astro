@@ -20,20 +20,21 @@ const cvEsHref = cvEs ? cvHref('es') : localePath(lang, '/cv/#cv-es');
 const cvEnHref = cvEn ? cvHref('en') : localePath(lang, '/cv/#cv-en');
 ---
 
-<section class="band" aria-labelledby="contacto-banda">
-  <div class="container band__grid">
-    <div class="band__main">
+<section class="h-band" aria-labelledby="contacto-banda">
+  <div class="h-wrap h-band__grid">
+    <div>
+      <p class="h-eyebrow">{t.contact}</p>
       <h2 id="contacto-banda">{title}</h2>
-      <p>{tx(lang, copy.contactPrompt)}</p>
-      <div class="cluster">
+      <p class="h-band__text">{tx(lang, copy.contactPrompt)}</p>
+      <div class="h-btn-group">
         {
           actions === 'contact' ? (
             <>
-              <a class="button button--light" href={localePath(lang, '/contacto/')}>
+              <a class="h-btn h-btn--light" href={localePath(lang, '/contacto/')}>
                 {t.contactCta}
               </a>
               <a
-                class="button button--outline-light"
+                class="h-btn h-btn--ghost"
                 href={cvEsHref}
                 download={cvEs ? '' : undefined}
               >
@@ -42,11 +43,11 @@ const cvEnHref = cvEn ? cvHref('en') : localePath(lang, '/cv/#cv-en');
             </>
           ) : (
             <>
-              <a class="button button--light" href={cvEsHref} download={cvEs ? '' : undefined}>
+              <a class="h-btn h-btn--light" href={cvEsHref} download={cvEs ? '' : undefined}>
                 {t.downloadCvEs}
               </a>
               <a
-                class="button button--outline-light"
+                class="h-btn h-btn--ghost"
                 href={cvEnHref}
                 download={cvEn ? '' : undefined}
               >
@@ -57,24 +58,27 @@ const cvEnHref = cvEn ? cvHref('en') : localePath(lang, '/cv/#cv-en');
         }
       </div>
     </div>
-    <div class="band__aside">
-      <dl class="band__list">
-        <div class="band__row">
-          <dt>{t.email}</dt>
-          <dd>
-            <a href={`mailto:${site.email}`}>{site.email}</a>
-          </dd>
-        </div>
-        <div class="band__row">
-          <dt>LinkedIn</dt>
-          <dd>
-            <a href={site.links.linkedin} rel="me noopener noreferrer" target="_blank">
-              {t.linkedinShort}
-              <span class="sr-only"> ({t.newTab})</span>
-            </a>
-          </dd>
-        </div>
-      </dl>
-    </div>
+    <ul class="h-channels">
+      <li>
+        <a href={`mailto:${site.email}`}>
+          <span class="h-channels__label">{t.email}</span>
+          <span class="h-channels__value">{site.email}</span>
+        </a>
+      </li>
+      <li>
+        <a href={site.links.linkedin} rel="me noopener noreferrer" target="_blank">
+          <span class="h-channels__label">LinkedIn</span>
+          <span class="h-channels__value">
+            {t.linkedinShort}<span class="sr-only"> ({t.newTab})</span>
+          </span>
+        </a>
+      </li>
+      <li>
+        <a href={localePath(lang, '/contacto/')}>
+          <span class="h-channels__label">{t.formLabel}</span>
+          <span class="h-channels__value">{t.formValue}</span>
+        </a>
+      </li>
+    </ul>
   </div>
 </section>

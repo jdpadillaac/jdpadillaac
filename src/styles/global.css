@@ -66,7 +66,7 @@ p,
 h1,
 h2,
 h3 {
-  font-family: Fraunces, Georgia, serif;
+  font-family: 'Fraunces Variable', Fraunces, Georgia, serif;
   font-weight: 500;
   line-height: 1.12;
   letter-spacing: -0.02em;
@@ -306,7 +306,7 @@ a:hover {
 }
 
 .result__value {
-  font-family: Fraunces, Georgia, serif;
+  font-family: 'Fraunces Variable', Fraunces, Georgia, serif;
   font-size: clamp(1.75rem, 3vw, 2.5rem);
   font-weight: 500;
   line-height: 1.15;
@@ -395,7 +395,7 @@ a:hover {
 }
 
 .other-row__company {
-  font-family: Fraunces, Georgia, serif;
+  font-family: 'Fraunces Variable', Fraunces, Georgia, serif;
   font-size: 24px;
   font-weight: 500;
   line-height: 1.2;
@@ -702,7 +702,7 @@ a:hover {
 }
 
 .row-link__title {
-  font-family: Fraunces, Georgia, serif;
+  font-family: 'Fraunces Variable', Fraunces, Georgia, serif;
   font-size: 1.35rem;
   font-weight: 500;
   color: var(--text);

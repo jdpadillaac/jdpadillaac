@@ -3,16 +3,16 @@ import type { Localized } from '../i18n/ui';
 export const copy = {
   availability: { es: 'Disponible de inmediato', en: 'Available now' },
   label: {
-    es: 'Senior Software Engineer · 8+ años de experiencia',
-    en: 'Senior Software Engineer · 8+ years of experience',
+    es: '8+ años de experiencia · Banca, fintech y retail',
+    en: '8+ years of experience · Banking, fintech and retail',
   },
   headline: {
-    es: 'Apps móviles con Flutter, backend con Java y full stack con arquitectura limpia.',
-    en: 'Mobile apps with Flutter, backend with Java, and full stack with clean architecture.',
+    es: 'Senior Software Engineer. Mobile con Flutter y nativo, backend con Java y Go.',
+    en: 'Senior Software Engineer. Mobile with Flutter and native, backend with Java and Go.',
   },
   lede: {
-    es: 'Diseño y construyo software con Clean Architecture, design systems y micropaquetes, e integro IA en mi flujo diario. Disponible para roles de tiempo completo, remotos o híbridos en Medellín, y para proyectos freelance.',
-    en: 'I design and build software with Clean Architecture, design systems and micropackages, and I use AI in my daily work. Available for full-time roles, remote or hybrid in Medellín, and for freelance projects.',
+    es: 'Desarrollo apps móviles con Flutter e integraciones nativas con Pigeon, y features backend con Java, Spring Boot y Go. Trabajo con Clean Architecture, design systems y micropaquetes, y uso desarrollo asistido por IA en mi día a día (Cursor, Claude Code y spec-driven development). Disponible para roles de tiempo completo, remotos o híbridos en Medellín, y para proyectos freelance.',
+    en: 'I build mobile apps with Flutter and native integrations with Pigeon, and backend features with Java, Spring Boot and Go. I work with Clean Architecture, design systems and micropackages, and I use AI-assisted development every day (Cursor, Claude Code and spec-driven development). Available for full-time roles, remote or hybrid in Medellín, and for freelance projects.',
   },
   contactPrompt: {
     es: 'Hablemos. Disponible de inmediato para roles de tiempo completo, remotos o híbridos en Medellín, y para proyectos freelance. Escríbeme por correo o LinkedIn.',
