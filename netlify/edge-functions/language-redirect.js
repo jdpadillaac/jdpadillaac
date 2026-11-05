@@ -46,6 +46,8 @@ export default async (req) => {
 
 export const config = {
   path: '/',
-  method: ['GET', 'HEAD'],
+  // Netlify only allows GET, POST, PUT, PATCH, DELETE, and OPTIONS.
+  // A GET route also runs for HEAD.
+  method: 'GET',
   onError: 'bypass',
 };
