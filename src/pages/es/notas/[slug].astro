@@ -1,0 +1,12 @@
+---
+import NoteDetailPage from '../../../views/NoteDetailPage.astro';
+import { publishedNotes } from '../../../lib/notes';
+
+export async function getStaticPaths() {
+  const notes = await publishedNotes();
+  return notes
+    .filter((entry) => entry.data.lang === 'es')
+    .map((entry) => ({ params: { slug: entry.data.slug } }));
+}
+---
+<NoteDetailPage lang="es" slug={Astro.params.slug!} />

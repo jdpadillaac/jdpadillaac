@@ -50,6 +50,12 @@ function current(href: string, exact = false) {
       </nav>
       <div class="h-lang" role="group" aria-label={t.languageLabel}>
         <a
+          href={localePath(lang, '/contacto/')}
+          class="h-contact-link"
+        >
+          {t.contactCta}
+        </a>
+        <a
           href={hrefs.es}
           aria-current={lang === 'es' ? 'true' : undefined}
           lang="es"

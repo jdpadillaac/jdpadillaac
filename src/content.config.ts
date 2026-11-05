@@ -17,6 +17,8 @@ const experiences = defineCollection({
   schema: z.object({
     slug: z.string(),
     published: z.boolean().default(false),
+    datePublished: z.string().default('2025-01-01'),
+    dateModified: z.string().default('2025-11-05'),
     featured: z.boolean().default(false),
     order: z.number(),
     company: text,
@@ -56,6 +58,21 @@ const experiences = defineCollection({
     learnings: text.optional(),
     heroAlt: text.optional(),
     gallery: z.array(z.object({ alt: text })).default([]),
+    profiles: z.array(z.string()).default([]),
+  }),
+});
+
+const notes = defineCollection({
+  loader: glob({ pattern: '**/*.mdx', base: './src/content/notes' }),
+  schema: z.object({
+    slug: z.string(),
+    translationKey: z.string(),
+    lang: z.enum(['es', 'en']),
+    published: z.boolean().default(false),
+    datePublished: z.string(),
+    dateModified: z.string(),
+    title: z.string(),
+    description: z.string(),
   }),
 });
 
@@ -100,4 +117,4 @@ const projects = defineCollection({
   }),
 });
 
-export const collections = { experiences, cases, projects };
+export const collections = { experiences, cases, projects, notes };

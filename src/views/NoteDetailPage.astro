@@ -1,0 +1,67 @@
+---
+import type { Lang } from '../i18n/ui';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import ContactBand from '../components/ContactBand.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../data/site';
+import { localePath } from '../i18n/paths';
+import { ui } from '../i18n/ui';
+import { publishedNotes } from '../lib/notes';
+import { pageGraph } from '../lib/structured-data';
+
+interface Props {
+  lang: Lang;
+  slug: string;
+}
+
+const { lang, slug } = Astro.props;
+const t = ui[lang];
+const notes = await publishedNotes();
+const entry = notes.find((item) => item.data.slug === slug && item.data.lang === lang);
+if (!entry) throw new Error(`Missing note: ${slug}`);
+const { Content } = await entry.render();
+const pathname = localePath(lang, `/notas/${entry.data.slug}/`);
+const pageTitle = `${entry.data.title} — ${site.name}`;
+const crumbs = [
+  { label: t.home, href: localePath(lang, '/') },
+  { label: t.notes, href: localePath(lang, '/notas/') },
+  { label: entry.data.title, href: pathname },
+];
+---
+<BaseLayout
+  lang={lang}
+  title={pageTitle}
+  description={entry.data.description}
+  pathname={pathname}
+  ogType="article"
+  jsonLd={await pageGraph({
+    lang,
+    pathname,
+    pageType: 'WebPage',
+    title: pageTitle,
+    description: entry.data.description,
+    dateModified: entry.data.dateModified,
+    breadcrumbs: crumbs,
+    article: {
+      datePublished: entry.data.datePublished,
+      dateModified: entry.data.dateModified,
+      keywords: [],
+      about: [],
+    },
+  })}
+>
+  <div class="h-wrap page">
+    <article>
+      <Breadcrumbs items={crumbs} label={t.breadcrumbs} />
+      <header>
+        <p class="h-eyebrow">{entry.data.datePublished}</p>
+        <h1 id="titulo">{entry.data.title}</h1>
+        <p class="lead">{entry.data.description}</p>
+      </header>
+      <div class="prose">
+        <Content />
+      </div>
+    </article>
+  </div>
+  <ContactBand lang={lang} />
+</BaseLayout>

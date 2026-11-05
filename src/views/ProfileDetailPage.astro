@@ -1,0 +1,113 @@
+---
+import type { Lang } from '../i18n/ui';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import ContactBand from '../components/ContactBand.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { copy } from '../data/copy';
+import { profileBySlug, profilesForExperience } from '../data/profiles';
+import { profileSeo } from '../data/seo';
+import { site } from '../data/site';
+import { localePath } from '../i18n/paths';
+import { tx, ui } from '../i18n/ui';
+import { publishedExperiences } from '../lib/content';
+import { pageGraph } from '../lib/structured-data';
+import { siteLastModified } from '../lib/seo-dates';
+
+interface Props {
+  lang: Lang;
+  slug: string;
+}
+
+const { lang, slug } = Astro.props;
+const profile = profileBySlug(slug);
+if (!profile) throw new Error('Unsupported profile');
+const t = ui[lang];
+const name = tx(lang, profile.name);
+const pathname = localePath(lang, `/perfiles/${profile.slug}/`);
+const crumbs = [
+  { label: t.home, href: localePath(lang, '/') },
+  { label: t.profiles, href: localePath(lang, '/perfiles/') },
+  { label: name, href: pathname },
+];
+const seo = profileSeo[profile.slug][lang];
+const experiences = (await publishedExperiences()).filter((entry) =>
+  profile.experienceSlugs.includes(entry.data.slug),
+);
+---
+
+<BaseLayout
+  lang={lang}
+  title={seo.title}
+  description={seo.description}
+  pathname={pathname}
+  jsonLd={await pageGraph({
+    lang,
+    pathname,
+    pageType: 'WebPage',
+    title: seo.title,
+    description: seo.description,
+    dateModified: siteLastModified,
+    breadcrumbs: crumbs,
+  })}
+>
+  <div class="h-wrap page">
+    <Breadcrumbs items={crumbs} label={t.breadcrumbs} />
+    <header>
+      <h1 id="titulo">{name}</h1>
+      <p class="lead">{tx(lang, profile.intro)}</p>
+    </header>
+    <section aria-labelledby="focus-perfil">
+      <h2 id="focus-perfil">{t.whatIDid}</h2>
+      <ul class="h-checks">
+        {profile.focus[lang].map((item) => (
+          <li>{item}</li>
+        ))}
+      </ul>
+    </section>
+    <section class="card facts" aria-labelledby="stack-perfil">
+      <h2 id="stack-perfil">{t.stack}</h2>
+      <ul class="pills">
+        {profile.stack[lang].map((item) => (
+          <li>{item}</li>
+        ))}
+      </ul>
+    </section>
+    <section aria-labelledby="ia-perfil">
+      <h2 id="ia-perfil">{t.aiAssist}</h2>
+      <p>{tx(lang, profile.ai)}</p>
+    </section>
+    {
+      experiences.length > 0 && (
+        <section aria-labelledby="exp-perfil">
+          <h2 id="exp-perfil">{t.relatedExperience}</h2>
+          <ul class="h-list">
+            {experiences.map((entry) => (
+              <li>
+                <a href={localePath(lang, `/experiencia/${entry.data.slug}/`)}>
+                  <span>
+                    <span class="h-list__company">{tx(lang, entry.data.company)}</span>
+                    <span class="h-list__meta">
+                      {tx(lang, entry.data.title)} · {tx(lang, entry.data.start)} — {tx(lang, entry.data.end)}
+                    </span>
+                  </span>
+                  <span class="h-list__go">{t.viewPage} →</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+    <p class="lead">{tx(lang, copy.contactPrompt)}</p>
+    <div class="cluster">
+      <a class="button" href={localePath(lang, '/contacto/')}>
+        {t.contactCta}
+      </a>
+      <a class="button button--ghost" href={site.links.linkedin} rel="me noopener noreferrer" target="_blank">
+        LinkedIn
+        <span class="sr-only"> ({t.newTab})</span>
+      </a>
+    </div>
+  </div>
+  <ContactBand lang={lang} />
+</BaseLayout>

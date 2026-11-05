@@ -1,0 +1,95 @@
+---
+import type { Lang } from '../i18n/ui';
+import { Picture } from 'astro:assets';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import ContactBand from '../components/ContactBand.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import profilePhoto from '../assets/images/profile.jpg';
+import { copy } from '../data/copy';
+import { pageSeo } from '../data/seo';
+import { site } from '../data/site';
+import { localePath } from '../i18n/paths';
+import { tx, ui } from '../i18n/ui';
+import { pageGraph } from '../lib/structured-data';
+import { siteLastModified } from '../lib/seo-dates';
+
+interface Props {
+  lang: Lang;
+
+}
+
+const { lang } = Astro.props;
+const t = ui[lang];
+const pathname = localePath(lang, '/sobre-mi/');
+const crumbs = [
+  { label: t.home, href: localePath(lang, '/') },
+  { label: t.about, href: pathname },
+];
+const alt =
+  lang === 'es'
+    ? 'Jonatan Padilla con audífonos y una sudadera verde, sentado en una silla'
+    : 'Jonatan Padilla wearing headphones and a green hoodie, seated in a chair';
+---
+<BaseLayout lang={lang} title={pageSeo.about[lang].title} description={pageSeo.about[lang].description} pathname={pathname} jsonLd={await pageGraph({
+  lang,
+  pathname,
+  pageType: 'ProfilePage',
+  title: pageSeo.about[lang].title,
+  description: pageSeo.about[lang].description,
+  dateModified: siteLastModified,
+  breadcrumbs: crumbs,
+})}>
+  <div class="h-wrap page">
+    <Breadcrumbs items={crumbs} label={t.breadcrumbs} />
+    <div class="split">
+      <header>
+        <h1 id="titulo">{t.about}</h1>
+        <p class="lead">{tx(lang, copy.about)}</p>
+        <div class="facts">
+          <dl>
+            <div>
+              <dt>{t.location}</dt>
+              <dd>{site.location}</dd>
+            </div>
+            <div>
+              <dt>{t.email}</dt>
+              <dd><a href={`mailto:${site.email}`}>{site.email}</a></dd>
+            </div>
+            <div>
+              <dt>{t.education}</dt>
+              <dd>{tx(lang, copy.education)}</dd>
+            </div>
+            <div>
+              <dt>{t.certifications}</dt>
+              <dd>{tx(lang, copy.certifications)}</dd>
+            </div>
+            <div>
+              <dt>{t.languages}</dt>
+              <dd>{tx(lang, copy.languages)}</dd>
+            </div>
+          </dl>
+        </div>
+      </header>
+      <Picture
+        src={profilePhoto}
+        formats={['avif', 'webp']}
+        alt={alt}
+        width={360}
+        height={456}
+        densities={[1, 2]}
+        sizes="(min-width: 720px) 360px, calc(100vw - 48px)"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+        class="portrait"
+      />
+    </div>
+    <section aria-labelledby="stack-sobre">
+      <h2 id="stack-sobre">{t.stack}</h2>
+      <ul class="pills">
+        {site.skills.map((skill) => <li>{skill}</li>)}
+      </ul>
+    </section>
+  </div>
+  <ContactBand lang={lang} />
+</BaseLayout>

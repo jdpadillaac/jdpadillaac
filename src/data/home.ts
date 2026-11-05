@@ -29,12 +29,12 @@ export const homeFeature = {
   highlights: Localized & { es: readonly string[]; en: readonly string[] };
 };
 
-export const headlineEm = {
-  es: 'backend con Java y Go.',
-  en: 'backend with Java and Go.',
+export const homeH1 = {
+  es: 'Jonatan Padilla, Senior Software Engineer: Flutter, Java y Full Stack',
+  en: 'Jonatan Padilla, Senior Software Engineer: Flutter, Java and Full Stack',
 } as const satisfies Localized;
 
-export const headlineBefore = {
-  es: 'Senior Software Engineer. Mobile con Flutter y nativo, ',
-  en: 'Senior Software Engineer. Mobile with Flutter and native, ',
+export const homeLead = {
+  es: 'Apps móviles con Flutter, backend con Java y full stack con arquitectura limpia.',
+  en: 'Mobile apps with Flutter, backend with Java, and full stack with clean architecture.',
 } as const satisfies Localized;

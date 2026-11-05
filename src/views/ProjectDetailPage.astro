@@ -1,0 +1,84 @@
+---
+import type { Lang } from '../i18n/ui';
+import { render } from 'astro:content';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import ContactBand from '../components/ContactBand.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../data/site';
+import { localePath } from '../i18n/paths';
+import { ui } from '../i18n/ui';
+import { publishedProjects } from '../lib/content';
+import { breadcrumbGraph } from '../lib/structured-data';
+
+interface Props {
+  lang: Lang;
+  proyecto: string;
+}
+
+const { lang, proyecto } = Astro.props;
+const t = ui[lang];
+const project = (await publishedProjects()).find((item) => item.id === proyecto);
+if (!project) throw new Error(`Missing project: ${proyecto}`);
+const pathname = localePath(lang, `/proyectos/${project.id}/`);
+const pending = '[Pendiente: traducción]';
+const summary = lang === 'es' ? project.data.summary : project.data.summaryEn === pending ? '' : project.data.summaryEn;
+const description =
+  lang === 'es'
+    ? project.data.description
+    : project.data.descriptionEn === pending
+      ? project.data.description
+      : `${project.data.descriptionEn} (${project.data.title})`;
+const crumbs = [
+  { label: t.home, href: localePath(lang, '/') },
+  { label: t.projects, href: localePath(lang, '/proyectos/') },
+  { label: project.data.title, href: pathname },
+];
+const { Content } = await render(project);
+---
+<BaseLayout
+  lang={lang}
+  title={`${project.data.title} — ${site.name}`}
+  description={description}
+  pathname={pathname}
+  noindex={true}
+  jsonLd={breadcrumbGraph(crumbs)}
+>
+  <div class="h-wrap page">
+    <Breadcrumbs items={crumbs} label={t.breadcrumbs} />
+    <header>
+      <h1 id="titulo">{project.data.title}</h1>
+      {summary && <p class="lead">{summary}</p>}
+    </header>
+    <ul class="pills">
+      {project.data.stack.map((item) => <li>{item}</li>)}
+    </ul>
+    <div class="cluster">
+      <a class="button" href={project.data.repoUrl} rel="noopener noreferrer" target="_blank">
+        {t.repository}
+        <span class="sr-only"> ({t.newTab})</span>
+      </a>
+      {
+        project.data.secondaryRepoUrl && (
+          <a class="button button--ghost" href={project.data.secondaryRepoUrl} rel="noopener noreferrer" target="_blank">
+            {t.secondaryRepository}
+            <span class="sr-only"> ({t.newTab})</span>
+          </a>
+        )
+      }
+      {
+        project.data.demoUrl && (
+          <a class="button button--ghost" href={project.data.demoUrl} rel="noopener noreferrer" target="_blank">
+            {t.demo}
+            <span class="sr-only"> ({t.newTab})</span>
+          </a>
+        )
+      }
+    </div>
+    {lang === 'es' && (
+      <div class="prose">
+        <Content />
+      </div>
+    )}
+  </div>
+  <ContactBand lang={lang} />
+</BaseLayout>

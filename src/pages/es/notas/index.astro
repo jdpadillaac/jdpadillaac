@@ -1,0 +1,11 @@
+---
+import NotesIndexPage from '../../../views/NotesIndexPage.astro';
+import { publishedNotes } from '../../../lib/notes';
+
+export async function getStaticPaths() {
+  const notes = await publishedNotes();
+  if (notes.length === 0) return [];
+  return [{}];
+}
+---
+<NotesIndexPage lang="es" />

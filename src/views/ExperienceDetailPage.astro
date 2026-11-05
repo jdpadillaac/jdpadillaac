@@ -1,0 +1,130 @@
+---
+import type { Lang } from '../i18n/ui';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import ContactBand from '../components/ContactBand.astro';
+import Study from '../components/Study.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { profilesForExperience } from '../data/profiles';
+import { site } from '../data/site';
+import { localePath } from '../i18n/paths';
+import { tx, ui } from '../i18n/ui';
+import { publishedCases, publishedExperiences } from '../lib/content';
+import { pageGraph } from '../lib/structured-data';
+
+interface Props {
+  lang: Lang;
+  empresa: string;
+}
+
+const { lang, empresa } = Astro.props;
+const t = ui[lang];
+const experiences = await publishedExperiences();
+const entry = experiences.find((item) => item.data.slug === empresa);
+if (!entry) throw new Error(`Missing experience: ${empresa}`);
+const cases = (await publishedCases()).filter((item) => item.data.experienceSlug === entry.data.slug);
+const pathname = localePath(lang, `/experiencia/${entry.data.slug}/`);
+const company = tx(lang, entry.data.company);
+const title = tx(lang, entry.data.title);
+const dates = `${tx(lang, entry.data.start)} — ${tx(lang, entry.data.end)}`;
+const crumbs = [
+  { label: t.home, href: localePath(lang, '/') },
+  { label: t.experience, href: localePath(lang, '/experiencia/') },
+  { label: company, href: pathname },
+];
+const stack = entry.data.stack?.[lang] ?? [];
+const stackSection =
+  stack.length > 0
+    ? { id: 'stack', title: t.stack, body: stack.join(' · ') }
+    : undefined;
+const sections = [
+  entry.data.context ? { id: 'contexto', title: t.context, body: tx(lang, entry.data.context) } : undefined,
+  entry.data.challenge ? { id: 'problema', title: t.problem, body: tx(lang, entry.data.challenge) } : undefined,
+  entry.data.roleNarrative ? { id: 'rol', title: t.roleSection, body: tx(lang, entry.data.roleNarrative) } : undefined,
+  entry.data.solution
+    ? { id: 'decisiones', title: t.technicalDecisions, body: tx(lang, entry.data.solution) }
+    : undefined,
+  stackSection,
+].filter((section) => section !== undefined);
+const pageTitle = `${title} — ${company} — ${site.name}`;
+const pageDescription = tx(lang, entry.data.description);
+const relatedProfiles = profilesForExperience(entry.data.slug);
+---
+<BaseLayout
+  lang={lang}
+  title={pageTitle}
+  description={pageDescription}
+  pathname={pathname}
+  ogType="article"
+  jsonLd={await pageGraph({
+    lang,
+    pathname,
+    pageType: 'WebPage',
+    title: pageTitle,
+    description: pageDescription,
+    dateModified: entry.data.dateModified,
+    breadcrumbs: crumbs,
+    article: {
+      datePublished: entry.data.datePublished,
+      dateModified: entry.data.dateModified,
+      keywords: stack,
+      about: stack,
+    },
+  })}
+>
+  <div class="h-wrap page">
+    <article>
+    <Study
+      lang={lang}
+      kicker={`${company} · ${dates}`}
+      title={title}
+      summary={tx(lang, entry.data.summary)}
+      facts={{
+        role: tx(lang, entry.data.role),
+        dates,
+        team: entry.data.team ? tx(lang, entry.data.team) : undefined,
+        stack: entry.data.stack?.[lang],
+      }}
+      heroAlt={entry.data.heroAlt ? tx(lang, entry.data.heroAlt) : undefined}
+      highlights={entry.data.highlights[lang]}
+      stages={entry.data.stages.map((stage) => ({
+        role: tx(lang, stage.role),
+        period: tx(lang, stage.period),
+        summary: tx(lang, stage.summary),
+      }))}
+      results={entry.data.results.map((item) => ({ value: tx(lang, item.value), label: tx(lang, item.label) }))}
+      sections={sections}
+      shots={entry.data.gallery.map((shot) => tx(lang, shot.alt))}
+      learnings={entry.data.learnings ? tx(lang, entry.data.learnings) : undefined}
+      cases={cases.map((item) => ({
+        href: localePath(lang, `/experiencia/${entry.data.slug}/casos/${item.data.slug}/`),
+        title: tx(lang, item.data.title),
+        meta: tx(lang, item.data.summary),
+      }))}
+      others={experiences
+        .filter((item) => item.data.slug !== entry.data.slug)
+        .map((item) => ({
+          href: localePath(lang, `/experiencia/${item.data.slug}/`),
+          title: tx(lang, item.data.company),
+          meta: `${tx(lang, item.data.title)} · ${tx(lang, item.data.start)} — ${tx(lang, item.data.end)}`,
+        }))}
+    >
+      <Breadcrumbs slot="crumbs" items={crumbs} label={t.breadcrumbs} />
+    </Study>
+    {
+      relatedProfiles.length > 0 && (
+        <section aria-labelledby="perfiles-rel">
+          <h2 id="perfiles-rel">{t.relatedProfiles}</h2>
+          <ul class="pills">
+            {relatedProfiles.map((profile) => (
+              <li>
+                <a href={localePath(lang, `/perfiles/${profile.slug}/`)}>{tx(lang, profile.name)}</a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+    </article>
+  </div>
+  <ContactBand lang={lang} title={t.lookingFor} actions="contact" />
+</BaseLayout>

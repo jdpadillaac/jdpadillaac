@@ -1,0 +1,52 @@
+---
+import type { Lang } from '../i18n/ui';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import ContactBand from '../components/ContactBand.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { pageSeo } from '../data/seo';
+import { localePath } from '../i18n/paths';
+import { ui } from '../i18n/ui';
+import { publishedNotes } from '../lib/notes';
+import { breadcrumbGraph } from '../lib/structured-data';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = ui[lang];
+const pathname = localePath(lang, '/notas/');
+const notes = (await publishedNotes()).filter((entry) => entry.data.lang === lang);
+const crumbs = [
+  { label: t.home, href: localePath(lang, '/') },
+  { label: t.notes, href: pathname },
+];
+---
+<BaseLayout
+  lang={lang}
+  title={pageSeo.notesIndex[lang].title}
+  description={pageSeo.notesIndex[lang].description}
+  pathname={pathname}
+  jsonLd={breadcrumbGraph(crumbs)}
+>
+  <div class="h-wrap page">
+    <Breadcrumbs items={crumbs} label={t.breadcrumbs} />
+    <header>
+      <h1 id="titulo">{t.notesTitle}</h1>
+    </header>
+    <ul class="h-list">
+      {
+        notes.map((entry) => (
+          <li>
+            <a href={localePath(lang, `/notas/${entry.data.slug}/`)}>
+              <span class="h-list__title">{entry.data.title}</span>
+              <span class="h-list__meta">{entry.data.datePublished}</span>
+            </a>
+            <p>{entry.data.description}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+  <ContactBand lang={lang} />
+</BaseLayout>
