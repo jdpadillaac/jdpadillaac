@@ -7,23 +7,15 @@ vi.mock('../../src/lib/content', () => ({
   projectsForProfile: vi.fn(),
 }));
 
-import * as caseNs from '../../src/pages/[lang]/experiencia/[empresa]/casos/[proyecto].astro';
-import * as experienceNs from '../../src/pages/[lang]/experiencia/[empresa].astro';
-import * as experiencesNs from '../../src/pages/[lang]/experiencia/index.astro';
-import * as homeNs from '../../src/pages/[lang]/index.astro';
+import CaseDetailPage from '../../src/views/CaseDetailPage.astro';
+import ExperienceDetailPage from '../../src/views/ExperienceDetailPage.astro';
+import ExperienceIndexPage from '../../src/views/ExperienceIndexPage.astro';
+import HomePage from '../../src/views/HomePage.astro';
 import { publishedCases, publishedExperiences } from '../../src/lib/content';
 import { page } from '../helpers/render';
 
-const home = homeNs as unknown as { default: Parameters<typeof page>[0] };
-const experiences = experiencesNs as unknown as { default: Parameters<typeof page>[0] };
-const experience = experienceNs as unknown as {
-  default: Parameters<typeof page>[0];
-  getStaticPaths: () => Promise<Array<{ params: Record<string, string> }>>;
-};
-const casePage = caseNs as unknown as {
-  default: Parameters<typeof page>[0];
-  getStaticPaths: () => Promise<Array<{ params: Record<string, string> }>>;
-};
+const home = HomePage;
+const experiences = ExperienceIndexPage;
 
 const text = (value: string) => ({ es: value, en: value });
 
@@ -34,6 +26,8 @@ function entry(overrides: Record<string, unknown> = {}) {
     data: {
       slug,
       published: true,
+      datePublished: '2020-01-01',
+      dateModified: '2024-01-01',
       featured: false,
       order: 1,
       company: text('Acme'),
@@ -59,14 +53,14 @@ describe('page branches the published content does not hit', () => {
   });
 
   it('skips the experience block when nothing is published', async () => {
-    const html = await page(home.default, { lang: 'es' });
+    const html = await page(home, { lang: 'es' });
     expect(html).toContain('Mobile / Flutter');
     expect(html).not.toContain('id="experiencia"');
   });
 
   it('uses the first experience when none is featured', async () => {
     vi.mocked(publishedExperiences).mockResolvedValue([entry({ slug: 'solo', company: text('Solo') })] as never);
-    const html = await page(home.default, { lang: 'en' });
+    const html = await page(home, { lang: 'en' });
     expect(html).toContain('Solo');
     expect(html).toContain('h-feature');
     expect(html).toContain('h-checks');
@@ -85,7 +79,7 @@ describe('page branches the published content does not hit', () => {
       entry({ slug: 'next', order: 2, company: text('Next') }),
     ] as never);
 
-    const html = await page(home.default, { lang: 'es' });
+    const html = await page(home, { lang: 'es' });
     expect(html).toContain('Atomic Design');
     expect(html).not.toContain('Four');
     expect(html).toContain('h-others');
@@ -93,7 +87,7 @@ describe('page branches the published content does not hit', () => {
   });
 
   it('lists child cases only for the matching experience', async () => {
-    const empty = await page(experiences.default, { lang: 'es' });
+    const empty = await page(experiences, { lang: 'es' });
     expect(empty).not.toContain('other-list');
 
     vi.mocked(publishedExperiences).mockResolvedValue([
@@ -105,8 +99,8 @@ describe('page branches the published content does not hit', () => {
       { data: { experienceSlug: 'other', slug: 'nope', title: text('Nope') } },
     ] as never);
 
-    const html = await page(experiences.default, { lang: 'en' });
-    expect(html).toContain('/en/experiencia/seek/casos/push/');
+    const html = await page(experiences, { lang: 'en' });
+    expect(html).toContain('/en/experience/seek/cases/push/');
     expect(html).toContain('Push');
     expect(html).not.toContain('Nope');
     expect(html).toContain('WACO');
@@ -132,32 +126,6 @@ describe('page branches the published content does not hit', () => {
     const bare = entry({ slug: 'bare', order: 2, company: text('Bare Co') });
     vi.mocked(publishedExperiences).mockResolvedValue([rich, bare] as never);
     vi.mocked(publishedCases).mockResolvedValue([
-      { data: { experienceSlug: 'rich', slug: 'caso', title: text('Case title'), summary: text('Case summary') } },
-    ] as never);
-
-    const paths = await experience.getStaticPaths();
-    expect(paths).toHaveLength(4);
-    const richHtml = await page(experience.default, { lang: 'es', empresa: 'rich' });
-    const bareHtml = await page(experience.default, { lang: 'en', empresa: 'bare' });
-
-    expect(richHtml).toContain('id="contexto"');
-    expect(richHtml).toContain('id="rol"');
-    expect(richHtml).toContain('id="reto"');
-    expect(richHtml).toContain('id="solucion"');
-    expect(richHtml).toContain('Squad');
-    expect(richHtml).toContain('Hero alt');
-    expect(richHtml).toContain('Learning body');
-    expect(richHtml).toContain('Gallery shot');
-    expect(richHtml).toContain('/es/experiencia/rich/casos/caso/');
-    expect(richHtml).toContain('Bare Co');
-    expect(bareHtml).not.toContain('id="contexto"');
-    expect(bareHtml).not.toContain('>Equipo<');
-    expect(bareHtml).toContain('Rich Co');
-  });
-
-  it('renders a published case study', async () => {
-    vi.mocked(publishedExperiences).mockResolvedValue([entry({ slug: 'rich', company: text('Rich Co') })] as never);
-    vi.mocked(publishedCases).mockResolvedValue([
       {
         data: {
           slug: 'caso',
@@ -177,11 +145,23 @@ describe('page branches the published content does not hit', () => {
       },
     ] as never);
 
-    await expect(casePage.getStaticPaths()).resolves.toEqual([
-      { params: { lang: 'es', empresa: 'rich', proyecto: 'caso' } },
-      { params: { lang: 'en', empresa: 'rich', proyecto: 'caso' } },
-    ]);
-    const html = await page(casePage.default, { lang: 'en', empresa: 'rich', proyecto: 'caso' });
+    const richHtml = await page(ExperienceDetailPage, { lang: 'es', empresa: 'rich' });
+    const bareHtml = await page(ExperienceDetailPage, { lang: 'en', empresa: 'bare' });
+
+    expect(richHtml).toContain('id="contexto"');
+    expect(richHtml).toContain('id="rol"');
+    expect(richHtml).toContain('id="problema"');
+    expect(richHtml).toContain('id="decisiones"');
+    expect(richHtml).toContain('Squad');
+    expect(richHtml).toContain('Hero alt');
+    expect(richHtml).toContain('Learning body');
+    expect(richHtml).toContain('Gallery shot');
+    expect(richHtml).toContain('/es/experiencia/rich/casos/caso/');
+    expect(bareHtml).not.toContain('id="contexto"');
+    expect(bareHtml).not.toContain('>Equipo<');
+    expect(bareHtml).toContain('Rich Co');
+
+    const html = await page(CaseDetailPage, { lang: 'en', empresa: 'rich', proyecto: 'caso' });
     expect(html).toContain('Case title');
     expect(html).toContain('Case context');
     expect(html).toContain('Case hero');

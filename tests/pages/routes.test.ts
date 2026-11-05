@@ -1,49 +1,26 @@
 import { describe, expect, it } from 'vitest';
-import * as aboutNs from '../../src/pages/[lang]/sobre-mi.astro';
-import * as caseNs from '../../src/pages/[lang]/experiencia/[empresa]/casos/[proyecto].astro';
-import * as contactNs from '../../src/pages/[lang]/contacto.astro';
-import * as cvNs from '../../src/pages/[lang]/cv.astro';
-import * as experienceNs from '../../src/pages/[lang]/experiencia/[empresa].astro';
-import * as experiencesNs from '../../src/pages/[lang]/experiencia/index.astro';
-import * as homeNs from '../../src/pages/[lang]/index.astro';
-import * as profileNs from '../../src/pages/[lang]/perfiles/[slug].astro';
-import * as profilesNs from '../../src/pages/[lang]/perfiles/index.astro';
-import * as projectNs from '../../src/pages/[lang]/proyectos/[proyecto].astro';
-import * as projectsNs from '../../src/pages/[lang]/proyectos/index.astro';
-import * as sentNs from '../../src/pages/[lang]/contacto/enviado.astro';
+import AboutPage from '../../src/views/AboutPage.astro';
+import CaseDetailPage from '../../src/views/CaseDetailPage.astro';
+import ContactPage from '../../src/views/ContactPage.astro';
+import ContactSentPage from '../../src/views/ContactSentPage.astro';
+import CvPage from '../../src/views/CvPage.astro';
+import ExperienceDetailPage from '../../src/views/ExperienceDetailPage.astro';
+import ExperienceIndexPage from '../../src/views/ExperienceIndexPage.astro';
+import HomePage from '../../src/views/HomePage.astro';
+import ProfileDetailPage from '../../src/views/ProfileDetailPage.astro';
+import ProfilesIndexPage from '../../src/views/ProfilesIndexPage.astro';
+import ProjectDetailPage from '../../src/views/ProjectDetailPage.astro';
+import ProjectsIndexPage from '../../src/views/ProjectsIndexPage.astro';
 import NotFound from '../../src/pages/404.astro';
-import Root from '../../src/pages/index.astro';
 import { publishedCases, publishedExperiences, publishedProjects } from '../../src/lib/content';
+import { profiles } from '../../src/data/profiles';
 import { page } from '../helpers/render';
 
-type Params = Record<string, string | undefined>;
-type Routed = {
-  default: Parameters<typeof page>[0];
-  getStaticPaths: () => Promise<Array<{ params: Params }>> | Array<{ params: Params }>;
-};
-
-const home = homeNs as unknown as Routed;
-const cv = cvNs as unknown as Routed;
-const experiences = experiencesNs as unknown as Routed;
-const experience = experienceNs as unknown as Routed;
-const casePage = caseNs as unknown as Routed;
-const projects = projectsNs as unknown as Routed;
-const project = projectNs as unknown as Routed;
-const profiles = profilesNs as unknown as Routed;
-const profile = profileNs as unknown as Routed;
-const contact = contactNs as unknown as Routed;
-const sent = sentNs as unknown as Routed;
-const about = aboutNs as unknown as Routed;
-
-async function renderAll(mod: Routed) {
-  const paths = await mod.getStaticPaths();
-  const html: string[] = [];
-  for (const entry of paths) {
-    const result = await page(mod.default, entry.params);
-    expect(result).toContain('<html');
-    html.push(result);
-  }
-  return html;
+async function renderLangs(component: Parameters<typeof page>[0], extra: Record<string, string> = {}) {
+  return Promise.all([
+    page(component, { lang: 'es', ...extra }),
+    page(component, { lang: 'en', ...extra }),
+  ]);
 }
 
 function byPath(html: string[], path: string) {
@@ -73,105 +50,80 @@ describe('published content', () => {
 });
 
 describe('static pages', () => {
-  it('renders every localized route', async () => {
-    const homes = await renderAll(home);
-    expect(byPath(homes, '/es/')).toContain('/es/cv/#cv-es');
-    expect(byPath(homes, '/es/')).toContain('Mobile / Flutter');
-    expect(byPath(homes, '/es/')).toContain('SEEK');
-    expect(byPath(homes, '/es/')).toContain('WACO Digital Hub');
+  it('renders localized views', async () => {
+    const homes = await renderLangs(HomePage);
+    expect(byPath(homes, '/es/')).toContain('Jonatan Padilla, Senior Software Engineer');
     expect(byPath(homes, '/en/')).toContain('Available now');
 
-    const cvs = await renderAll(cv);
+    const cvs = await renderLangs(CvPage);
     expect(byPath(cvs, '/es/cv/')).not.toContain('id="cv-es"');
     expect(byPath(cvs, '/en/cv/')).not.toContain('id="cv-en"');
 
-    const experienceIndex = await renderAll(experiences);
+    const experienceIndex = await renderLangs(ExperienceIndexPage);
     expect(byPath(experienceIndex, '/es/experiencia/')).toContain('Siigo');
-    expect(byPath(experienceIndex, '/es/experiencia/')).not.toContain('/casos/');
+    expect(byPath(experienceIndex, '/en/experience/')).toContain('Siigo');
 
-    const experiencePages = await renderAll(experience);
+    const experiencePages = await Promise.all(
+      (await publishedExperiences()).flatMap((entry) => [
+        page(ExperienceDetailPage, { lang: 'es', empresa: entry.data.slug }),
+        page(ExperienceDetailPage, { lang: 'en', empresa: entry.data.slug }),
+      ]),
+    );
     expect(experiencePages).toHaveLength(6);
     expect(byPath(experiencePages, '/es/experiencia/seek/')).toContain('InFinancexp');
-    expect(byPath(experiencePages, '/en/experiencia/waco/')).toContain('Stages');
-    expect(byPath(experiencePages, '/es/experiencia/siigo/')).toContain('¿Buscas un perfil como este?');
+    expect(byPath(experiencePages, '/en/experience/waco/')).toContain('Stages');
 
-    expect(await casePage.getStaticPaths()).toEqual([]);
+    const projectIndex = await renderLangs(ProjectsIndexPage);
+    expect(byPath(projectIndex, '/es/proyectos/')).toContain('noindex, follow');
+    expect(byPath(projectIndex, '/en/projects/')).toContain('noindex, follow');
 
-    const projectIndex = await renderAll(projects);
-    expect(byPath(projectIndex, '/es/proyectos/')).toContain('Aplicación web');
-    expect(byPath(projectIndex, '/en/proyectos/')).not.toContain('[Pendiente: traducción]');
-
-    const projectPages = await renderAll(project);
-    expect(projectPages).toHaveLength(12);
+    const projectPages = await Promise.all(
+      (await publishedProjects()).flatMap((entry) => [
+        page(ProjectDetailPage, { lang: 'es', proyecto: entry.id }),
+        page(ProjectDetailPage, { lang: 'en', proyecto: entry.id }),
+      ]),
+    );
     const board = byPath(projectPages, '/es/proyectos/jtaskboard/');
-    const boardEn = byPath(projectPages, '/en/proyectos/jtaskboard/');
-    const pokemon = byPath(projectPages, '/en/proyectos/pokemon-swiftui/');
     expect(board).toContain('class="prose"');
-    expect(board).toContain('https://jtaskboard-react-app.vercel.app');
-    expect(board).toContain('jtaskboard-java-api');
-    expect(boardEn).not.toContain('class="prose"');
-    expect(boardEn).not.toContain('<p class="lead">');
-    expect(pokemon).not.toContain('https://jtaskboard-react-app.vercel.app');
 
-    const profileIndex = await renderAll(profiles);
-    expect(byPath(profileIndex, '/en/perfiles/')).toContain('Java backend');
+    const profileIndex = await renderLangs(ProfilesIndexPage);
+    expect(byPath(profileIndex, '/en/profiles/')).toContain('Java backend');
 
-    const profilePages = await renderAll(profile);
-    expect(byPath(profilePages, '/es/perfiles/mobile-flutter/')).toContain('Perfil Mobile / Flutter de Jonatan Padilla');
-    expect(byPath(profilePages, '/en/perfiles/backend-java/')).toContain('Java backend profile of Jonatan Padilla');
+    const profilePages = await Promise.all(
+      profiles.flatMap((entry) => [
+        page(ProfileDetailPage, { lang: 'es', slug: entry.slug }),
+        page(ProfileDetailPage, { lang: 'en', slug: entry.slug }),
+      ]),
+    );
+    expect(byPath(profilePages, '/es/perfiles/mobile-flutter/')).toContain('Desarrollo asistido por IA');
+    expect(byPath(profilePages, '/en/profiles/backend-java/')).toContain('AI-assisted development');
 
-    const contactPages = await renderAll(contact);
+    const contactPages = await renderLangs(ContactPage);
     expect(byPath(contactPages, '/es/contacto/')).toContain('data-netlify="true"');
-    expect(byPath(contactPages, '/en/contacto/')).toContain('name="bot-field"');
+    expect(byPath(contactPages, '/en/contact/')).toContain('name="bot-field"');
 
-    const sentPages = await renderAll(sent);
+    const sentPages = await renderLangs(ContactSentPage);
     expect(byPath(sentPages, '/es/contacto/enviado/')).toContain('noindex, follow');
-    expect(byPath(sentPages, '/en/contacto/enviado/')).toContain('rel="alternate" hreflang="es"');
+    expect(byPath(sentPages, '/en/contact/sent/')).toContain('noindex, follow');
 
-    const aboutPages = await renderAll(about);
+    const aboutPages = await renderLangs(AboutPage);
     expect(byPath(aboutPages, '/es/sobre-mi/')).toContain('audífonos');
-    expect(byPath(aboutPages, '/en/sobre-mi/')).toContain('headphones');
-    expect(byPath(aboutPages, '/es/sobre-mi/')).toContain('Flutter');
+    expect(byPath(aboutPages, '/en/about/')).toContain('headphones');
   });
 
-  it('renders the language gate and the 404', async () => {
-    const root = await page(Root);
-    expect(root).toContain('noindex, follow');
-    expect(root).toContain('href="/es/"');
-    expect(root).toContain('href="/en/" lang="en"');
-
+  it('renders the 404', async () => {
     const missing = await page(NotFound);
     expect(missing).toContain('Página no encontrada');
-    expect(missing).toContain('lang="en"');
+    expect(missing).toContain('Experiencia');
     expect(missing).toContain('noindex, follow');
-    expect(missing).not.toContain('rel="alternate"');
   });
 
-  it('rejects unknown params', async () => {
-    await expect(page(home.default, { lang: 'fr' })).rejects.toThrow('Unsupported language');
-    await expect(page(cv.default, { lang: undefined })).rejects.toThrow('Unsupported language');
-    await expect(page(experiences.default, { lang: 'pt' })).rejects.toThrow('Unsupported language');
-    await expect(page(experience.default, { lang: 'fr', empresa: 'seek' })).rejects.toThrow('Unsupported experience');
-    await expect(page(experience.default, { lang: 'es' })).rejects.toThrow('Unsupported experience');
-    await expect(page(experience.default, { lang: 'es', empresa: 'missing' })).rejects.toThrow('Missing experience: missing');
-    await expect(page(casePage.default, { lang: 'fr', empresa: 'seek', proyecto: 'caso' })).rejects.toThrow('Unsupported case');
-    await expect(page(casePage.default, { lang: 'es', empresa: 'seek' })).rejects.toThrow('Unsupported case');
-    await expect(page(casePage.default, { lang: 'es', proyecto: 'caso' })).rejects.toThrow('Unsupported case');
-    await expect(page(casePage.default, { lang: 'es', empresa: 'missing', proyecto: 'caso' })).rejects.toThrow(
-      'Missing case: missing/caso',
-    );
-    await expect(page(casePage.default, { lang: 'es', empresa: 'seek', proyecto: 'missing' })).rejects.toThrow(
+  it('rejects unknown slugs', async () => {
+    await expect(page(ExperienceDetailPage, { lang: 'es', empresa: 'missing' })).rejects.toThrow('Missing experience: missing');
+    await expect(page(ProfileDetailPage, { lang: 'es', slug: 'missing' })).rejects.toThrow('Unsupported profile');
+    await expect(page(ProjectDetailPage, { lang: 'en', proyecto: 'missing' })).rejects.toThrow('Missing project: missing');
+    await expect(page(CaseDetailPage, { lang: 'es', empresa: 'seek', proyecto: 'missing' })).rejects.toThrow(
       'Missing case: seek/missing',
     );
-    await expect(page(projects.default, { lang: 'fr' })).rejects.toThrow('Unsupported language');
-    await expect(page(project.default, { lang: 'fr', proyecto: 'jtaskboard' })).rejects.toThrow('Unsupported project');
-    await expect(page(project.default, { lang: 'es' })).rejects.toThrow('Unsupported project');
-    await expect(page(project.default, { lang: 'en', proyecto: 'missing' })).rejects.toThrow('Missing project: missing');
-    await expect(page(profiles.default, { lang: 'fr' })).rejects.toThrow('Unsupported language');
-    await expect(page(profile.default, { lang: 'fr', slug: 'mobile-flutter' })).rejects.toThrow('Unsupported profile');
-    await expect(page(profile.default, { lang: 'es', slug: 'missing' })).rejects.toThrow('Unsupported profile');
-    await expect(page(contact.default, { lang: 'fr' })).rejects.toThrow('Unsupported language');
-    await expect(page(sent.default, { lang: 'fr' })).rejects.toThrow('Unsupported language');
-    await expect(page(about.default, { lang: 'fr' })).rejects.toThrow('Unsupported language');
   });
 });

@@ -14,16 +14,10 @@ vi.mock('../../src/lib/content', () => ({
   projectsForProfile: vi.fn(() => []),
 }));
 
-import * as detailNs from '../../src/pages/[lang]/proyectos/[proyecto].astro';
-import * as indexNs from '../../src/pages/[lang]/proyectos/index.astro';
+import ProjectDetailPage from '../../src/views/ProjectDetailPage.astro';
+import ProjectsIndexPage from '../../src/views/ProjectsIndexPage.astro';
 import { publishedProjects } from '../../src/lib/content';
 import { page } from '../helpers/render';
-
-const index = indexNs as unknown as { default: Parameters<typeof page>[0] };
-const detail = detailNs as unknown as {
-  default: Parameters<typeof page>[0];
-  getStaticPaths: () => Promise<Array<{ params: Record<string, string> }>>;
-};
 
 const project = {
   id: 'translated',
@@ -45,16 +39,12 @@ describe('projects with an english translation', () => {
   });
 
   it('shows the english summary on the index', async () => {
-    const html = await page(index.default, { lang: 'en' });
+    const html = await page(ProjectsIndexPage, { lang: 'en' });
     expect(html).toContain('English summary');
   });
 
   it('uses the english description on the project page', async () => {
-    await expect(detail.getStaticPaths()).resolves.toEqual([
-      { params: { lang: 'es', proyecto: 'translated' } },
-      { params: { lang: 'en', proyecto: 'translated' } },
-    ]);
-    const html = await page(detail.default, { lang: 'en', proyecto: 'translated' });
+    const html = await page(ProjectDetailPage, { lang: 'en', proyecto: 'translated' });
     expect(html).toContain('English description (Translated)');
     expect(html).toContain('English summary');
     expect(html).not.toContain('class="prose"');

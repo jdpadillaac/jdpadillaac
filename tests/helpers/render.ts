@@ -9,6 +9,6 @@ export async function render(component: Component, options: ContainerRenderOptio
   return container.renderToString(component, options);
 }
 
-export function page(component: Component, params: Record<string, string | undefined> = {}) {
-  return render(component, { params, partial: false });
+export function page(component: Component, props: Record<string, string | undefined> = {}) {
+  return render(component, { props, partial: false });
 }

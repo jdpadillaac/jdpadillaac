@@ -6,8 +6,8 @@ vi.mock('../../src/data/cv', () => ({
 }));
 
 import ContactBand from '../../src/components/ContactBand.astro';
-import CvPage from '../../src/pages/[lang]/cv.astro';
-import HomePage from '../../src/pages/[lang]/index.astro';
+import CvPage from '../../src/views/CvPage.astro';
+import HomePage from '../../src/views/HomePage.astro';
 import { page, render } from '../helpers/render';
 
 describe('pages when the cv pdfs exist', () => {

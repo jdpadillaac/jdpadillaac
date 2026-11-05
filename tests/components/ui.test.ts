@@ -25,10 +25,10 @@ describe('seo', () => {
     expect(html).toContain('rel="canonical" href="https://jdpadillac.com/es/experiencia/"');
     expect(html).toContain('hreflang="es"');
     expect(html).toContain('hreflang="en"');
-    expect(html).toContain('hreflang="x-default" href="https://jdpadillac.com/en/experiencia/"');
+    expect(html).toContain('hreflang="x-default" href="https://jdpadillac.com/es/experiencia/"');
     expect(html).toContain('property="og:locale" content="es_CO"');
     expect(html).toContain('property="og:locale:alternate" content="en_US"');
-    expect(html).toContain(`property="og:image" content="https://jdpadillac.com${site.ogImage}"`);
+    expect(html).toContain(`property="og:image" content="https://jdpadillac.com/og/experience-es.png"`);
     expect(html).toContain(`property="og:image:alt" content="${site.name}"`);
     expect(html).toContain('property="og:type" content="website"');
   });
@@ -68,8 +68,8 @@ describe('chrome', () => {
     expect(home).toContain('lang="en"');
     expect(home).not.toContain('aria-current="true" lang="en"');
 
-    const nested = await render(SiteHeader, { props: { lang: 'en', pathname: '/en/experiencia/seek/' } });
-    expect(nested).toContain('href="/en/experiencia/" aria-current="page"');
+    const nested = await render(SiteHeader, { props: { lang: 'en', pathname: '/en/experience/seek/' } });
+    expect(nested).toContain('href="/en/experience/" aria-current="page"');
     expect(nested).not.toContain('href="/en/" aria-current="page"');
 
     const exact = await render(SiteHeader, { props: { lang: 'es', pathname: '/es/contacto/' } });
@@ -77,7 +77,7 @@ describe('chrome', () => {
 
     const swapped = await render(SiteHeader, { props: { lang: 'en', pathname: '/contacto/' } });
     expect(swapped).toContain('href="/es/contacto/"');
-    expect(swapped).toContain('href="/en/contacto/"');
+    expect(swapped).toContain('href="/en/contact/"');
   });
 
   it('uses explicit alternates when the route is not localized', async () => {
@@ -157,8 +157,8 @@ describe('study', () => {
         sections: [
           { id: 'contexto', title: 'Context', body: 'Context body' },
           { id: 'rol', title: 'Role', body: 'Role body' },
-          { id: 'reto', title: 'Challenge', body: 'Challenge body' },
-          { id: 'solucion', title: 'Solution', body: 'Solution body' },
+          { id: 'problema', title: 'Challenge', body: 'Challenge body' },
+          { id: 'decisiones', title: 'Solution', body: 'Solution body' },
           { id: 'notas', title: 'Notes', body: 'Notes body' },
         ],
         stages: [{ role: 'Lead', period: '2024', summary: 'Led the team' }],
@@ -177,14 +177,13 @@ describe('study', () => {
     });
 
     expect(html).toContain('<nav>Inicio</nav>');
-    expect(html).toContain('What I did');
+    expect(html).toContain('What I do');
     expect(html).toContain('Flutter');
     expect(html).toContain('5 people');
     expect(html).toContain('id="contexto"');
     expect(html).toContain('id="rol"');
-    expect(html).toContain('id="reto"');
-    expect(html).toContain('Challenge body');
-    expect(html).toContain('id="solucion"');
+    expect(html).toContain('id="problema"');
+    expect(html).toContain('id="decisiones"');
     expect(html).toContain('id="notas"');
     expect(html).toContain('Stages');
     expect(html).toContain('Results');

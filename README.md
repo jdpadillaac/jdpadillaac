@@ -9,35 +9,52 @@ npm install
 npm run dev
 ```
 
-Abre `http://localhost:4321`. `/` elige `/es/` o `/en/` con el idioma del navegador. En producción esa redirección la hace una edge function; en local la hace la página de inicio.
+Abre `http://localhost:4321`. `/` redirige a `/es/` (local y producción).
 
 ```bash
 npm run build
 npm run preview
+npm run test
 ```
+
+`npm run build` ejecuta `scripts/check-seo.mjs` sobre `dist/` (JSON-LD, canonical, hreflang, un solo h1, OG PNG, sitemap).
+
+## URLs
+
+- Español: `/es/`, `/es/sobre-mi/`, `/es/perfiles/`, `/es/experiencia/`, `/es/contacto/`
+- Inglés: `/en/`, `/en/about/`, `/en/profiles/`, `/en/experience/`, `/en/contact/`
+- `hreflang` incluye `es`, `en` y `x-default` (español).
+- Las rutas antiguas en `/en/experiencia/`, `/en/sobre-mi/`, etc. redirigen con 301.
+
+`/proyectos/` y `/en/projects/` están con `noindex` (repos personales, fuera del sitemap).
 
 ## Contenido
 
-Los textos y cifras que todavía no están definidos aparecen entre corchetes, por ejemplo `[Titular pendiente]`. No rellenes esos huecos con datos estimados.
+Los textos pendientes llevan `TODO:` o `[Pendiente]`. No rellenes huecos con datos estimados.
 
 - Interfaz: `src/i18n/ui.ts`
-- Identidad, enlaces y stack: `src/data/site.ts`
-- Textos de portada: `src/data/copy.ts`
+- Rutas traducidas: `src/i18n/routes.ts`
+- SEO por página: `src/data/seo.ts`
 - Perfiles: `src/data/profiles.ts`
 - Experiencias: `src/content/experiences/*.mdx`
-- Casos: `src/content/cases/*.mdx`
-- Proyectos: `src/content/projects/*.md`
+- Notas (plantilla): `src/content/notes/` (sin publicar aún)
 
-`published: false` deja una experiencia o un caso fuera del build, del listado y del sitemap. Los borradores de ejemplo son `borrador`.
+## Variables de entorno
 
-Los PDF del CV van en `public/cv/jonatan-padilla-es.pdf` y `public/cv/jonatan-padilla-en.pdf`. Hasta que existan, los botones llevan a la página `/cv/`.
+Copia `.env.example` a `.env` y define:
 
-## Idiomas
-
-Las rutas conservan el mismo camino después del prefijo: `/es/experiencia/empresa-a/` y `/en/experiencia/empresa-a/`. El conmutador ES/EN intercambia solo ese prefijo. `hreflang` incluye `es`, `en` y `x-default` (inglés).
+- `PUBLIC_GOOGLE_SITE_VERIFICATION`
+- `PUBLIC_BING_SITE_VERIFICATION`
+- `PUBLIC_SITE_LASTMOD` (opcional, usada en sitemap)
 
 ## Netlify
 
-`netlify.toml` define el build (`npm run build`, `dist`, Node 22), la redirección de `www`, las rutas viejas hacia `/es/…` y el formulario `contact`. Después del primer deploy, confirma el formulario en Forms y avisa a `contact@jdpadillac.com`.
+`netlify.toml` define build, redirección de `www`, `/` → `/es/`, rutas legadas y cabeceras de caché para `/_astro/` y `/og/`.
 
-`/` responde 302 según `Accept-Language`. Español tiene prioridad cuando su peso es mayor; el resto cae en inglés.
+Desactiva el script HUD de Netlify en el panel del sitio (inyecta `/.netlify/scripts/hud`).
+
+Tras el deploy, envía `https://jdpadillac.com/sitemap-index.xml` en Search Console y Bing.
+
+## Lighthouse
+
+GitHub Actions ejecuta Lighthouse CI con los presupuestos de `lighthouserc.json` tras cada build.
