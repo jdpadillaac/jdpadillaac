@@ -1,0 +1,49 @@
+---
+import JsonLd from './JsonLd.astro';
+import Seo from './Seo.astro';
+import '../styles/fonts.css';
+import { type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  title: string;
+  description: string;
+  pathname: string;
+  localized?: boolean;
+  noindex?: boolean;
+  ogImage?: string;
+  ogAlt?: string;
+  jsonLd?: Record<string, unknown>;
+}
+
+const {
+  lang,
+  title,
+  description,
+  pathname,
+  localized = true,
+  noindex = false,
+  ogImage,
+  ogAlt,
+  jsonLd,
+} = Astro.props;
+---
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="generator" content={Astro.generator} />
+<Seo
+  title={title}
+  description={description}
+  pathname={pathname}
+  lang={lang}
+  localized={localized}
+  noindex={noindex}
+  ogImage={ogImage}
+  ogAlt={ogAlt}
+/>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="icon" href="/favicon.ico" sizes="any" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />
+{jsonLd && <JsonLd data={jsonLd} />}

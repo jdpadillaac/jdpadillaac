@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import Breadcrumbs from '../../src/components/Breadcrumbs.astro';
-import Footer from '../../src/components/Footer.astro';
+import SiteFooter from '../../src/components/SiteFooter.astro';
 import Frame from '../../src/components/Frame.astro';
-import Header from '../../src/components/Header.astro';
+import SiteHeader from '../../src/components/SiteHeader.astro';
 import JsonLd from '../../src/components/JsonLd.astro';
 import SectionHeader from '../../src/components/SectionHeader.astro';
 import Seo from '../../src/components/Seo.astro';
@@ -62,39 +62,39 @@ describe('seo', () => {
 
 describe('chrome', () => {
   it('marks the current page and falls back to the swapped locale', async () => {
-    const home = await render(Header, { props: { lang: 'es', pathname: '/es/' } });
+    const home = await render(SiteHeader, { props: { lang: 'es', pathname: '/es/' } });
     expect(home).toContain('href="/es/" aria-current="page"');
-    expect(home).toContain('hreflang="es" lang="es" aria-current="page"');
-    expect(home).toContain('hreflang="en" lang="en"');
-    expect(home).not.toContain('hreflang="en" lang="en" aria-current="page"');
+    expect(home).toContain('aria-current="true" lang="es"');
+    expect(home).toContain('lang="en"');
+    expect(home).not.toContain('aria-current="true" lang="en"');
 
-    const nested = await render(Header, { props: { lang: 'en', pathname: '/en/experiencia/seek/' } });
+    const nested = await render(SiteHeader, { props: { lang: 'en', pathname: '/en/experiencia/seek/' } });
     expect(nested).toContain('href="/en/experiencia/" aria-current="page"');
     expect(nested).not.toContain('href="/en/" aria-current="page"');
 
-    const exact = await render(Header, { props: { lang: 'es', pathname: '/es/contacto/' } });
+    const exact = await render(SiteHeader, { props: { lang: 'es', pathname: '/es/contacto/' } });
     expect(exact).toContain('href="/es/contacto/" aria-current="page"');
 
-    const swapped = await render(Header, { props: { lang: 'en', pathname: '/contacto/' } });
+    const swapped = await render(SiteHeader, { props: { lang: 'en', pathname: '/contacto/' } });
     expect(swapped).toContain('href="/es/contacto/"');
     expect(swapped).toContain('href="/en/contacto/"');
   });
 
   it('uses explicit alternates when the route is not localized', async () => {
-    const html = await render(Header, {
+    const html = await render(SiteHeader, {
       props: { lang: 'es', pathname: '/404/', alternates: { es: '/es/', en: '/en/' } },
     });
-    expect(html).toContain('href="/es/" hreflang="es"');
-    expect(html).toContain('href="/en/" hreflang="en"');
+    expect(html).toContain('href="/es/"');
+    expect(html).toContain('href="/en/"');
     expect(html).not.toContain('aria-current="page"');
   });
 
   it('renders the footer and a section header', async () => {
-    const footer = await render(Footer, { props: { lang: 'en' } });
+    const footer = await render(SiteFooter, { props: { lang: 'en' } });
     expect(footer).toContain(String(new Date().getFullYear()));
     expect(footer).toContain(`mailto:${site.email}`);
     expect(footer).toContain(site.links.linkedin);
-    expect(footer).toContain('opens in a new tab');
+    expect(footer).toContain('h-footer');
 
     const withSub = await render(SectionHeader, {
       props: { id: 'experiencia', kicker: 'Experiencia', title: 'Experiencia', sub: 'Detalle' },

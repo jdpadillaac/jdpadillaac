@@ -1,0 +1,92 @@
+---
+import { site } from '../data/site';
+import { localePath, swapLang } from '../i18n/paths';
+import { ui, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  pathname: string;
+  alternates?: { es: string; en: string };
+}
+
+const { lang, pathname, alternates } = Astro.props;
+const t = ui[lang];
+const hrefs = {
+  es: alternates?.es ?? swapLang(pathname, 'es'),
+  en: alternates?.en ?? swapLang(pathname, 'en'),
+};
+
+const items = [
+  { href: localePath(lang, '/'), label: t.home, exact: true },
+  { href: localePath(lang, '/perfiles/'), label: t.profiles },
+  { href: localePath(lang, '/experiencia/'), label: t.experience },
+  { href: localePath(lang, '/sobre-mi/'), label: t.about },
+  { href: localePath(lang, '/contacto/'), label: t.contact },
+  { href: localePath(lang, '/cv/'), label: t.cv },
+];
+
+function current(href: string, exact = false) {
+  if (exact || href === localePath(lang, '/')) return pathname === href;
+  return pathname === href || pathname.startsWith(href);
+}
+---
+
+<header class="h-header">
+  <div class="h-wrap h-header__bar">
+    <a class="h-brand" href={localePath(lang, '/')}>{site.name}</a>
+    <div class="h-header__right">
+      <nav class="h-nav" id="h-nav" aria-label={t.navLabel}>
+        <ul>
+          {
+            items.map((item) => (
+              <li>
+                <a href={item.href} aria-current={current(item.href, item.exact) ? 'page' : undefined}>
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+      <div class="h-lang" role="group" aria-label={t.languageLabel}>
+        <a
+          href={hrefs.es}
+          aria-current={lang === 'es' ? 'true' : undefined}
+          lang="es"
+        >
+          ES
+        </a>
+        <a
+          href={hrefs.en}
+          aria-current={lang === 'en' ? 'true' : undefined}
+          lang="en"
+        >
+          EN
+        </a>
+      </div>
+      <button class="h-menu-btn" type="button" aria-expanded="false" aria-controls="h-nav">
+        {t.menu}
+      </button>
+    </div>
+  </div>
+</header>
+
+<script is:inline>
+  (function () {
+    var btn = document.querySelector('.h-menu-btn'),
+      nav = document.getElementById('h-nav');
+    if (!btn || !nav) return;
+    btn.addEventListener('click', function () {
+      var open = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!open));
+      nav.classList.toggle('is-open', !open);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && nav.classList.contains('is-open')) {
+        nav.classList.remove('is-open');
+        btn.setAttribute('aria-expanded', 'false');
+        btn.focus();
+      }
+    });
+  })();
+</script>

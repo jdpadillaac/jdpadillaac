@@ -1,0 +1,62 @@
+---
+import SiteFooter from '../components/SiteFooter.astro';
+import SiteHead from '../components/SiteHead.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import '../styles/shell.css';
+import '../styles/home.css';
+import { ui, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  title: string;
+  description: string;
+  pathname: string;
+  localized?: boolean;
+  noindex?: boolean;
+  ogImage?: string;
+  ogAlt?: string;
+  alternates?: { es: string; en: string };
+  jsonLd?: Record<string, unknown>;
+}
+
+const {
+  lang,
+  title,
+  description,
+  pathname,
+  localized = true,
+  noindex = false,
+  ogImage,
+  ogAlt,
+  alternates,
+  jsonLd,
+} = Astro.props;
+const t = ui[lang];
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <SiteHead
+      lang={lang}
+      title={title}
+      description={description}
+      pathname={pathname}
+      localized={localized}
+      noindex={noindex}
+      ogImage={ogImage}
+      ogAlt={ogAlt}
+      jsonLd={jsonLd}
+    />
+  </head>
+  <body>
+    <div class="home">
+      <a class="h-skip" href="#contenido">{t.skip}</a>
+      <SiteHeader lang={lang} pathname={pathname} alternates={alternates} />
+      <main id="contenido">
+        <slot />
+      </main>
+      <SiteFooter lang={lang} />
+    </div>
+  </body>
+</html>

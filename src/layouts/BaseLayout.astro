@@ -1,12 +1,9 @@
 ---
-import '@fontsource/fraunces/latin-500.css';
-import '@fontsource/inter/latin-400.css';
-import '@fontsource/inter/latin-600.css';
+import SiteFooter from '../components/SiteFooter.astro';
+import SiteHead from '../components/SiteHead.astro';
+import SiteHeader from '../components/SiteHeader.astro';
 import '../styles/global.css';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import JsonLd from '../components/JsonLd.astro';
-import Seo from '../components/Seo.astro';
+import '../styles/shell.css';
 import { ui, type Lang } from '../i18n/ui';
 
 interface Props {
@@ -40,31 +37,28 @@ const t = ui[lang];
 <!doctype html>
 <html lang={lang}>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="generator" content={Astro.generator} />
-    <Seo
+    <SiteHead
+      lang={lang}
       title={title}
       description={description}
       pathname={pathname}
-      lang={lang}
       localized={localized}
       noindex={noindex}
       ogImage={ogImage}
       ogAlt={ogAlt}
+      jsonLd={jsonLd}
     />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="icon" href="/favicon.ico" sizes="any" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="manifest" href="/site.webmanifest" />
-    {jsonLd && <JsonLd data={jsonLd} />}
   </head>
   <body>
-    <a class="skip-link" href="#contenido">{t.skip}</a>
-    <Header lang={lang} pathname={pathname} alternates={alternates} />
+    <div class="home h-shell">
+      <a class="h-skip" href="#contenido">{t.skip}</a>
+      <SiteHeader lang={lang} pathname={pathname} alternates={alternates} />
+    </div>
     <main id="contenido">
       <slot />
     </main>
-    <Footer lang={lang} />
+    <div class="home h-shell">
+      <SiteFooter lang={lang} />
+    </div>
   </body>
 </html>

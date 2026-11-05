@@ -1,0 +1,21 @@
+---
+import { site } from '../data/site';
+import { type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang: _lang } = Astro.props;
+const year = new Date().getFullYear();
+---
+
+<footer class="h-footer">
+  <div class="h-wrap">
+    <span>© {year} {site.name}</span>
+    <span>
+      <a href={`mailto:${site.email}`}>{site.email}</a> ·{' '}
+      <a href={site.links.linkedin} target="_blank" rel="noopener">LinkedIn</a>
+    </span>
+  </div>
+</footer>

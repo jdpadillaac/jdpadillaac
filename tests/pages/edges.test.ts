@@ -68,13 +68,12 @@ describe('page branches the published content does not hit', () => {
     vi.mocked(publishedExperiences).mockResolvedValue([entry({ slug: 'solo', company: text('Solo') })] as never);
     const html = await page(home.default, { lang: 'en' });
     expect(html).toContain('Solo');
-    expect(html).toContain('feature-card');
-    expect(html).not.toContain('feature-card__points');
-    expect(html).not.toContain('pills--on-panel');
-    expect(html).not.toContain('other-experiences');
+    expect(html).toContain('h-feature');
+    expect(html).toContain('h-checks');
+    expect(html).not.toContain('h-others');
   });
 
-  it('hides an empty stack and keeps only three highlights', async () => {
+  it('uses fixed home highlights and feature chips', async () => {
     vi.mocked(publishedExperiences).mockResolvedValue([
       entry({
         slug: 'main',
@@ -87,10 +86,9 @@ describe('page branches the published content does not hit', () => {
     ] as never);
 
     const html = await page(home.default, { lang: 'es' });
-    expect(html).toContain('One');
-    expect(html).toContain('Three');
+    expect(html).toContain('Atomic Design');
     expect(html).not.toContain('Four');
-    expect(html).not.toContain('pills--on-panel');
+    expect(html).toContain('h-others');
     expect(html).toContain('Next');
   });
 
