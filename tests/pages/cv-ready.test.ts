@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('../../src/data/cv', () => ({
+  cvFile: (lang: 'es' | 'en') => `jonatan-padilla-${lang}.pdf`,
   cvHref: (lang: 'es' | 'en') => `/cv/jonatan-padilla-${lang}.pdf`,
   cvAvailable: vi.fn(() => true),
 }));

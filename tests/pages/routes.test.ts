@@ -56,8 +56,10 @@ describe('static pages', () => {
     expect(byPath(homes, '/en/')).toContain('Available now');
 
     const cvs = await renderLangs(CvPage);
-    expect(byPath(cvs, '/es/cv/')).not.toContain('id="cv-es"');
-    expect(byPath(cvs, '/en/cv/')).not.toContain('id="cv-en"');
+    expect(byPath(cvs, '/es/cv/')).toContain('href="/cv/jonatan-padilla-es.pdf"');
+    expect(byPath(cvs, '/es/cv/')).toContain('download="jonatan-padilla-es.pdf"');
+    expect(byPath(cvs, '/en/cv/')).toContain('href="/cv/jonatan-padilla-en.pdf"');
+    expect(byPath(cvs, '/en/cv/')).toContain('download="jonatan-padilla-en.pdf"');
 
     const experienceIndex = await renderLangs(ExperienceIndexPage);
     expect(byPath(experienceIndex, '/es/experiencia/')).toContain('Siigo');

@@ -3,7 +3,7 @@ import type { Lang } from '../i18n/ui';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import ContactBand from '../components/ContactBand.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { cvAvailable, cvHref } from '../data/cv';
+import { cvAvailable, cvFile, cvHref } from '../data/cv';
 import { pageSeo } from '../data/seo';
 import { site } from '../data/site';
 import { localePath } from '../i18n/paths';
@@ -40,7 +40,7 @@ const crumbs = [
           available && (
             <section id={file.id} aria-labelledby={`${file.id}-titulo`}>
               <h2 id={`${file.id}-titulo`}>{file.title}</h2>
-              <a class="button" href={cvHref(file.lang)} download>
+              <a class="button" href={cvHref(file.lang)} download={cvFile(file.lang)}>
                 {t.cvDownload}
               </a>
             </section>

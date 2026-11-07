@@ -1,6 +1,6 @@
 ---
 import { copy } from '../data/copy';
-import { cvAvailable, cvHref } from '../data/cv';
+import { cvAvailable, cvFile, cvHref } from '../data/cv';
 import { site } from '../data/site';
 import { localePath } from '../i18n/paths';
 import { tx, ui, type Lang } from '../i18n/ui';
@@ -36,20 +36,20 @@ const cvEnHref = cvEn ? cvHref('en') : localePath(lang, '/cv/#cv-en');
               <a
                 class="h-btn h-btn--ghost"
                 href={cvEsHref}
-                download={cvEs ? '' : undefined}
+                download={cvEs ? cvFile('es') : undefined}
               >
                 {t.downloadCvEs}
               </a>
             </>
           ) : (
             <>
-              <a class="h-btn h-btn--light" href={cvEsHref} download={cvEs ? '' : undefined}>
+              <a class="h-btn h-btn--light" href={cvEsHref} download={cvEs ? cvFile('es') : undefined}>
                 {t.downloadCvEs}
               </a>
               <a
                 class="h-btn h-btn--ghost"
                 href={cvEnHref}
-                download={cvEn ? '' : undefined}
+                download={cvEn ? cvFile('en') : undefined}
               >
                 {t.downloadCvEn}
               </a>

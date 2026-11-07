@@ -6,8 +6,12 @@ const files = {
   en: 'jonatan-padilla-en.pdf',
 } as const;
 
+export function cvFile(lang: keyof typeof files): string {
+  return files[lang];
+}
+
 export function cvHref(lang: keyof typeof files): string {
-  return `/cv/${files[lang]}`;
+  return `/cv/${cvFile(lang)}`;
 }
 
 export function cvAvailable(lang: keyof typeof files): boolean {

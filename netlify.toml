@@ -150,3 +150,17 @@
   for = "/favicon.svg"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/cv/jonatan-padilla-es.pdf"
+  [headers.values]
+    Content-Type = "application/pdf"
+    Content-Disposition = "attachment; filename=\"jonatan-padilla-es.pdf\""
+    Cache-Control = "public, max-age=86400"
+
+[[headers]]
+  for = "/cv/jonatan-padilla-en.pdf"
+  [headers.values]
+    Content-Type = "application/pdf"
+    Content-Disposition = "attachment; filename=\"jonatan-padilla-en.pdf\""
+    Cache-Control = "public, max-age=86400"

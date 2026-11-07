@@ -1,7 +1,7 @@
 ---
 import type { Lang } from '../i18n/ui';
 import HomeLayout from '../layouts/HomeLayout.astro';
-import { cvAvailable, cvHref } from '../data/cv';
+import { cvAvailable, cvFile, cvHref } from '../data/cv';
 import { copy } from '../data/copy';
 import { homeFeature, homeH1, homeLead } from '../data/home';
 import { profiles } from '../data/profiles';
@@ -60,10 +60,10 @@ const featuredKicker = featured
         <p class="h-lead">{tx(lang, copy.lede)}</p>
         <div class="h-actions">
           <div class="h-btn-group">
-            <a class="h-btn h-btn--primary" href={cvEsHref} download={cvEs ? '' : undefined}>
+            <a class="h-btn h-btn--primary" href={cvEsHref} download={cvEs ? cvFile('es') : undefined}>
               {t.downloadCvEs}
             </a>
-            <a class="h-btn h-btn--outline" href={cvEnHref} download={cvEn ? '' : undefined}>
+            <a class="h-btn h-btn--outline" href={cvEnHref} download={cvEn ? cvFile('en') : undefined}>
               {t.downloadCvEn}
             </a>
           </div>
@@ -210,10 +210,10 @@ const featuredKicker = featured
         <h2 id="contacto-title">{t.bandTitle}</h2>
         <p class="h-band__text">{t.bandText}</p>
         <div class="h-btn-group">
-          <a class="h-btn h-btn--light" href={cvEsHref} download={cvEs ? '' : undefined}>
+          <a class="h-btn h-btn--light" href={cvEsHref} download={cvEs ? cvFile('es') : undefined}>
             {t.downloadCvEs}
           </a>
-          <a class="h-btn h-btn--ghost" href={cvEnHref} download={cvEn ? '' : undefined}>
+          <a class="h-btn h-btn--ghost" href={cvEnHref} download={cvEn ? cvFile('en') : undefined}>
             {t.downloadCvEn}
           </a>
         </div>
