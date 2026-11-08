@@ -35,6 +35,8 @@ describe('published content', () => {
       'seek',
       'siigo',
       'waco',
+      'tul',
+      'personalsoft',
     ]);
     await expect(publishedCases()).resolves.toEqual([]);
     const projects = await publishedProjects();
@@ -71,7 +73,7 @@ describe('static pages', () => {
         page(ExperienceDetailPage, { lang: 'en', empresa: entry.data.slug }),
       ]),
     );
-    expect(experiencePages).toHaveLength(6);
+    expect(experiencePages).toHaveLength(10);
     expect(byPath(experiencePages, '/es/experiencia/seek/')).toContain('InFinancexp');
     expect(byPath(experiencePages, '/en/experience/waco/')).toContain('Stages');
 

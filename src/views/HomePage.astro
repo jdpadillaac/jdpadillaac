@@ -1,9 +1,10 @@
 ---
 import type { Lang } from '../i18n/ui';
 import HomeLayout from '../layouts/HomeLayout.astro';
+import ExperienceTimeline from '../components/ExperienceTimeline.astro';
 import { cvAvailable, cvFile, cvHref } from '../data/cv';
 import { copy } from '../data/copy';
-import { homeFeature, homeH1, homeLead } from '../data/home';
+import { homeH1, homeLead } from '../data/home';
 import { profiles } from '../data/profiles';
 import { site } from '../data/site';
 import { localePath } from '../i18n/paths';
@@ -14,27 +15,16 @@ import { siteLastModified } from '../lib/seo-dates';
 
 interface Props {
   lang: Lang;
-
 }
 
 const { lang } = Astro.props;
 const t = ui[lang];
 const pathname = localePath(lang, '/');
 const experiences = await publishedExperiences();
-const featured = experiences.find((entry) => entry.data.featured) ?? experiences[0];
-const rest = featured
-  ? experiences.filter((entry) => entry.data.slug !== featured.data.slug)
-  : [];
 const cvEs = cvAvailable('es');
 const cvEn = cvAvailable('en');
 const cvEsHref = cvEs ? cvHref('es') : localePath(lang, '/cv/#cv-es');
 const cvEnHref = cvEn ? cvHref('en') : localePath(lang, '/cv/#cv-en');
-function dates(entry: (typeof experiences)[number]) {
-  return `${tx(lang, entry.data.start)} — ${tx(lang, entry.data.end)}`;
-}
-const featuredKicker = featured
-  ? `${tx(lang, featured.data.company)} · ${dates(featured)}`
-  : '';
 ---
 <HomeLayout
   lang={lang}
@@ -139,7 +129,7 @@ const featuredKicker = featured
   </section>
 
   {
-    featured && (
+    experiences.length > 0 && (
       <section class="h-section" id="experiencia" aria-labelledby="experiencia-title">
         <div class="h-wrap">
           <div class="h-section__head">
@@ -147,57 +137,7 @@ const featuredKicker = featured
             <h2 id="experiencia-title">{t.builtTitle}</h2>
             <p>{t.builtSub}</p>
           </div>
-
-          <article class="h-feature" aria-labelledby="seek-title">
-            <div class="h-feature__media">
-              <div>
-                <p class="h-eyebrow">{t.client}</p>
-                <p class="h-feature__client">{tx(lang, homeFeature.client)}</p>
-                <p class="h-feature__products">{tx(lang, homeFeature.products)}</p>
-              </div>
-              <ul class="h-chips" aria-label={t.techLabel}>
-                {homeFeature.chips.map((item) => (
-                  <li>{item}</li>
-                ))}
-              </ul>
-            </div>
-            <div class="h-feature__body">
-              <p class="h-eyebrow">{featuredKicker}</p>
-              <h3 id="seek-title">{tx(lang, featured.data.title)}</h3>
-              <p class="h-feature__summary">{tx(lang, featured.data.summary)}</p>
-              <ul class="h-checks">
-                {homeFeature.highlights[lang].map((item) => (
-                  <li>{item}</li>
-                ))}
-              </ul>
-              <a class="h-textlink" href={localePath(lang, `/experiencia/${featured.data.slug}/`)}>
-                {t.readCase} →
-              </a>
-            </div>
-          </article>
-
-          {rest.length > 0 && (
-            <div class="h-others">
-              <h3>{t.otherExperiences}</h3>
-              <ul class="h-list">
-                {rest.map((entry) => (
-                  <li>
-                    <a href={localePath(lang, `/experiencia/${entry.data.slug}/`)}>
-                      <span>
-                        <span class="h-list__company">{tx(lang, entry.data.company)}</span>
-                        <span class="h-list__meta">
-                          {tx(lang, entry.data.title)} · {dates(entry)}
-                        </span>
-                      </span>
-                      <span class="h-list__go" aria-hidden="true">
-                        {t.viewPage} →
-                      </span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+          <ExperienceTimeline lang={lang} entries={experiences} />
         </div>
       </section>
     )

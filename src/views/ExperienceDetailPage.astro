@@ -82,13 +82,15 @@ const relatedProfiles = profilesForExperience(entry.data.slug);
         role: tx(lang, entry.data.role),
         dates,
         team: entry.data.team ? tx(lang, entry.data.team) : undefined,
+        product: entry.data.product ? tx(lang, entry.data.product) : undefined,
+        client: entry.data.client ? tx(lang, entry.data.client) : undefined,
         stack: entry.data.stack?.[lang],
       }}
       heroAlt={entry.data.heroAlt ? tx(lang, entry.data.heroAlt) : undefined}
       highlights={entry.data.highlights[lang]}
       stages={entry.data.stages.map((stage) => ({
         role: tx(lang, stage.role),
-        period: tx(lang, stage.period),
+        period: stage.modality ? `${tx(lang, stage.period)} · ${tx(lang, stage.modality)}` : tx(lang, stage.period),
         summary: tx(lang, stage.summary),
       }))}
       results={entry.data.results.map((item) => ({ value: tx(lang, item.value), label: tx(lang, item.label) }))}

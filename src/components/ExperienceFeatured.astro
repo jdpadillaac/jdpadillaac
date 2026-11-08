@@ -1,0 +1,58 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import ExperienceMedia from './ExperienceMedia.astro';
+import { ui, type Lang } from '../i18n/ui';
+import { experienceCardModel } from '../lib/experience-home';
+
+interface Props {
+  lang: Lang;
+  entry: CollectionEntry<'experiences'>;
+}
+
+const { lang, entry } = Astro.props;
+const t = ui[lang];
+const card = experienceCardModel(lang, entry);
+---
+
+<article class="exp-featured" aria-labelledby={card.headingId}>
+  <div class="exp-featured__body">
+    <p class="exp-featured__meta">
+      <span>{card.company} · {card.dates}</span>
+      {card.isCurrent && <span class="exp-featured__now">{t.now}</span>}
+    </p>
+    <h3 id={card.headingId}>{card.role}</h3>
+    <p class="exp-featured__summary">{card.summary}</p>
+    {
+      card.contextRows.length > 0 && (
+        <ul class="exp-featured__context">
+          {card.contextRows.map((row) => (
+            <li>{row}</li>
+          ))}
+        </ul>
+      )
+    }
+    {
+      card.highlights.length > 0 && (
+        <ul class="exp-pills" aria-label={t.featuredHighlights}>
+          {card.highlights.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      )
+    }
+    {
+      card.stack.length > 0 && (
+        <ul class="exp-tags" aria-label={t.techLabel}>
+          {card.stack.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      )
+    }
+    <a class="exp-featured__link" href={card.href}>
+      {t.viewCase}<span aria-hidden="true">&nbsp;→</span>
+      <span class="sr-only">: {card.company}</span>
+    </a>
+  </div>
+  <ExperienceMedia variant="featured" initials={card.initials} image={card.image} />
+</article>

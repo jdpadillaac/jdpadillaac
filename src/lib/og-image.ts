@@ -66,7 +66,14 @@ export function ogLabelForKey(key: string, lang: Lang): { title: string; subtitl
   }
   if (key.startsWith('experience-') && key !== 'experience-es' && key !== 'experience-en') {
     const slug = key.replace(/^experience-/, '').replace(/-es$|-en$/, '');
-    return { title: 'Jonatan Padilla', subtitle: slug.toUpperCase() };
+    const companies: Record<string, string> = {
+      seek: 'SEEK · Mobile Architect',
+      siigo: 'Siigo · Full Stack',
+      waco: 'WACO Digital Hub',
+      tul: 'TUL · Chapter Lead Mobile',
+      personalsoft: 'Personalsoft · Bancolombia',
+    };
+    return { title: 'Jonatan Padilla', subtitle: companies[slug] ?? slug.toUpperCase() };
   }
   const labels: Record<string, { es: string; en: string }> = {
     'home-es': { es: 'Senior Software Engineer', en: 'Senior Software Engineer' },

@@ -58,37 +58,63 @@ describe('page branches the published content does not hit', () => {
     expect(html).not.toContain('id="experiencia"');
   });
 
-  it('uses the first experience when none is featured', async () => {
+  it('renders a single experience as the featured card', async () => {
     vi.mocked(publishedExperiences).mockResolvedValue([entry({ slug: 'solo', company: text('Solo') })] as never);
     const html = await page(home, { lang: 'en' });
     expect(html).toContain('Solo');
-    expect(html).toContain('h-feature');
-    expect(html).toContain('h-checks');
+    expect(html).toContain('exp-featured');
+    expect(html).toContain('exp-media__monogram');
+    expect(html).not.toContain('exp-timeline');
+    expect(html).not.toContain('h-feature');
     expect(html).not.toContain('h-others');
   });
 
-  it('uses fixed home highlights and feature chips', async () => {
+  it('renders card highlights and stack from entry data', async () => {
     vi.mocked(publishedExperiences).mockResolvedValue([
       entry({
         slug: 'main',
         featured: true,
+        isCurrent: true,
         company: text('Main'),
-        stack: { es: [], en: [] },
+        product: text('Producto'),
+        client: text('Cliente'),
+        stack: { es: ['Flutter'], en: ['Flutter'] },
+        featuredHighlights: { es: ['Uno'], en: ['One'] },
         highlights: { es: ['One', 'Two', 'Three', 'Four'], en: ['One', 'Two', 'Three', 'Four'] },
       }),
-      entry({ slug: 'next', order: 2, company: text('Next') }),
+      entry({
+        slug: 'next',
+        order: 2,
+        company: text('Next'),
+        product: text('OcultoProducto'),
+        stack: { es: ['Go', 'Java', 'Kotlin'], en: ['Go', 'Java', 'Kotlin'] },
+        featuredHighlights: { es: ['Primero', 'Segundo'], en: ['First', 'Second'] },
+      }),
     ] as never);
 
     const html = await page(home, { lang: 'es' });
-    expect(html).toContain('Atomic Design');
-    expect(html).not.toContain('Four');
-    expect(html).toContain('h-others');
+    expect(html).toContain('exp-featured');
+    expect(html).toContain('exp-timeline');
+    expect(html).toContain('aria-hidden="true"');
+    expect(html).toContain('Uno');
+    expect(html).toContain('Flutter');
+    expect(html).toContain('Producto');
+    expect(html).toContain('Cliente');
+    expect(html).toContain('Ahora');
     expect(html).toContain('Next');
+    expect(html).toContain('Primero');
+    expect(html).toContain('Go');
+    expect(html).toContain('Java');
+    expect(html).not.toContain('Segundo');
+    expect(html).not.toContain('Kotlin');
+    expect(html).not.toContain('OcultoProducto');
+    expect(html).not.toContain('h-feature');
   });
 
-  it('lists child cases only for the matching experience', async () => {
+  it('links each experience to its detail page without case links', async () => {
     const empty = await page(experiences, { lang: 'es' });
-    expect(empty).not.toContain('other-list');
+    expect(empty).not.toContain('exp-featured');
+    expect(empty).not.toContain('exp-timeline');
 
     vi.mocked(publishedExperiences).mockResolvedValue([
       entry({ slug: 'seek', company: text('SEEK') }),
@@ -100,10 +126,23 @@ describe('page branches the published content does not hit', () => {
     ] as never);
 
     const html = await page(experiences, { lang: 'en' });
-    expect(html).toContain('/en/experience/seek/cases/push/');
-    expect(html).toContain('Push');
+    expect(html).toContain('exp-featured');
+    expect(html).toContain('exp-timeline');
+    expect(html).toContain('/en/experience/seek/');
+    expect(html).toContain('/en/experience/waco/');
+    expect(html).not.toContain('/cases/push/');
     expect(html).not.toContain('Nope');
     expect(html).toContain('WACO');
+  });
+
+  it('renders a single experience on the index as featured without a timeline', async () => {
+    vi.mocked(publishedExperiences).mockResolvedValue([entry({ slug: 'solo', company: text('Solo') })] as never);
+
+    const html = await page(experiences, { lang: 'es' });
+    expect(html).toContain('Solo');
+    expect(html).toContain('exp-featured');
+    expect(html).toContain('exp-home');
+    expect(html).not.toContain('exp-timeline');
   });
 
   it('renders optional experience fields and a related case', async () => {
