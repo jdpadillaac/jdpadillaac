@@ -3,10 +3,8 @@ import type { Lang } from '../i18n/ui';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import ContactBand from '../components/ContactBand.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { copy } from '../data/copy';
 import { profileBySlug, profilesForExperience } from '../data/profiles';
 import { profileSeo } from '../data/seo';
-import { site } from '../data/site';
 import { localePath } from '../i18n/paths';
 import { tx, ui } from '../i18n/ui';
 import { publishedExperiences } from '../lib/content';
@@ -98,16 +96,6 @@ const experiences = (await publishedExperiences()).filter((entry) =>
         </section>
       )
     }
-    <p class="lead">{tx(lang, copy.contactPrompt)}</p>
-    <div class="cluster">
-      <a class="button" href={localePath(lang, '/contacto/')}>
-        {t.contactCta}
-      </a>
-      <a class="button button--ghost" href={site.links.linkedin} rel="me noopener noreferrer" target="_blank">
-        LinkedIn
-        <span class="sr-only"> ({t.newTab})</span>
-      </a>
-    </div>
   </div>
   <ContactBand lang={lang} />
 </BaseLayout>
