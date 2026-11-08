@@ -45,7 +45,16 @@ const sections = [
     : undefined,
   stackSection,
 ].filter((section) => section !== undefined);
-const pageTitle = `${title} — ${company} — ${site.name}`;
+const pageTitle =
+  empresa === 'waco'
+    ? lang === 'es'
+      ? 'Tech Lead Mobile — WACO Digital Hub — Jonatan Padilla'
+      : 'Mobile Tech Lead — WACO Digital Hub — Jonatan Padilla'
+    : empresa === 'tul'
+      ? lang === 'es'
+        ? 'Chapter Lead Mobile — TUL — Jonatan Padilla'
+        : 'Mobile Chapter Lead — TUL — Jonatan Padilla'
+      : `${title} — ${company} — ${site.name}`;
 const pageDescription = tx(lang, entry.data.description);
 const relatedProfiles = profilesForExperience(entry.data.slug);
 ---

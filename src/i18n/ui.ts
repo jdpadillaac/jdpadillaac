@@ -92,9 +92,9 @@ const es = {
   sumBaseValue: 'Medellín, Colombia · remoto o híbrido',
   inFinance: 'InFinancexp · Grupo Interbank',
   linkedinShort: 'in/jdpadillac',
-  seoHomeTitle: 'Jonatan Padilla | Senior Software Engineer · Flutter, Java y Full Stack',
+  seoHomeTitle: 'Jonatan Padilla | Senior Software Engineer Flutter y Java',
   seoHome:
-    'Senior Software Engineer con más de 8 años en Flutter, Java y full stack. Clean Architecture, design systems e IA en el día a día. Disponible de inmediato en Medellín.',
+    'Senior Software Engineer con más de 8 años en Flutter, Java y full stack. Clean Architecture, design systems e IA. Disponible en Medellín.',
   seoProfiles: 'Perfiles de Jonatan Padilla: Mobile / Flutter, Backend Java y Full Stack.',
   seoExperience: 'Experiencia profesional de Jonatan Padilla.',
   seoProjects: 'Proyectos de Jonatan Padilla.',
@@ -198,9 +198,9 @@ const en: typeof es = {
   sumBaseValue: 'Medellín, Colombia · remote or hybrid',
   inFinance: 'InFinancexp · Interbank Group',
   linkedinShort: 'in/jdpadillac',
-  seoHomeTitle: 'Jonatan Padilla | Senior Software Engineer · Flutter, Java & Full Stack',
+  seoHomeTitle: 'Jonatan Padilla | Senior Software Engineer, Flutter & Java',
   seoHome:
-    'Senior Software Engineer with 8+ years in Flutter, Java and full stack. Clean Architecture, design systems and AI-assisted delivery. Available now in Medellín.',
+    'Senior Software Engineer with 8+ years in Flutter, Java and full stack. Clean Architecture, design systems and AI. Available in Medellín.',
   seoProfiles: 'Jonatan Padilla profiles: Mobile / Flutter, Java backend, and full stack.',
   seoExperience: 'Professional experience of Jonatan Padilla.',
   seoProjects: 'Projects by Jonatan Padilla.',
