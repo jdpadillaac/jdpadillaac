@@ -17,6 +17,7 @@
   --dark-rule: #4a463e;
   --serif: 'Fraunces Variable', 'Fraunces Fallback', Georgia, serif;
   --sans: 'Inter', 'Inter Fallback', system-ui, -apple-system, sans-serif;
+  --section-end: 112px;
 }
 
 .h-shell {
@@ -27,6 +28,19 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 24px;
+}
+
+.h-wrap.page {
+  padding-bottom: var(--section-end);
+}
+
+.h-wrap.page > :last-child {
+  margin-bottom: 0;
+}
+
+.h-wrap.page article > :last-child,
+.h-wrap.page .study > :last-child {
+  margin-bottom: 0;
 }
 
 .home h1,
@@ -236,6 +250,10 @@
 }
 
 @media (max-width: 560px) {
+  :root {
+    --section-end: 80px;
+  }
+
   .h-header__bar {
     min-height: 60px;
   }
