@@ -1,0 +1,4 @@
+Contact: mailto:contact@jdpadillac.com
+Preferred-Languages: es, en
+Canonical: https://jdpadillac.com/.well-known/security.txt
+Expires: 2027-11-07T23:59:59Z
