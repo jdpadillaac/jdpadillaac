@@ -51,7 +51,6 @@ const crumbs = [
       netlify-honeypot="bot-field"
     >
       <input type="hidden" name="form-name" value="contact" />
-      <input type="hidden" name="subject" value={`Contacto — ${site.name}`} />
       <input type="hidden" name="locale" value={lang} />
       <p class="honeypot">
         <label>
@@ -61,15 +60,15 @@ const crumbs = [
       </p>
       <label class="field">
         {t.formName}
-        <input id={`nombre-${lang}`} name="name" type="text" required autocomplete="name" />
+        <input id={`nombre-${lang}`} name="name" type="text" required autocomplete="name" maxlength={80} />
       </label>
       <label class="field">
         {t.formEmail}
-        <input id={`correo-${lang}`} name="email" type="email" required autocomplete="email" />
+        <input id={`correo-${lang}`} name="email" type="email" required autocomplete="email" maxlength={254} />
       </label>
       <label class="field">
         {t.formMessage}
-        <textarea id={`mensaje-${lang}`} name="message" required></textarea>
+        <textarea id={`mensaje-${lang}`} name="message" required maxlength={2000}></textarea>
       </label>
       <p class="kicker">{t.formHint}</p>
       <button class="button" type="submit">{t.formSend}</button>

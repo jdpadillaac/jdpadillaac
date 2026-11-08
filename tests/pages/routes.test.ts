@@ -103,7 +103,12 @@ describe('static pages', () => {
     expect(byPath(profilePages, '/en/profiles/backend-java/')).toContain('AI-assisted development');
 
     const contactPages = await renderLangs(ContactPage);
-    expect(byPath(contactPages, '/es/contacto/')).toContain('data-netlify="true"');
+    const contactEs = byPath(contactPages, '/es/contacto/');
+    expect(contactEs).toContain('data-netlify="true"');
+    expect(contactEs).not.toContain('name="subject"');
+    expect(contactEs).toContain('maxlength="80"');
+    expect(contactEs).toContain('maxlength="254"');
+    expect(contactEs).toContain('maxlength="2000"');
     expect(byPath(contactPages, '/en/contact/')).toContain('name="bot-field"');
 
     const sentPages = await renderLangs(ContactSentPage);
