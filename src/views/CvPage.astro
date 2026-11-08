@@ -5,22 +5,34 @@ import ContactBand from '../components/ContactBand.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { cvAvailable, cvFile, cvHref } from '../data/cv';
 import { pageSeo } from '../data/seo';
-import { site } from '../data/site';
 import { localePath } from '../i18n/paths';
 import { ui } from '../i18n/ui';
 import { breadcrumbGraph } from '../lib/structured-data';
 
 interface Props {
   lang: Lang;
-
 }
 
 const { lang } = Astro.props;
 const t = ui[lang];
 const pathname = localePath(lang, '/cv/');
 const files = [
-  { id: 'cv-es', title: t.cvEsTitle, lang: 'es' as const },
-  { id: 'cv-en', title: t.cvEnTitle, lang: 'en' as const },
+  {
+    id: 'cv-es',
+    title: t.cvEsTitle,
+    lang: 'es' as const,
+    pill: 'Español',
+    downloadLabel: t.cvDownloadEsLabel,
+    openLabel: t.cvOpenEsLabel,
+  },
+  {
+    id: 'cv-en',
+    title: t.cvEnTitle,
+    lang: 'en' as const,
+    pill: 'English',
+    downloadLabel: t.cvDownloadEnLabel,
+    openLabel: t.cvOpenEnLabel,
+  },
 ];
 const crumbs = [
   { label: t.home, href: localePath(lang, '/') },
@@ -30,24 +42,281 @@ const crumbs = [
 <BaseLayout lang={lang} title={pageSeo.cv[lang].title} description={pageSeo.cv[lang].description} pathname={pathname} jsonLd={breadcrumbGraph(crumbs)}>
   <div class="h-wrap page">
     <Breadcrumbs items={crumbs} label={t.breadcrumbs} />
-    <header>
-      <h1 id="titulo">{t.cv}</h1>
+    <header class="cv-head">
+      <p class="cv-eyebrow">{t.cvEyebrow}</p>
+      <h1 id="titulo" class="cv-title">{t.cv}</h1>
+      <p class="cv-lead">{t.cvLead}</p>
     </header>
-    {
-      files.map((file) => {
-        const available = cvAvailable(file.lang);
-        return (
-          available && (
-            <section id={file.id} aria-labelledby={`${file.id}-titulo`}>
-              <h2 id={`${file.id}-titulo`}>{file.title}</h2>
-              <a class="button" href={cvHref(file.lang)} download={cvFile(file.lang)}>
-                {t.cvDownload}
-              </a>
-            </section>
-          )
-        );
-      })
-    }
+    <div class="cv-grid">
+      {
+        files.map((file) => {
+          const available = cvAvailable(file.lang);
+          return (
+            available && (
+              <section id={file.id} class="cv-card" aria-label={file.title}>
+                <div class="cv-top">
+                  <div class="cv-sheet" aria-hidden="true">
+                    <span class="cv-sheet__title"></span>
+                    <span class="cv-sheet__line" style="width: 92%"></span>
+                    <span class="cv-sheet__line" style="width: 85%"></span>
+                    <span class="cv-sheet__line" style="width: 90%"></span>
+                    <span class="cv-sheet__gap"></span>
+                    <span class="cv-sheet__line" style="width: 70%"></span>
+                    <span class="cv-sheet__line" style="width: 78%"></span>
+                  </div>
+                  <div class="cv-meta">
+                    <span class="cv-pill">{file.pill}</span>
+                    <h2 id={`${file.id}-titulo`} class="cv-card__title">
+                      {file.title}
+                    </h2>
+                    <p class="cv-file">{t.cvMeta}</p>
+                  </div>
+                </div>
+                <div class="cv-actions">
+                  <a
+                    class="cv-btn cv-btn--primary"
+                    href={cvHref(file.lang)}
+                    download={cvFile(file.lang)}
+                    aria-label={file.downloadLabel}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                      <path
+                        d="M8 2v8m0 0 3.2-3.2M8 10 4.8 6.8M2.5 12.5v1a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1v-1"
+                        stroke="currentColor"
+                        stroke-width="1.6"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                    {t.cvDownloadPdf}
+                  </a>
+                  <a
+                    class="cv-btn cv-btn--secondary"
+                    href={cvHref(file.lang)}
+                    target="_blank"
+                    rel="noopener"
+                    aria-label={file.openLabel}
+                  >
+                    {t.cvOpenNewTab}
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                      <path
+                        d="M5 3h6v6M11 3 4.5 9.5M9 8.5V11a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h2.5"
+                        stroke="currentColor"
+                        stroke-width="1.6"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </a>
+                </div>
+              </section>
+            )
+          );
+        })
+      }
+    </div>
   </div>
   <ContactBand lang={lang} />
 </BaseLayout>
+
+<style>
+  .cv-head {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .cv-eyebrow {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+  }
+
+  .cv-title {
+    font-size: 56px;
+    line-height: 1.05;
+  }
+
+  .cv-lead {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--text-2);
+    max-width: 720px;
+  }
+
+  .cv-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 32px;
+  }
+
+  .cv-card {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 20px;
+    padding: 32px;
+    min-width: 0;
+  }
+
+  .cv-top {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    min-width: 0;
+  }
+
+  .cv-sheet {
+    flex: 0 0 132px;
+    width: 132px;
+    height: 172px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 20px 16px;
+    background: #fbf9f4;
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(27, 26, 23, 0.08);
+  }
+
+  .cv-sheet__title {
+    display: block;
+    width: 58%;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--accent);
+  }
+
+  .cv-sheet__line {
+    display: block;
+    height: 6px;
+    border-radius: 999px;
+    background: #e2ddd0;
+  }
+
+  .cv-sheet__gap {
+    display: block;
+    height: 6px;
+  }
+
+  .cv-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .cv-pill {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: var(--pill);
+    color: var(--pill-text);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .cv-card__title {
+    font-size: 30px;
+    line-height: 1.15;
+  }
+
+  .cv-file {
+    margin: 0;
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  .cv-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .cv-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 48px;
+    padding: 0 24px;
+    border-radius: 999px;
+    font: inherit;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.2;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .cv-btn--primary {
+    border: 1px solid var(--accent);
+    background: var(--accent);
+    color: #fff;
+  }
+
+  .cv-btn--primary:hover {
+    border-color: var(--accent-hover);
+    background: var(--accent-hover);
+    color: #fff;
+  }
+
+  .cv-btn--secondary {
+    border: 1px solid var(--accent);
+    background: transparent;
+    color: var(--accent);
+  }
+
+  .cv-btn--secondary:hover {
+    background: var(--pill);
+    color: var(--accent);
+  }
+
+  @media (max-width: 768px) {
+    .cv-title {
+      font-size: 40px;
+    }
+
+    .cv-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .cv-card {
+      padding: 20px;
+    }
+
+    .cv-card__title {
+      font-size: 24px;
+    }
+
+    .cv-sheet {
+      flex-basis: 88px;
+      width: 88px;
+      height: 114px;
+      padding: 12px 10px;
+      gap: 6px;
+    }
+
+    .cv-actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .cv-btn {
+      width: 100%;
+    }
+  }
+</style>
