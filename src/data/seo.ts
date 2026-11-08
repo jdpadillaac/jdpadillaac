@@ -7,19 +7,19 @@ export const pageSeo = {
     es: {
       title: 'Sobre mí | Jonatan Padilla',
       description:
-        'Senior Software Engineer en Medellín con más de 8 años en Flutter, Java y full stack. Clean Architecture, design systems e IA en el flujo diario. Disponible ya.',
+        'Senior Software Engineer en Medellín con más de 8 años de experiencia: Flutter, Java y Go, Clean Architecture, design systems y liderazgo técnico.',
     },
     en: {
       title: 'About | Jonatan Padilla',
       description:
-        'Senior Software Engineer in Medellín with 8+ years in Flutter, Java and full stack. Clean Architecture, design systems and AI-assisted delivery. Available now.',
+        'Senior Software Engineer in Medellín with 8+ years of experience: Flutter, Java and Go, Clean Architecture, design systems and technical leadership.',
     },
   },
   contact: {
     es: {
       title: 'Contacto | Jonatan Padilla',
       description:
-        'Escríbeme para roles de tiempo completo (remoto o híbrido en Medellín) o proyectos freelance. Respondo por correo y LinkedIn. Disponible de inmediato.',
+        'Escríbeme para roles de tiempo completo (remoto o híbrido en Medellín) o proyectos freelance. Respondo por correo y LinkedIn.',
     },
     en: {
       title: 'Contact | Jonatan Padilla',
@@ -43,12 +43,12 @@ export const pageSeo = {
     es: {
       title: 'Experiencia | Jonatan Padilla',
       description:
-        'Experiencia en SEEK, Siigo y WACO: arquitectura Flutter, design systems, Thales D1, Java, Go y liderazgo técnico. Casos con stack y resultados reales.',
+        'Experiencia en SEEK, Siigo, WACO, TUL y Personalsoft: arquitectura Flutter, design systems, Thales D1, Java y Go. Casos con stack real.',
     },
     en: {
       title: 'Experience | Jonatan Padilla',
       description:
-        'Experience at SEEK, Siigo and WACO: Flutter architecture, design systems, Thales D1, Java, Go and technical leadership. Cases with real stack and outcomes.',
+        'Experience at SEEK, Siigo, WACO, TUL and Personalsoft: Flutter architecture, design systems, Thales D1, Java and Go. Real stack cases.',
     },
   },
   notesIndex: {
@@ -82,31 +82,31 @@ export const profileSeo: Record<string, SeoEntry> = {
     es: {
       title: 'Desarrollador Flutter senior Medellín | Jonatan Padilla',
       description:
-        'Arquitectura mobile con Flutter, Clean Architecture, micropaquetes, Pigeon y Thales D1. Design systems con Atomic Design. Disponible remoto o híbrido en Medellín.',
+        'Apps móviles con Flutter: Clean Architecture, micropaquetes, Pigeon y Thales D1, y design systems con Atomic Design. Remoto o híbrido en Medellín.',
     },
     en: {
       title: 'Senior Flutter Developer Colombia | Jonatan Padilla',
       description:
-        'Mobile architecture with Flutter, Clean Architecture, micropackages, Pigeon and Thales D1. Design systems with Atomic Design. Remote or hybrid in Medellín.',
+        'Mobile apps with Flutter: Clean Architecture, micropackages, Pigeon and Thales D1, plus Atomic Design systems. Remote or hybrid in Medellín.',
     },
   },
   'backend-java': {
     es: {
       title: 'Desarrollador Java Spring Boot Medellín | Jonatan Padilla',
       description:
-        'APIs REST y microservicios con Java, Spring Boot y Go. Construyo features con buenas prácticas y bases relacionales. Tiempo completo remoto o híbrido en Medellín.',
+        'APIs REST y microservicios con Java, Spring Boot y Go, con bases de datos relacionales. Tiempo completo, remoto o híbrido en Medellín.',
     },
     en: {
       title: 'Java Spring Boot Developer Remote | Jonatan Padilla',
       description:
-        'REST APIs and microservices with Java, Spring Boot and Go. I ship features with solid practices and relational data stores. Full-time remote or hybrid in Medellín.',
+        'REST APIs and microservices with Java, Spring Boot and Go, on relational databases. Full-time, remote or hybrid in Medellín.',
     },
   },
   'full-stack': {
     es: {
       title: 'Desarrollador full stack Java Angular | Jonatan Padilla',
       description:
-        'Producto de punta a punta con Flutter, Angular y backend Java o Go. Liderazgo de equipos pequeños. Disponible para roles de tiempo completo y proyectos freelance.',
+        'Producto de punta a punta con Flutter, Angular y backend Java o Go. Liderazgo de equipos pequeños. Tiempo completo y proyectos freelance.',
     },
     en: {
       title: 'Full Stack Java Angular Developer | Jonatan Padilla',
