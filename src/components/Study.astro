@@ -19,7 +19,7 @@ interface Props {
   kicker: string;
   title: string;
   summary: string;
-  facts?: { role: string; dates: string; team?: string; stack?: string[] };
+  facts?: { role: string; dates: string; team?: string; product?: string; client?: string; stack?: string[] };
   heroAlt?: string;
   results?: { value: string; label: string }[];
   sections?: { id: string; title: string; body: string }[];
@@ -88,6 +88,18 @@ const t = ui[lang];
                   ))}
                 </ul>
             </dd>
+          </div>
+          )}
+          {facts.product && facts.product.trim() && (
+          <div>
+            <dt>{t.product}</dt>
+            <dd>{facts.product}</dd>
+          </div>
+          )}
+          {facts.client && facts.client.trim() && (
+          <div>
+            <dt>{t.clients}</dt>
+            <dd>{facts.client}</dd>
           </div>
           )}
           {facts.team && facts.team.trim() && (

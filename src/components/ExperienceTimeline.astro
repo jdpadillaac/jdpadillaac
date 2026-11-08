@@ -1,0 +1,30 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import ExperienceFeatured from './ExperienceFeatured.astro';
+import ExperienceTimelineRow from './ExperienceTimelineRow.astro';
+import { splitHomeExperiences } from '../lib/experience-home';
+import type { Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  entries: CollectionEntry<'experiences'>[];
+}
+
+const { lang, entries } = Astro.props;
+const { featured, rest } = splitHomeExperiences(entries);
+---
+
+{
+  entries.length > 0 && (
+    <div class="exp-home">
+      {featured && <ExperienceFeatured lang={lang} entry={featured} />}
+      {rest.length > 0 && (
+        <ol class="exp-timeline">
+          {rest.map((entry) => (
+            <ExperienceTimelineRow lang={lang} entry={entry} />
+          ))}
+        </ol>
+      )}
+    </div>
+  )
+}

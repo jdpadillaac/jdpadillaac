@@ -14,52 +14,84 @@ const result = z.object({
 
 const experiences = defineCollection({
   loader: glob({ pattern: '**/*.mdx', base: './src/content/experiences' }),
-  schema: z.object({
-    slug: z.string(),
-    published: z.boolean().default(false),
-    datePublished: z.string().default('2025-01-01'),
-    dateModified: z.string().default('2025-11-05'),
-    featured: z.boolean().default(false),
-    order: z.number(),
-    company: text,
-    role: text,
-    start: text,
-    end: text,
-    stack: z
-      .object({
-        es: z.array(z.string()),
-        en: z.array(z.string()),
-      })
-      .optional(),
-    team: text.optional(),
-    title: text,
-    summary: text,
-    description: text,
-    highlights: z
-      .object({
-        es: z.array(z.string()),
-        en: z.array(z.string()),
-      })
-      .default({ es: [], en: [] }),
-    stages: z
-      .array(
-        z.object({
-          role: text,
-          period: text,
-          summary: text,
-        }),
-      )
-      .default([]),
-    results: z.array(result).default([]),
-    context: text.optional(),
-    roleNarrative: text.optional(),
-    challenge: text.optional(),
-    solution: text.optional(),
-    learnings: text.optional(),
-    heroAlt: text.optional(),
-    gallery: z.array(z.object({ alt: text })).default([]),
-    profiles: z.array(z.string()).default([]),
-  }),
+  schema: ({ image }) =>
+    z.object({
+      slug: z.string(),
+      published: z.boolean().default(false),
+      datePublished: z.string().default('2025-01-01'),
+      dateModified: z.string().default('2025-11-05'),
+      featured: z.boolean().default(false),
+      order: z.number(),
+      company: text,
+      role: text,
+      start: text,
+      end: text,
+      stack: z
+        .object({
+          es: z.array(z.string()),
+          en: z.array(z.string()),
+        })
+        .optional(),
+      team: text.optional(),
+      /** Cliente final (p. ej. Bancolombia). Opcional. */
+      client: text.optional(),
+      /** Producto o línea (p. ej. Punto de venta POS). Opcional. */
+      product: text.optional(),
+      /** Marca la experiencia vigente. Muestra la insignia "Ahora". */
+      isCurrent: z.boolean().default(false),
+      title: text,
+      summary: text,
+      description: text,
+      highlights: z
+        .object({
+          es: z.array(z.string()),
+          en: z.array(z.string()),
+        })
+        .default({ es: [], en: [] }),
+      /** Cifras o hechos destacados: máx. 2, se muestran como chips. */
+      featuredHighlights: z
+        .object({
+          es: z.array(z.string()).max(2),
+          en: z.array(z.string()).max(2),
+        })
+        .default({ es: [], en: [] }),
+      stages: z
+        .array(
+          z.object({
+            role: text,
+            period: text,
+            summary: text,
+            /** Modalidad de la etapa (p. ej. Freelance). Opcional. */
+            modality: text.optional(),
+          }),
+        )
+        .default([]),
+      results: z.array(result).default([]),
+      context: text.optional(),
+      roleNarrative: text.optional(),
+      challenge: text.optional(),
+      solution: text.optional(),
+      learnings: text.optional(),
+      heroAlt: text.optional(),
+      gallery: z.array(z.object({ alt: text })).default([]),
+      profiles: z.array(z.string()).default([]),
+      /**
+       * Imagen opcional de la experiencia.
+       * Vive en src/assets/experience/<slug>/.
+       * `alt` es obligatorio cuando hay imagen; si falta, el build avisa
+       * porque el schema exige ambas traducciones no vacías.
+       */
+      image: z
+        .object({
+          src: image(),
+          alt: z.object({
+            es: z.string().min(1, 'alt ES obligatorio cuando hay imagen'),
+            en: z.string().min(1, 'alt EN obligatorio cuando hay imagen'),
+          }),
+          kind: z.enum(['logo', 'cover']).default('cover'),
+        })
+        .optional(),
+    }),
 });
 
 const notes = defineCollection({
